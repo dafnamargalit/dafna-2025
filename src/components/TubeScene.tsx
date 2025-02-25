@@ -71,7 +71,7 @@ const TubeScene: FC = () => {
     <button className='bg-red-700 p-10 h-5' onClick={() => setCheckpointIndex((prev) => prev > 0 ? prev - 1 : numCheckpoints - 1)}>
         back
       </button>
-      <button className='bg-red-700 p-10 h-5' onClick={() => setCheckpointIndex((prev) => prev < numCheckpoints - 1 ? prev + 1 : 0)}>
+      <button className='bg-red-700 p-10 h-5' onClick={() => setCheckpointIndex((prev) => prev < numCheckpoints - 1 ? prev + 1 : numCheckpoints - 1)}>
         next
       </button>
     </div>

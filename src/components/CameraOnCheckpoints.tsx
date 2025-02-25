@@ -15,11 +15,11 @@ interface CameraOnCheckpointsProps {
 
 const CameraOnCheckpoints: React.FC<CameraOnCheckpointsProps> = ({ checkpointIndex, setCheckpointIndex, checkpoints, numCheckpoints }) => {
   const { camera } = useThree()
-  // Smooth interpolation parameter
-  const currentTRef = useRef<number>(checkpoints[checkpointIndex])
-  // Throttle scroll events
+  // Instead of keeping currentT strictly in [0,1], use an absolute value that can exceed 1.
+  const absoluteTRef = useRef<number>(checkpoints[checkpointIndex])
+  // Ref used to throttle scroll events.
   const canScrollRef = useRef<boolean>(true)
-  // Lock new transitions until current one finishes
+  // Lock so that new transitions don't start until the current one finishes.
   const transitionLockRef = useRef<boolean>(false)
 
   useEffect(() => {
@@ -31,9 +31,10 @@ const CameraOnCheckpoints: React.FC<CameraOnCheckpointsProps> = ({ checkpointInd
 
       setCheckpointIndex((prev) => {
         if (e.deltaY > 0) {
-          // If at last checkpoint, wrap around to 0.
+          // Scroll down: go to next checkpoint (wrap to 0 at end)
           return prev < checkpoints.length - 1 ? prev + 1 : 0
         } else if (e.deltaY < 0) {
+          // Scroll up: go to previous checkpoint if possible
           return prev > 0 ? prev - 1 : prev
         }
         return prev
@@ -49,32 +50,36 @@ const CameraOnCheckpoints: React.FC<CameraOnCheckpointsProps> = ({ checkpointInd
   }, [setCheckpointIndex])
 
   useFrame((_, delta) => {
-    const targetT: number = checkpoints[checkpointIndex];
-    // If the target is less than the current t, we're wrapping forward.
-    let effectiveTargetT = targetT;
-    if (targetT < currentTRef.current) {
-      effectiveTargetT = targetT + 1;
+    // Get the current absolute parameter and the target fractional checkpoint.
+    const currentAbs = absoluteTRef.current
+    const currentFraction = currentAbs % 1
+    const targetFraction = checkpoints[checkpointIndex]
+
+    // Compute the desired absolute target.
+    // Start with the floor of currentAbs plus targetFraction.
+    let desiredAbs = Math.floor(currentAbs) + targetFraction
+    // If the targetFraction is less than the current fraction, we must be wrapping forward.
+    if (targetFraction < currentFraction) {
+      desiredAbs += 1
     }
-    
-    // Interpolate currentTRef toward effectiveTargetT.
-    currentTRef.current = THREE.MathUtils.lerp(currentTRef.current, effectiveTargetT, delta * 2);
-    let t: number = currentTRef.current;
-    // If we've gone over 1, wrap around.
-    if (t >= 1) t -= 1;
-    
-    // Set the camera's position along the spline.
-    const pos: THREE.Vector3 = spline.getPointAt(t);
-    camera.position.copy(pos);
-    
-    // Look slightly ahead along the spline.
-    const lookAt: THREE.Vector3 = spline.getPointAt((t + 0.01) % 1);
-    camera.lookAt(lookAt);
-    
-    // Once we're close enough to the target, release the transition lock.
-    if (Math.abs(currentTRef.current - effectiveTargetT) < 0.001) {
-      transitionLockRef.current = false;
+
+    // Interpolate smoothly towards the desired absolute value.
+    absoluteTRef.current = THREE.MathUtils.lerp(currentAbs, desiredAbs, delta * 2)
+    // Use the modulo value to get the position on the closed curve.
+    const t = absoluteTRef.current % 1
+
+    // Update camera position.
+    const pos: THREE.Vector3 = spline.getPointAt(t)
+    camera.position.copy(pos)
+    // Look ahead slightly.
+    const lookAt: THREE.Vector3 = spline.getPointAt((t + 0.01) % 1)
+    camera.lookAt(lookAt)
+
+    // When close enough to the desired absolute value, release the transition lock.
+    if (Math.abs(absoluteTRef.current - desiredAbs) < 0.001) {
+      transitionLockRef.current = false
     }
-  });
+  })
 
   return null
 }
