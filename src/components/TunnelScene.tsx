@@ -119,7 +119,7 @@ export default function TunnelScene() {
         />
       </Canvas>
       <div className="absolute bottom-4 px-4 flex flex-col items-center justify-center h-screen w-screen z-10">
-        <DafnaLogo width={400} height={400}/>
+        {(checkpointIndex === CHECKPOINTS.length - 1) && <DafnaLogo width={400} height={400}/>}
        <div  className="absolute flex bottom-4 px-4 justify-between w-screen z-10">
         {/* <button onClick={handleBack} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500">
           Back
