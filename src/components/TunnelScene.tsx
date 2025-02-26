@@ -125,7 +125,7 @@ export default function TunnelScene() {
       <Canvas camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
-        {/* <fogExp2 attach="fog" args={[0x000000, 0.005]} /> */}
+        <fogExp2 attach="fog" args={[0x000000, 0.005]} />
         <Stars
           radius={500}   // Stars distributed within a sphere of radius 500
           depth={10}     // Spread over 90 units in depth
