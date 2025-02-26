@@ -53,6 +53,22 @@ export default function TunnelScene() {
   // Ref for throttling scroll events.
   const throttleTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check the screen size only after the component has mounted
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+    };
+
+    // Run the resize handler once on mount
+    handleResize();
+
+    // Add a resize event listener
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
+  }, []);
+
   const handleNext = () => {
     setCheckpointIndex(prev => Math.min(prev + 1, CHECKPOINTS.length - 1))
   }
@@ -119,7 +135,7 @@ export default function TunnelScene() {
         />
       </Canvas>
       <div className="absolute bottom-4 px-4 flex flex-col items-center justify-center h-screen w-screen z-10">
-        {(checkpointIndex === CHECKPOINTS.length - 1) && <DafnaLogo width={400} height={400}/>}
+        {(checkpointIndex === CHECKPOINTS.length - 1) && <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>}
        <div  className="absolute flex bottom-4 px-4 justify-between w-screen z-10">
         {/* <button onClick={handleBack} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500">
           Back
