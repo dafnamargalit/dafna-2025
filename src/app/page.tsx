@@ -1,20 +1,16 @@
 'use client'
 
-import dynamic from 'next/dynamic'
-import { NextPage } from 'next'
-import Image from "next/image";
-import { AnimatePresence } from 'framer-motion';
+import { Suspense } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { Environment } from '@react-three/drei'
 
-const TunnelScene = dynamic(() => import('../components/TunnelScene'), { ssr: false })
+import FloatingModel from '@/components/FloatingTVModel'
+import TunnelScene from '@/components/TunnelScene'
 
 export default function Home() {
   return (
-    <div className='relative flex items-center justify-center w-screen h-screen'>
-    <div className="absolute bg-black w-screen h-screen z-10">
-    <AnimatePresence mode="wait" initial={false}>
+    <div className="bg-black w-screen h-screen overflow-hidden">
       <TunnelScene />
-    </AnimatePresence>
     </div>
-    </div>
-  );
+  )
 }

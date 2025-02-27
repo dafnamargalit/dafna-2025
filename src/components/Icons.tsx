@@ -32,3 +32,104 @@ export const DafnaLogo = ({width, height }: {width?: number, height?: number}) =
 </svg>
     )
 }
+
+export const IconInstagram = ({ fill, size }: { fill?: string, size?: string }) => (
+    <svg style={{
+        opacity: 0, // Initially hidden
+        animation: 'fadeIn 2s ease forwards', // Fade in animation
+      }} width="40px" height="40px" className="hover:fill-cyan-100 fill-cyan-300" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+   viewBox="0 0 56.7 56.7">
+      <g>
+        <path d="M28.2,16.7c-7,0-12.8,5.7-12.8,12.8s5.7,12.8,12.8,12.8S41,36.5,41,29.5S35.2,16.7,28.2,16.7z M28.2,37.7
+          c-4.5,0-8.2-3.7-8.2-8.2s3.7-8.2,8.2-8.2s8.2,3.7,8.2,8.2S32.7,37.7,28.2,37.7z"/>
+        <circle cx="41.5" cy="16.4" r="2.9"/>
+        <path d="M49,8.9c-2.6-2.7-6.3-4.1-10.5-4.1H17.9c-8.7,0-14.5,5.8-14.5,14.5v20.5c0,4.3,1.4,8,4.2,10.7c2.7,2.6,6.3,3.9,10.4,3.9
+          h20.4c4.3,0,7.9-1.4,10.5-3.9c2.7-2.6,4.1-6.3,4.1-10.6V19.3C53,15.1,51.6,11.5,49,8.9z M48.6,39.9c0,3.1-1.1,5.6-2.9,7.3
+          s-4.3,2.6-7.3,2.6H18c-3,0-5.5-0.9-7.3-2.6C8.9,45.4,8,42.9,8,39.8V19.3c0-3,0.9-5.5,2.7-7.3c1.7-1.7,4.3-2.6,7.3-2.6h20.6
+          c3,0,5.5,0.9,7.3,2.7c1.7,1.8,2.7,4.3,2.7,7.2V39.9L48.6,39.9z"/>
+      </g>
+      <style>
+            {`
+            @keyframes fadeIn {
+              from {
+                opacity: 0; /* Fully transparent */
+                scale: 0;
+              }
+              to {
+                opacity: 1; /* Fully visible */
+                scale: 1;
+              }
+            }
+            `}
+        </style>
+  </svg>
+  );
+  
+  
+  export const IconYoutube = ({ fill, size }: { fill?: string, size?: string }) => (
+    <svg style={{
+        opacity: 0, // Initially hidden
+        animation: 'fadeIn 2s ease forwards', // Fade in animation
+      }} className="hover:fill-cyan-100 fill-cyan-300" version="1.1" viewBox="0 0 512 512" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg">
+      <path d="M501.303,132.765c-5.887,-22.03 -23.235,-39.377 -45.265,-45.265c-39.932,-10.7 -200.038,-10.7 -200.038,-10.7c0,0 -160.107,0 -200.039,10.7c-22.026,5.888 -39.377,23.235 -45.264,45.265c-10.697,39.928 -10.697,123.238 -10.697,123.238c0,0 0,83.308 10.697,123.232c5.887,22.03 23.238,39.382 45.264,45.269c39.932,10.696 200.039,10.696 200.039,10.696c0,0 160.106,0 200.038,-10.696c22.03,-5.887 39.378,-23.239 45.265,-45.269c10.696,-39.924 10.696,-123.232 10.696,-123.232c0,0 0,-83.31 -10.696,-123.238Zm-296.506,200.039l0,-153.603l133.019,76.802l-133.019,76.801Z" />
+      <style>
+            {`
+            @keyframes fadeIn {
+              from {
+                opacity: 0; /* Fully transparent */
+                scale: 0;
+              }
+              to {
+                opacity: 1; /* Fully visible */
+                scale: 1;
+              }
+            }
+            `}
+        </style>
+    </svg>
+  );
+  
+  export const IconGithub = ({ fill, size }: { fill?: string, size?: string }) => (
+   <svg style={{
+    opacity: 0, // Initially hidden
+    animation: 'fadeIn 2s ease forwards', // Fade in animation
+  }} className="hover:fill-cyan-100 fill-cyan-300" width="40px" height="40px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g><path className="st0" d="M256,32C132.3,32,32,134.8,32,261.7c0,101.5,64.2,187.5,153.2,217.9c11.2,2.1,15.3-5,15.3-11.1   c0-5.5-0.2-19.9-0.3-39.1c-62.3,13.9-75.5-30.8-75.5-30.8c-10.2-26.5-24.9-33.6-24.9-33.6c-20.3-14.3,1.5-14,1.5-14   c22.5,1.6,34.3,23.7,34.3,23.7c20,35.1,52.4,25,65.2,19.1c2-14.8,7.8-25,14.2-30.7c-49.7-5.8-102-25.5-102-113.5   c0-25.1,8.7-45.6,23-61.6c-2.3-5.8-10-29.2,2.2-60.8c0,0,18.8-6.2,61.6,23.5c17.9-5.1,37-7.6,56.1-7.7c19,0.1,38.2,2.6,56.1,7.7   c42.8-29.7,61.5-23.5,61.5-23.5c12.2,31.6,4.5,55,2.2,60.8c14.3,16.1,23,36.6,23,61.6c0,88.2-52.4,107.6-102.3,113.3   c8,7.1,15.2,21.1,15.2,42.5c0,30.7-0.3,55.5-0.3,63c0,6.1,4,13.3,15.4,11C415.9,449.1,480,363.1,480,261.7   C480,134.8,379.7,32,256,32z"/></g>
+  <style>
+            {`
+            @keyframes fadeIn {
+              from {
+                opacity: 0; /* Fully transparent */
+                scale: 0;
+              }
+              to {
+                opacity: 1; /* Fully visible */
+                scale: 1;
+              }
+            }
+            `}
+        </style>
+  </svg>
+  )
+
+  export const IconSpotify = ({ fill, size }: { fill?: string, size?: string }) => (
+    <svg style={{
+        opacity: 0, // Initially hidden
+        animation: 'fadeIn 2s ease forwards', // Fade in animation
+      }} className="hover:fill-cyan-100 fill-cyan-300" width="40px" height="40px" viewBox="0 0 128 128"  xmlns="http://www.w3.org/2000/svg">
+        <path id="svg_2" fillRule="evenodd" d="m64,0c-35.2,0 -64,28.8 -64,64s28.8,64 64,64s64,-28.8 64,-64s-28.48,-64 -64,-64m29.44,92.48c-1.28,1.92 -3.52,2.56 -5.44,1.28c-15.04,-9.28 -33.92,-11.2 -56.32,-6.08c-2.24,0.64 -4.16,-0.96 -4.8,-2.88c-0.64,-2.24 0.96,-4.16 2.88,-4.8c24.32,-5.44 45.44,-3.2 62.08,7.04c2.24,0.96 2.56,3.52 1.6,5.44m7.68,-17.6c-1.6,2.24 -4.48,3.2 -6.72,1.6c-17.28,-10.56 -43.52,-13.76 -63.68,-7.36c-2.56,0.64 -5.44,-0.64 -6.08,-3.2c-0.64,-2.56 0.64,-5.44 3.2,-6.08c23.36,-7.04 52.16,-3.52 72,8.64c1.92,0.96 2.88,4.16 1.28,6.4m0.64,-17.92c-20.48,-12.16 -54.72,-13.44 -74.24,-7.36c-3.2,0.96 -6.4,-0.96 -7.36,-3.84c-0.96,-3.2 0.96,-6.4 3.84,-7.36c22.72,-6.72 60.16,-5.44 83.84,8.64c2.88,1.6 3.84,5.44 2.24,8.32c-1.6,2.24 -5.44,3.2 -8.32,1.6" clipRule="evenodd"/>
+        <style>
+            {`
+            @keyframes fadeIn {
+              from {
+                opacity: 0; /* Fully transparent */
+                scale: 0;
+              }
+              to {
+                opacity: 1; /* Fully visible */
+                scale: 1;
+              }
+            }
+            `}
+        </style>
+</svg>
+  )

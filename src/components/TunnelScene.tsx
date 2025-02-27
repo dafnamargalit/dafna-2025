@@ -3,9 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import GridPlane from './GridPlane'
 import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
-import Image from 'next/image'
-import { motion } from "framer-motion";
-import { DafnaLogo } from './Icons'
+import { DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
+import FloatingModel from './FloatingTVModel'
 
 
 // Define checkpoints along the Z axis.
@@ -52,8 +51,9 @@ export default function TunnelScene() {
   const [pageLoaded, setPageLoaded] = useState(false);
   // Ref for throttling scroll events.
   const throttleTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
+  const touchStartY = useRef<number | null>(null)
   const [isMobile, setIsMobile] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   useEffect(() => {
     // Check the screen size only after the component has mounted
@@ -69,10 +69,10 @@ export default function TunnelScene() {
     return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
   }, []);
 
-  const handleNext = () => {
+  const handleBack = () => {
     setCheckpointIndex(prev => Math.min(prev + 1, CHECKPOINTS.length - 1))
   }
-  const handleBack = () => {
+  const handleNext = () => {
     setCheckpointIndex(prev => Math.max(prev - 1, 0))
   }
 
@@ -85,6 +85,7 @@ export default function TunnelScene() {
 
   // Handle scroll events to trigger checkpoint changes.
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    setIsScrolling(true);
     // Throttle to one scroll action per 800ms (adjust as needed)
     if (throttleTimeoutRef.current) return
 
@@ -95,33 +96,53 @@ export default function TunnelScene() {
     }
     throttleTimeoutRef.current = setTimeout(() => {
       throttleTimeoutRef.current = null
-    }, 1400)
+    }, 1000)
   }
-
+  
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (throttleTimeoutRef.current) return
 
       // Up arrow goes forward (next)
       if (e.key === "ArrowUp") {
-        handleNext()
+        handleBack()
       }
       // Down arrow goes backward (back)
       else if (e.key === "ArrowDown") {
-        handleBack()
+        handleNext()
       }
-
-      throttleTimeoutRef.current = setTimeout(() => {
         throttleTimeoutRef.current = null
-      }, 1400)
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartY.current = e.touches[0].clientY
+  }
+
+  // Handle touch end event (for mobile)
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartY.current === null) return
+    const touchEndY = e.changedTouches[0].clientY
+    const deltaY = touchStartY.current - touchEndY
+    // Use a threshold of 50px to determine if it's a swipe.
+    if (!throttleTimeoutRef.current) {
+      if (deltaY > 50) {
+        handleNext()
+      } else if (deltaY < -50) {
+        handleBack()
+      }
+      throttleTimeoutRef.current = setTimeout(() => {
+        throttleTimeoutRef.current = null
+      }, 1000)
+    }
+    touchStartY.current = null
+  }
   return (
-    <div className="w-screen h-screen relative" onWheel={handleWheel}>
+    <div className="w-screen h-screen relative" onWheel={handleWheel} onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}>
       <Canvas camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
@@ -133,18 +154,26 @@ export default function TunnelScene() {
           factor={15}    // Controls star size
           saturation={0} // Optional: adjust color saturation        // Optional: fade stars with distance
         />
+        <FloatingModel />
       </Canvas>
+      {(checkpointIndex === CHECKPOINTS.length - 1) && 
       <div className="absolute bottom-4 px-4 flex flex-col items-center justify-center h-screen w-screen z-10">
-        {(checkpointIndex === CHECKPOINTS.length - 1) && <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>}
-       <div  className="absolute flex bottom-4 px-4 justify-between w-screen z-10">
-        {/* <button onClick={handleBack} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500">
-          Back
-        </button>
-        <button onClick={handleNext} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-500">
-          Next
-        </button> */}
+       <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
+       <div className='flex flex-row space-x-2'>
+            <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w'>
+            <IconSpotify />
+            </a>
+            <a href="https://instagram.com/dafnamusic">
+            <IconInstagram />
+            </a>
+            <a href='https://www.youtube.com/channel/UCzPtND9EY5MkOepLzllAbiw'>
+            <IconYoutube />
+            </a>
+            <a href='https://github.com/dafnamargalit'>
+            <IconGithub />
+            </a>
         </div>
-      </div>
+      </div>}
     </div>
   )
 }
