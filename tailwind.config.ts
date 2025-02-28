@@ -8,9 +8,14 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+      keyframes: {
+        orbit: {
+          '0%': { transform: 'rotate(0deg) translate(300px) rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg) translate(300px) rotate(-360deg)' },
+        },
+      },
+      animation: {
+        orbit: 'orbit 15s linear infinite',
       },
     },
   },

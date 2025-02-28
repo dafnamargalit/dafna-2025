@@ -20,7 +20,7 @@ export default function FloatingTVModel(props: any) {
     // Optionally scale and adjust as needed
     scene.scale.set(0.015, 0.015, 0.015)
 
-    const position = [-2,-3,-20];
+    const position = [-2,-5,-20];
     
   return (
     <Float floatIntensity={0.1} speed={0.1} floatingRange={[1, 2]}>

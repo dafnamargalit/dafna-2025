@@ -1,11 +1,14 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import GridPlane from './GridPlane'
-import { Stars } from '@react-three/drei'
+import { Preload, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import { DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
 import FloatingModel from './FloatingTVModel'
-
+import Merch from './Merch'
+import RecordPlayer from './RecordPlayer'
+import Image from 'next/image'
+import { FloatingVinyls } from './FloatingVinyls'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -53,8 +56,9 @@ export default function TunnelScene() {
   const throttleTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const touchStartY = useRef<number | null>(null)
   const [isMobile, setIsMobile] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [showVinyls, setShowVinyls] = useState(false);
 
+  const links = ["https://youtube.com", "https://youtube.com"]
   useEffect(() => {
     // Check the screen size only after the component has mounted
     const handleResize = () => {
@@ -79,13 +83,14 @@ export default function TunnelScene() {
   useEffect(() => {
     if(!pageLoaded){
         setCheckpointIndex(CHECKPOINTS.length - 1);
-        setPageLoaded(true);
     }
+    setTimeout(() => {
+      setPageLoaded(true);
+    }, 1000);
   }, [pageLoaded])
 
   // Handle scroll events to trigger checkpoint changes.
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    setIsScrolling(true);
     // Throttle to one scroll action per 800ms (adjust as needed)
     if (throttleTimeoutRef.current) return
 
@@ -103,12 +108,11 @@ export default function TunnelScene() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (throttleTimeoutRef.current) return
 
-      // Up arrow goes forward (next)
       if (e.key === "ArrowUp") {
         handleBack()
       }
-      // Down arrow goes backward (back)
       else if (e.key === "ArrowDown") {
+        console.log(checkpointIndex)
         handleNext()
       }
         throttleTimeoutRef.current = null
@@ -143,9 +147,17 @@ export default function TunnelScene() {
   return (
     <div className="w-screen h-screen relative" onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
-      <Canvas camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
+      <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
+        <Suspense fallback={null}>
+          <Preload all />
+          {pageLoaded && <Merch />}
+          {pageLoaded && <FloatingModel />}
+          {pageLoaded && <RecordPlayer setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
+          {showVinyls && <FloatingVinyls />}
+        </Suspense>
+        
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
         <Stars
           radius={500}   // Stars distributed within a sphere of radius 500
@@ -154,7 +166,6 @@ export default function TunnelScene() {
           factor={15}    // Controls star size
           saturation={0} // Optional: adjust color saturation        // Optional: fade stars with distance
         />
-        <FloatingModel />
       </Canvas>
       {(checkpointIndex === CHECKPOINTS.length - 1) && 
       <div className="absolute bottom-4 px-4 flex flex-col items-center justify-center h-screen w-screen z-10">

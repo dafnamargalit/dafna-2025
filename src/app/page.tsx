@@ -1,11 +1,8 @@
 'use client'
 
-import { Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
+import dynamic from 'next/dynamic'
 
-import FloatingModel from '@/components/FloatingTVModel'
-import TunnelScene from '@/components/TunnelScene'
+const TunnelScene = dynamic(() => import('../components/TunnelScene'), { ssr: false })
 
 export default function Home() {
   return (
