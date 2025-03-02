@@ -174,7 +174,7 @@ export default function TunnelScene() {
     touchStartY.current = null
   }
   return (
-    <div className={`w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} onWheel={handleWheel} onTouchStart={handleTouchStart}
+    <div className={`w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className} ${isMobile ? 'scale-95' : ''}`} onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
       <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
@@ -197,7 +197,7 @@ export default function TunnelScene() {
         />
       </Canvas>
       {(checkpointIndex === CHECKPOINTS.length - 1) && 
-      <div className="absolute bottom-4 px-4 flex flex-col items-center justify-center h-screen w-screen z-10">
+      <div className={`absolute bottom-4 px-4 flex flex-col overscroll-none overflow-y-none items-center justify-center h-screen w-screen z-10 ${isMobile ? 'scale-90' : ''}`}>
        <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
        <div className='flex flex-row space-x-2'>
             <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w'>
