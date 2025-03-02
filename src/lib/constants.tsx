@@ -28,3 +28,15 @@ export const albums = [
         apple: "https://music.apple.com/us/album/submerge/1497542566"
     }
 ]
+
+export const videos = [
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/iwannafeel.mp4", name: "Screen1" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/wheredougoshort.mp4", name: "Screen2" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/sweeter.mp4", name: "Screen3" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/star.mp4", name: "Screen4" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/lovebomb.mp4", name: "Screen5" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/bitter.mp4", name: "Screen6" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/sour.mp4", name: "Screen7" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/live.mp4", name: "Screen8" }
+  ];
+  
