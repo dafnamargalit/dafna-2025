@@ -28,7 +28,7 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { 
   }, [hover, scene])
 
   // Scale and position the model as needed
-  isMobile ? scene.scale.set(0.03, 0.03, 0.03) : scene.scale.set(0.05, 0.05, 0.05);
+  isMobile ? scene.scale.set(0.04, 0.04, 0.04) : scene.scale.set(0.05, 0.05, 0.05);
 
   const position = [0, 0, -330]
 
