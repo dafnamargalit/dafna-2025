@@ -40,13 +40,8 @@ export default function FloatingTVModel(props: any) {
       video.autoplay = true
       video.playsInline = true
       
-      // Debug logging
-      video.addEventListener('loadeddata', () => {
-        console.log('Video loaded data')
-      })
   
       video.addEventListener('canplay', () => {
-        console.log('Video can play')
         video.play().catch((err) => {
           console.error('Video play failed:', err)
         })
@@ -70,7 +65,6 @@ export default function FloatingTVModel(props: any) {
   
       // Clean up event listeners on unmount
       return () => {
-        video.removeEventListener('loadeddata', () => {})
         video.removeEventListener('canplay', () => {})
       }
     })
