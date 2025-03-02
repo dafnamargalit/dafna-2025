@@ -38,7 +38,8 @@ export default function FloatingTVModel(props: any) {
       video.loop = true
       video.muted = true
       video.autoplay = true
-  
+      video.playsInline = true
+      
       // Debug logging
       video.addEventListener('loadeddata', () => {
         console.log('Video loaded data')
