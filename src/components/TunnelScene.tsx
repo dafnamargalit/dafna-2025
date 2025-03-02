@@ -190,8 +190,7 @@ export default function TunnelScene() {
     touchStartY.current = null
   }
   return (
-    <div onWheel={handleWheel} onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}>
+    <div onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <RemoveScroll  className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} >
       <Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
@@ -214,7 +213,7 @@ export default function TunnelScene() {
         />
       </Canvas>
       {(checkpointIndex === CHECKPOINTS.length - 1) && 
-      <div className={`absolute bottom-4 px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
+      <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
        <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
        <div className='flex flex-row space-x-2'>
             <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w'>
@@ -230,7 +229,7 @@ export default function TunnelScene() {
             <IconGithub />
             </a>
         </div>
-        <button className='absolute text-cyan-300 items-center justify-center flex flex-col bottom-4' onClick={handleNext}>
+        <button className={`absolute text-cyan-300 items-center justify-center flex flex-col ${isMobile ? 'bottom-24' : 'bottom-4'}`} onClick={handleNext}>
           <div>{isMobile ? 'swipe down' : 'scroll down'}</div>
         <ChevronDown fill="#67E8F9"/>
         </button>
