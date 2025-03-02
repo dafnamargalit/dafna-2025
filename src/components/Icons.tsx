@@ -190,7 +190,7 @@ export const IconInstagram = ({ fill, size }: { fill?: string, size?: string }) 
                 transform: translateY(0);
               }
               50% {
-                transform: translateY(5px);
+                transform: translateY(7px);
               }
               100% {
                 transform: translateY(0);
