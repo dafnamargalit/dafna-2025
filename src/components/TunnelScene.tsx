@@ -173,7 +173,7 @@ export default function TunnelScene() {
     touchStartY.current = null
   }
   return (
-    <div className="w-screen h-screen relative" onWheel={handleWheel} onTouchStart={handleTouchStart}
+    <div className="w-screen h-screen relative overflow-y-none" onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
       <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
