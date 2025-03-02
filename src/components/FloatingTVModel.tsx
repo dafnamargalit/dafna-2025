@@ -3,7 +3,11 @@ import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { videos } from '@/lib/constants'
 
-export default function FloatingTVModel(props: any) {
+interface FloatingTVModelProps {
+  isMobile: boolean
+}
+
+export const FloatingTVModel: React.FC<FloatingTVModelProps> = ({ isMobile }) =>{
   const { scene } = useGLTF('/models/old_tv.glb')
   const [hover, setHover] = useState(false)
 
@@ -39,7 +43,6 @@ export default function FloatingTVModel(props: any) {
       video.muted = true
       video.autoplay = true
       video.playsInline = true
-      
   
       video.addEventListener('canplay', () => {
         video.play().catch((err) => {
@@ -72,8 +75,8 @@ export default function FloatingTVModel(props: any) {
   }, [scene])
 
   // Adjust model scale and position
-  scene.scale.set(0.012, 0.012, 0.012)
-  const position = [0,-8,-120];
+  isMobile ? scene.scale.set(0.011, 0.011, 0.011) : scene.scale.set(0.012, 0.012, 0.012)
+  const position = isMobile ? [0,-8,-125] : [0,-8,-120];
     
 
   return (

@@ -4,7 +4,7 @@ import GridPlane from './GridPlane'
 import { Preload, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import { ChevronDown, DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
-import FloatingModel from './FloatingTVModel'
+import { FloatingTVModel } from './FloatingTVModel'
 import Merch from './Merch'
 import RecordPlayer from './RecordPlayer'
 import Image from 'next/image'
@@ -198,7 +198,7 @@ export default function TunnelScene() {
         <Suspense fallback={null}>
           <Preload all />
           {pageLoaded && <Merch />}
-          {pageLoaded && <FloatingModel />}
+          {pageLoaded && <FloatingTVModel isMobile={isMobile} />}
           {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
           {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
         </Suspense>
