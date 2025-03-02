@@ -11,6 +11,7 @@ import Image from 'next/image'
 import { FloatingVinyls } from './FloatingVinyls'
 import Modal, { ModalData } from './Modal'
 import { albums } from '@/lib/constants'
+import retroFont from './RetroFont'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -173,7 +174,7 @@ export default function TunnelScene() {
     touchStartY.current = null
   }
   return (
-    <div className="w-screen h-screen relative overflow-y-none" onWheel={handleWheel} onTouchStart={handleTouchStart}
+    <div className={`w-screen h-screen relative overflow-y-none ${retroFont.className}`} onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
       <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
