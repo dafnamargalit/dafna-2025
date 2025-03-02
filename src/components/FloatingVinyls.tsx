@@ -121,7 +121,7 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
 
   return (
     // The parent group is positioned as before.
-    <group ref={parentRef} position={[1, 0, -313]}>
+    <group ref={parentRef} position={[0.5, 0, -313]}>
       {finalOffsets.map((_, idx) => (
         // Initially, each vinyl is placed at the center with position [0,0,0].
         <Vinyl setShowModal={setShowModal} path={paths[idx]} key={idx} position={[0, 0, 0]} />
