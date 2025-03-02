@@ -191,7 +191,7 @@ export default function TunnelScene() {
   return (
     <div className={`fixed w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
-      <Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
+      <Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
         <Suspense fallback={null}>
