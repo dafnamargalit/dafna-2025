@@ -3,7 +3,7 @@ import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 export default function RecordPlayer({ setShowVinyls, showVinyls }: { setShowVinyls: (set: boolean) => void, showVinyls: boolean }) {
-  const { scene } = useGLTF('/recordplayer.glb')
+  const { scene } = useGLTF('/models/recordplayer.glb')
   const [hover, setHover] = useState(false)
   const [isMobile, setIsMobile] = useState(false);
 
@@ -49,8 +49,6 @@ useEffect(() => {
 
   return (
     <Float floatIntensity={0.01} speed={0.1} floatingRange={[1, 1]} rotationIntensity={0.02}>
-      <ambientLight intensity={2} />
-      <directionalLight intensity={5} position={[10, 10, 5]} />
       <group>
         <primitive 
           object={scene}
@@ -74,4 +72,4 @@ useEffect(() => {
   )
 }
 
-useGLTF.preload('/recordplayer.glb')
+useGLTF.preload('/models/recordplayer.glb')

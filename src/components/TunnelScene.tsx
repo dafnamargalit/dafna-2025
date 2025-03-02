@@ -9,6 +9,8 @@ import Merch from './Merch'
 import RecordPlayer from './RecordPlayer'
 import Image from 'next/image'
 import { FloatingVinyls } from './FloatingVinyls'
+import Modal, { ModalData } from './Modal'
+import { albums } from '@/lib/constants'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -57,8 +59,35 @@ export default function TunnelScene() {
   const touchStartY = useRef<number | null>(null)
   const [isMobile, setIsMobile] = useState(false);
   const [showVinyls, setShowVinyls] = useState(false);
+  const [showModal, setShowModal] = useState<string | null>(null);
+  const [modalData, setModalData] = useState<ModalData | null>(null);
 
-  const links = ["https://youtube.com", "https://youtube.com"]
+  useEffect(() => {
+    const service = localStorage.getItem("streaming-service");
+    albums.map((album: ModalData) => {if (showModal?.includes(album.name)) {
+      switch (service) {
+        case "spotify":
+          window.open(album.spotify);
+        break;
+        case "youtube":
+          window.open(album.youtube);
+        break;
+        case "tidal":
+          window.open(album.tidal);
+        break;
+        case "apple":
+          window.open(album.apple);
+        break;
+        case null:
+          setModalData(album);
+        break;
+        default:
+          setModalData(album);
+          break;
+      }
+    }});
+  }, [showModal]);
+
   useEffect(() => {
     // Check the screen size only after the component has mounted
     const handleResize = () => {
@@ -112,7 +141,6 @@ export default function TunnelScene() {
         handleBack()
       }
       else if (e.key === "ArrowDown") {
-        console.log(checkpointIndex)
         handleNext()
       }
         throttleTimeoutRef.current = null
@@ -155,7 +183,7 @@ export default function TunnelScene() {
           {pageLoaded && <Merch />}
           {pageLoaded && <FloatingModel />}
           {pageLoaded && <RecordPlayer setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
-          {showVinyls && <FloatingVinyls />}
+          {showVinyls && <FloatingVinyls setShowModal={setShowModal} />}
         </Suspense>
         
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
@@ -188,6 +216,12 @@ export default function TunnelScene() {
         <ChevronDown fill="#67E8F9"/>
         </button>
       </div>}
+      {modalData &&
+          <Modal
+            modalData={modalData}
+            closeModal={() => setModalData(null)}
+          />
+      }
     </div>
   )
 }

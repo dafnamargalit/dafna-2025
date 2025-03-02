@@ -3,74 +3,74 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
+
+// ---------------- Vinyl Component ----------------
 interface VinylProps {
   position: [number, number, number]
   path: string
+  setShowModal: (show: string | null) => void
 }
 
-const Vinyl: React.FC<VinylProps> = ({ path, position }) => {
+const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
   const { scene } = useGLTF(path)
+  if (!scene) return null
+
   const [hover, setHover] = useState(false)
-  const [isMobile, setIsMobile] = useState(false);
-  // Clone the loaded scene so each instance is unique.
-  const clonedScene = useMemo(() => scene.clone(), [scene])
+
+  // Deep-clone the scene and its materials so each instance is independent.
+  const clonedScene = useMemo(() => {
+    const clone = scene.clone()
+    clone.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material) {
+        child.material = child.material.clone()
+      }
+    })
+    return clone
+  }, [scene])
+
+  // Function to update emissive effect.
+  const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
+    object.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material && 'emissive' in child.material) {
+        if (highlight) {
+          child.material.emissive = new THREE.Color('#67E8F9')
+          child.material.emissiveIntensity = 0.3
+        } else {
+          child.material.emissive = new THREE.Color('black')
+          child.material.emissiveIntensity = 0.1
+        }
+      }
+    })
+  }
 
   useEffect(() => {
     document.body.style.cursor = hover ? 'pointer' : 'auto'
-  }, [hover])
+    setEmissive(clonedScene, hover)
+  }, [hover, clonedScene])
 
-  useEffect(() => {
-        // Check the screen size only after the component has mounted
-        const handleResize = () => {
-          setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
-        };
-    
-        // Run the resize handler once on mount
-        handleResize();
-    
-        // Add a resize event listener
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
-      }, []);
-  
 
-  // Adjust scale and rotation for the clone
-  isMobile ? clonedScene.scale.set(0.08, 0.08, 0.08) : clonedScene.scale.set(0.1, 0.1, 0.1);
-  
   return (
     <primitive
       object={clonedScene}
-      rotation={[Math.PI / 2, 0, 0]}
+      rotation={[0, Math.PI, -Math.PI]}
       position={position}
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
-      onClick={() => window.open("https://www.youtube.com/@ThisIsDafna")}
+      onClick={() => setShowModal(path)}
     />
   )
 }
+interface FloatingVinylsProps {
+  setShowModal: (show: string | null) => void
+}
 
-export const FloatingVinyls: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  // Clone the loaded scene so each instance is unique.
-
-  useEffect(() => {
-        // Check the screen size only after the component has mounted
-        const handleResize = () => {
-          setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
-        };
-    
-        // Run the resize handler once on mount
-        handleResize();
-    
-        // Add a resize event listener
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
-      }, []);
+export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal }) => {
+  const [isMobile, setIsMobile] = useState(false)
   const parentRef = useRef<THREE.Group>(null)
-  const offsetDistance = isMobile ? 3.5 : 5.5;
+  const offsetDistance = isMobile ? 3.5 : 5.5
 
-  // Create four offset vectors (east, north, west, south)
-  const offsets: THREE.Vector3[] = [
+  // Define final offsets for each vinyl (east, north, west, south).
+  const finalOffsets: THREE.Vector3[] = [
     new THREE.Vector3(1, 0, 0).setLength(offsetDistance),
     new THREE.Vector3(0, 1, 0).setLength(offsetDistance),
     new THREE.Vector3(-1, 0, 0).setLength(offsetDistance),
@@ -78,28 +78,66 @@ export const FloatingVinyls: React.FC = () => {
   ]
 
   const paths = [
-    '/vinyl.glb',
-    '/vinyl.glb',
-    '/vinyl.glb',
-    '/vinyl.glb'
+    '/models/paradox.glb',
+    '/models/wiwwy.glb',
+    '/models/ily.glb',
+    '/models/submerge.glb'
   ]
-  // Animate the parent group and counter-rotate each child if needed.
-  useFrame(() => {
+
+  // A ref to store the animation progress (from 0: at center to 1: full offset).
+  const progressRef = useRef(0)
+
+  // Animate the parent group: update position and scale for each child vinyl.
+  useFrame((state, delta) => {
+    // Increase progress gradually until it reaches 1.
+    if (progressRef.current < 1) {
+      progressRef.current = Math.min(progressRef.current + delta, 1)
+    }
     if (parentRef.current) {
-      parentRef.current.rotation.z += 0.001
-      parentRef.current.children.forEach((child) => {
-        child.rotation.y -= 0.001
+      // Define final scale based on device type.
+      const finalScale = isMobile ? 0.08 : 0.1
+
+      parentRef.current.children.forEach((child, idx) => {
+        const finalOffset = finalOffsets[idx]
+        // Update position: from center ([0,0,0]) to finalOffset.
+        child.position.set(
+          finalOffset.x * progressRef.current,
+          finalOffset.y * progressRef.current,
+          finalOffset.z * progressRef.current
+        )
+        // Update scale: start from 0 and grow to finalScale.
+        child.scale.set(
+          finalScale * progressRef.current,
+          finalScale * progressRef.current,
+          finalScale * progressRef.current
+        )
+        child.rotation.z -= 0.001
       })
+      // Optionally, add a slow rotation to the whole group.
+      parentRef.current.rotation.z -= 0.001
     }
   })
 
+  // Handle responsiveness.
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   return (
-    <group ref={parentRef} position={[0.5, 0, -313]}>
-      {offsets.map((offset, idx) => (
-        <Vinyl path={paths[idx]} key={idx} position={[offset.x, offset.y, offset.z]} />
+    // The parent group is positioned as before.
+    <group ref={parentRef} position={[1, 0, -313]}>
+      {finalOffsets.map((_, idx) => (
+        // Initially, each vinyl is placed at the center with position [0,0,0].
+        <Vinyl setShowModal={setShowModal} path={paths[idx]} key={idx} position={[0, 0, 0]} />
       ))}
     </group>
   )
 }
 
-useGLTF.preload('/vinyl.glb')
+useGLTF.preload('/models/paradox.glb')
+useGLTF.preload('/models/wiwwy.glb')
+useGLTF.preload('/models/ily.glb')
+useGLTF.preload('/models/submerge.glb')

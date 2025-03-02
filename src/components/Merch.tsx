@@ -3,7 +3,7 @@ import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 export default function Merch() {
-    const { scene } = useGLTF('/tshirts.glb')
+    const { scene } = useGLTF('/models/tshirts.glb')
     const [hover, setHover] = useState(false);
   // Function to set emissive glow on all meshes in the scene
   const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
@@ -33,7 +33,7 @@ export default function Merch() {
     <>
         <group>
         <ambientLight intensity={2} />
-        <directionalLight intensity={3} position={[10, 10, 5]} />
+        <directionalLight intensity={4} position={[10, 10, 5]} />
           <primitive 
             object={scene} 
             position={position} 
@@ -58,5 +58,5 @@ export default function Merch() {
   )
 }
 
-useGLTF.preload('/tshirts.glb')
+useGLTF.preload('/models/tshirts.glb')
 
