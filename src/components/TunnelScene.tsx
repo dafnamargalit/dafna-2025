@@ -3,7 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import GridPlane from './GridPlane'
 import { Preload, Stars } from '@react-three/drei'
 import * as THREE from 'three'
-import { DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
+import { ChevronDown, DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
 import FloatingModel from './FloatingTVModel'
 import Merch from './Merch'
 import RecordPlayer from './RecordPlayer'
@@ -184,6 +184,9 @@ export default function TunnelScene() {
             <IconGithub />
             </a>
         </div>
+        <button className='absolute bottom-4' onClick={handleNext}>
+        <ChevronDown fill="#67E8F9"/>
+        </button>
       </div>}
     </div>
   )

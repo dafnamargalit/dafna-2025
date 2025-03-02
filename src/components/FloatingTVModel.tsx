@@ -14,9 +14,25 @@ export default function FloatingTVModel(props: any) {
     const { scene } = useGLTF('/old_tv.glb')
     const [hover, setHover] = useState(false);
 
-    useEffect(() => {
-       document.body.style.cursor = hover ? 'pointer' : 'auto'
-    }, [hover])
+const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
+    object.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material && 'emissive' in child.material) {
+        if (highlight) {
+          child.material.emissive = new THREE.Color('#67E8F9')
+          child.material.emissiveIntensity = 0.3
+        } else {
+          child.material.emissive = new THREE.Color('black')
+          child.material.emissiveIntensity = 0
+        }
+      }
+    })
+  }
+
+  // Update the cursor and model glow on hover change
+  useEffect(() => {
+    document.body.style.cursor = hover ? 'pointer' : 'auto'
+    setEmissive(scene, hover)
+  }, [hover, scene])
     // Optionally scale and adjust as needed
     scene.scale.set(0.015, 0.015, 0.015)
 
@@ -25,7 +41,7 @@ export default function FloatingTVModel(props: any) {
   return (
     <Float floatIntensity={0.1} speed={0.1} floatingRange={[1, 2]}>
         <ambientLight intensity={2} />
-        <directionalLight intensity={hover ? 200 : 3} position={[10, 10, 5]} />
+        <directionalLight intensity={3} position={[10, 10, 5]} />
         <group>
           <primitive 
             object={scene} 

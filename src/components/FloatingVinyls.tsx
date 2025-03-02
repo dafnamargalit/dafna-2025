@@ -11,7 +11,7 @@ interface VinylProps {
 const Vinyl: React.FC<VinylProps> = ({ path, position }) => {
   const { scene } = useGLTF(path)
   const [hover, setHover] = useState(false)
-
+  const [isMobile, setIsMobile] = useState(false);
   // Clone the loaded scene so each instance is unique.
   const clonedScene = useMemo(() => scene.clone(), [scene])
 
@@ -19,8 +19,23 @@ const Vinyl: React.FC<VinylProps> = ({ path, position }) => {
     document.body.style.cursor = hover ? 'pointer' : 'auto'
   }, [hover])
 
+  useEffect(() => {
+        // Check the screen size only after the component has mounted
+        const handleResize = () => {
+          setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+        };
+    
+        // Run the resize handler once on mount
+        handleResize();
+    
+        // Add a resize event listener
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
+      }, []);
+  
+
   // Adjust scale and rotation for the clone
-  clonedScene.scale.set(0.1, 0.1, 0.1)
+  isMobile ? clonedScene.scale.set(0.08, 0.08, 0.08) : clonedScene.scale.set(0.1, 0.1, 0.1);
   
   return (
     <primitive
@@ -35,8 +50,24 @@ const Vinyl: React.FC<VinylProps> = ({ path, position }) => {
 }
 
 export const FloatingVinyls: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  // Clone the loaded scene so each instance is unique.
+
+  useEffect(() => {
+        // Check the screen size only after the component has mounted
+        const handleResize = () => {
+          setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+        };
+    
+        // Run the resize handler once on mount
+        handleResize();
+    
+        // Add a resize event listener
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
+      }, []);
   const parentRef = useRef<THREE.Group>(null)
-  const offsetDistance = 5.5
+  const offsetDistance = isMobile ? 3.5 : 5.5;
 
   // Create four offset vectors (east, north, west, south)
   const offsets: THREE.Vector3[] = [
@@ -63,7 +94,7 @@ export const FloatingVinyls: React.FC = () => {
   })
 
   return (
-    <group ref={parentRef} position={[0, 0, -313]}>
+    <group ref={parentRef} position={[0.5, 0, -313]}>
       {offsets.map((offset, idx) => (
         <Vinyl path={paths[idx]} key={idx} position={[offset.x, offset.y, offset.z]} />
       ))}
