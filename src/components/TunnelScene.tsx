@@ -182,8 +182,8 @@ export default function TunnelScene() {
           <Preload all />
           {pageLoaded && <Merch />}
           {pageLoaded && <FloatingModel />}
-          {pageLoaded && <RecordPlayer setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
-          {showVinyls && <FloatingVinyls setShowModal={setShowModal} />}
+          {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
+          {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
         </Suspense>
         
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
@@ -220,6 +220,7 @@ export default function TunnelScene() {
           <Modal
             modalData={modalData}
             closeModal={() => setModalData(null)}
+            isMobile={isMobile}
           />
       }
     </div>

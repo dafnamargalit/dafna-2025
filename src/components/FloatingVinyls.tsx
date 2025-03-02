@@ -62,10 +62,11 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
 }
 interface FloatingVinylsProps {
   setShowModal: (show: string | null) => void
+  isMobile: boolean
 }
 
-export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal }) => {
-  const [isMobile, setIsMobile] = useState(false)
+export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, isMobile }) => {
+  
   const parentRef = useRef<THREE.Group>(null)
   const offsetDistance = isMobile ? 3.5 : 5.5
 
@@ -117,14 +118,6 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal }) 
       parentRef.current.rotation.z -= 0.001
     }
   })
-
-  // Handle responsiveness.
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768)
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
 
   return (
     // The parent group is positioned as before.

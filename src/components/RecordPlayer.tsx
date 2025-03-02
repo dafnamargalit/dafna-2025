@@ -2,24 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
-export default function RecordPlayer({ setShowVinyls, showVinyls }: { setShowVinyls: (set: boolean) => void, showVinyls: boolean }) {
+export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { setShowVinyls: (set: boolean) => void, showVinyls: boolean, isMobile: boolean }) {
   const { scene } = useGLTF('/models/recordplayer.glb')
   const [hover, setHover] = useState(false)
-  const [isMobile, setIsMobile] = useState(false);
-
-useEffect(() => {
-      // Check the screen size only after the component has mounted
-      const handleResize = () => {
-        setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
-      };
-  
-      // Run the resize handler once on mount
-      handleResize();
-  
-      // Add a resize event listener
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
-    }, []);
 
   // Function to set emissive glow on all meshes in the scene
   const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
@@ -45,7 +30,7 @@ useEffect(() => {
   // Scale and position the model as needed
   isMobile ? scene.scale.set(0.03, 0.03, 0.03) : scene.scale.set(0.05, 0.05, 0.05);
 
-  const position = [0, 0, -330]
+  const position = isMobile ? [1,0,-330] : [0, 0, -330]
 
   return (
     <Float floatIntensity={0.01} speed={0.1} floatingRange={[1, 1]} rotationIntensity={0.02}>

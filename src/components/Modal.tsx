@@ -9,7 +9,7 @@ export type ModalData = {
     apple: string
 }
 
-const Modal = ({ closeModal, modalData }: {closeModal: () => void, modalData: ModalData}) => {
+const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, modalData: ModalData, isMobile: boolean}) => {
 
     const [isChecked, setIsChecked] = useState(false);
 
@@ -21,16 +21,17 @@ const Modal = ({ closeModal, modalData }: {closeModal: () => void, modalData: Mo
     }
 
     return(
+        <>
         <div
         className="absolute text-cyan-300 flex flex-col bg-gray-700/75 bottom-0 z-50 justify-center items-center w-screen h-screen "
         onClick={closeModal} // Close modal when clicking outside the content
         >
         {/* Modal Content */}
         <div
-        className="flex flex-col justify-center items-center space-y-6 w-30 h-30 bg-blue-950/75 p-10 rounded-md"
+        className="flex flex-col justify-center items-center space-y-6 w-30 h-30 m-10 text-center bg-blue-950/75 p-10 rounded-md"
           onClick={(e) => e.stopPropagation()}
         >
-        <h2 className="text-3xl">select your preferred service:</h2>
+        <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl'}`}>select your preferred service:</h2>
         <div className='flex flex-row space-x-2'>
             <button onClick={() => rememberService("spotify", modalData.spotify)}>
             <IconSpotify />
@@ -52,6 +53,7 @@ const Modal = ({ closeModal, modalData }: {closeModal: () => void, modalData: Mo
        </div>
         </div>
       </div>
+      </>
     )
     }
 
