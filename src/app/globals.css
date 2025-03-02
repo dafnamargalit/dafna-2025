@@ -20,4 +20,6 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   overflow: hidden;
+  scrollbar-width: 0;
+  box-sizing: border-box;
 }

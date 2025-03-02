@@ -212,7 +212,7 @@ export default function TunnelScene() {
         />
       </Canvas>
       {(checkpointIndex === CHECKPOINTS.length - 1) && 
-      <div className={`absolute bottom-4 px-4 flex flex-col overscroll-none overflow-y-none items-center justify-center h-screen w-screen z-10`}>
+      <div className={`absolute bottom-4 px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
        <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
        <div className='flex flex-row space-x-2'>
             <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w'>
