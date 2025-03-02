@@ -218,9 +218,6 @@ export default function TunnelScene() {
         <ChevronDown fill="#67E8F9"/>
         </button>
       </div>}
-      {(checkpointIndex === 5 && !showVinyls) && <div className='absolute text-cyan-300 items-center justify-center flex flex-col w-screen top-80 left-0'>
-         click on me
-      </div>}
       {modalData &&
           <Modal
             modalData={modalData}
