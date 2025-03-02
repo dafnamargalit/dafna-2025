@@ -30,7 +30,7 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { 
   // Scale and position the model as needed
   isMobile ? scene.scale.set(0.03, 0.03, 0.03) : scene.scale.set(0.05, 0.05, 0.05);
 
-  const position = isMobile ? [-1,0,-330] : [0, 0, -330]
+  const position = [0, 0, -330]
 
   return (
     <Float floatIntensity={0.01} speed={0.1} floatingRange={[1, 1]} rotationIntensity={0.02}>
