@@ -134,6 +134,19 @@ export const IconInstagram = ({ fill, size }: { fill?: string, size?: string }) 
 </svg>
   )
 
+  export const IconAppleMusic = () => (
+    <svg style={{
+      opacity: 0, // Initially hidden
+      animation: 'fadeIn 2s ease forwards', // Fade in animation
+    }} className="hover:fill-cyan-100 fill-cyan-300"  viewBox="0 0 64 64" width="50px" height="50px"><path d="M45.928,7H18.072C11.957,7,7,11.957,7,18.072v27.856C7,52.043,11.957,57,18.072,57h27.856C52.043,57,57,52.043,57,45.928	V18.072C57,11.957,52.043,7,45.928,7z M37.67,44.644c-1.702,0-4.09-1.045-4.09-3.493c0-2.448,1.522-3.881,3.672-4.299	c0.851-0.165,1.785-0.354,2.603-0.522c0.868-0.178,1.489-0.941,1.489-1.827l0-11.266c0-0.534-0.489-0.934-1.012-0.828l-13.153,2.655	c-0.526,0.106-0.904,0.568-0.904,1.105v16.056c0,2.3-0.347,5.724-5.469,5.724c-1.697,0-4.079-1.042-4.079-3.484	s1.519-3.871,3.662-4.288c0.919-0.179,1.935-0.385,2.797-0.561c0.735-0.151,1.258-0.8,1.253-1.55l-0.134-18.631	c-0.008-1.06,0.738-1.976,1.777-2.184l15.531-3.116c0.795-0.159,1.537,0.444,1.537,1.255c0.001,5.388,0.003,22.895,0.003,23.516	C43.153,41.211,42.805,44.644,37.67,44.644z"/></svg>
+  )
+
+  export const IconTidal = () => (
+    <svg xmlns="http://www.w3.org/2000/svg"  style={{
+      opacity: 0, // Initially hidden
+      animation: 'fadeIn 2s ease forwards', // Fade in animation
+    }} className="hover:fill-cyan-100 fill-cyan-300"  viewBox="0 0 48 48" width="50px" height="50px"><path d="M 14 6 C 9.582 6 6 9.582 6 14 L 6 34 C 6 38.418 9.582 42 14 42 L 34 42 C 38.418 42 42 38.418 42 34 L 42 14 C 42 9.582 38.418 6 34 6 L 14 6 z M 16 17 L 20 21 L 24 17 L 28 21 L 32 17 L 36 21 L 32 25 L 28 21 L 24 25 L 28 29 L 24 33 L 20 29 L 24 25 L 20 21 L 16 25 L 12 21 L 16 17 z"/></svg>
+  )
   export const ChevronDown = ({ fill, size }: { fill?: string, size?: string }) => (
     <svg height={size || "50px"} id="Layer_1" version="1.1" viewBox="0 0 512 512" width={size || "50px"} xmlns="http://www.w3.org/2000/svg">
       <path fill={fill || "#fff"} d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/>

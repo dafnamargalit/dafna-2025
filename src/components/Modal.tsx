@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconSpotify, IconYoutube } from "./Icons";
+import { IconAppleMusic, IconSpotify, IconTidal, IconYoutube } from "./Icons";
 
 export type ModalData = {
     name: string,
@@ -36,8 +36,14 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
             <button onClick={() => rememberService("spotify", modalData.spotify)}>
             <IconSpotify />
             </button>
+            <button onClick={() => rememberService("apple", modalData.apple)}>
+            <IconAppleMusic />
+            </button>
             <button onClick={() => rememberService("youtube", modalData.youtube)}>
             <IconYoutube />
+            </button>
+            <button onClick={() => rememberService("tidal", modalData.tidal)}>
+            <IconTidal />
             </button>
         </div>
         <div className="flex flex-row justify-center items-center">

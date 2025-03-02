@@ -213,7 +213,8 @@ export default function TunnelScene() {
             <IconGithub />
             </a>
         </div>
-        <button className='absolute bottom-4' onClick={handleNext}>
+        <button className='absolute text-cyan-300 items-center justify-center flex flex-col bottom-4' onClick={handleNext}>
+          <div>{isMobile ? 'swipe down' : 'scroll down'}</div>
         <ChevronDown fill="#67E8F9"/>
         </button>
       </div>}
