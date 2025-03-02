@@ -26,9 +26,8 @@ export default function Merch() {
     setEmissive(scene, hover)
   }, [hover, scene])
     // Optionally scale and adjust as needed
+    const position = [0, -8, -25];
 
-    const position = [0,-10,-130];
-    
   return (
     <>
         <group>

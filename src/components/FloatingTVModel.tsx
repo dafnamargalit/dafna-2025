@@ -78,7 +78,8 @@ export default function FloatingTVModel(props: any) {
 
   // Adjust model scale and position
   scene.scale.set(0.012, 0.012, 0.012)
-  const position = [0, -8, -20]
+  const position = [0,-8,-120];
+    
 
   return (
     <>
