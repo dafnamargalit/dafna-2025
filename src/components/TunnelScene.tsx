@@ -12,6 +12,7 @@ import { FloatingVinyls } from './FloatingVinyls'
 import Modal, { ModalData } from './Modal'
 import { albums } from '@/lib/constants'
 import retroFont from './RetroFont'
+import { RemoveScroll } from 'react-remove-scroll'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -189,8 +190,9 @@ export default function TunnelScene() {
     touchStartY.current = null
   }
   return (
-    <div className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} onWheel={handleWheel} onTouchStart={handleTouchStart}
+    <div onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
+      <RemoveScroll  className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} >
       <Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
@@ -240,6 +242,7 @@ export default function TunnelScene() {
             isMobile={isMobile}
           />
       }
+            </RemoveScroll>
     </div>
   )
 }
