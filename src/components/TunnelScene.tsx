@@ -62,6 +62,21 @@ export default function TunnelScene() {
   const [showVinyls, setShowVinyls] = useState(false);
   const [showModal, setShowModal] = useState<string | null>(null);
   const [modalData, setModalData] = useState<ModalData | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault()  // Prevent scrolling
+    }
+
+    // Be sure to set passive: false so preventDefault works
+    canvas && canvas.addEventListener('touchmove', handleTouchMove, { passive: false })
+
+    return () => {
+      canvas && canvas.removeEventListener('touchmove', handleTouchMove)
+    }
+  }, [])
 
   useEffect(() => {
     const service = localStorage.getItem("streaming-service");
@@ -176,7 +191,7 @@ export default function TunnelScene() {
   return (
     <div className={`w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} onWheel={handleWheel} onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}>
-      <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
+      <Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
         <Suspense fallback={null}>
