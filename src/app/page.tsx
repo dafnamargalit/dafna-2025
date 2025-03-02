@@ -6,7 +6,7 @@ const TunnelScene = dynamic(() => import('../components/TunnelScene'), { ssr: fa
 
 export default function Home() {
   return (
-    <div className="bg-black overscroll-none overflow-y-none flex justify-center items-center w-screen h-screen overflow-hidden">
+    <div className="bg-black overscroll-none overflow-y-none flex justify-center items-center overflow-hidden">
       <TunnelScene />
     </div>
   )
