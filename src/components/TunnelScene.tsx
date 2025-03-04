@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import GridPlane from './GridPlane'
-import { Preload, Stars } from '@react-three/drei'
+import { CameraShake, OrbitControls, Preload, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import { ChevronDown, DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
 import { FloatingTVModel } from './FloatingTVModel'
@@ -45,10 +45,24 @@ function Tunnel() {
 }
 
 function CameraController({ checkpointIndex }: { checkpointIndex: number }) {
-  useFrame(({ camera }) => {
-    const target = CHECKPOINTS[checkpointIndex]
-    // Smoothly interpolate the camera's z position toward the target.
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, target, 0.1)
+  useFrame(({ camera, mouse }) => {
+    // 1) Smoothly move the camera along the z-axis toward the selected checkpoint
+    const targetZ = CHECKPOINTS[checkpointIndex]
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.1)
+
+    // 2) Slightly rotate camera based on mouse position (-1 to +1)
+    //    Adjust `rotationFactor` and `lerp` to make the effect stronger or smoother.
+    const rotationFactor = 0.4
+    camera.rotation.x = THREE.MathUtils.lerp(
+      camera.rotation.x,
+      -mouse.y * rotationFactor,
+      0.1
+    )
+    camera.rotation.y = THREE.MathUtils.lerp(
+      camera.rotation.y,
+      mouse.x * rotationFactor,
+      0.1
+    )
   })
   return null
 }
@@ -189,10 +203,25 @@ export default function TunnelScene() {
     }
     touchStartY.current = null
   }
+  const config = {
+    maxYaw: 0.1, // Max amount camera can yaw in either direction
+    maxPitch: 0.2, // Max amount camera can pitch in either direction
+    maxRoll: 0.1, // Max amount camera can roll in either direction
+    yawFrequency: 0.1, // Frequency of the yaw rotation
+    pitchFrequency: 0.2, // Frequency of the pitch rotation
+    rollFrequency: 0.1, // Frequency of the roll rotation
+    intensity: 0.6, // initial intensity of the shake
+    decay: false, // should the intensity decay over time
+    decayRate: 0.65, // if decay = true this is the rate at which intensity will reduce at
+    controls: undefined, // if using orbit controls, pass a ref here so we can update the rotation
+  }
+  
   return (
     <div onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <RemoveScroll  className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} >
-      <Canvas ref={canvasRef} gl={{ preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
+      <Canvas shadows ref={canvasRef} gl={{ preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
+        <CameraShake {...config} />
+        <ambientLight intensity={0.015} />
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
         <Suspense fallback={null}>

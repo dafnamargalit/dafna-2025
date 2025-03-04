@@ -3,8 +3,6 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
-
-// ---------------- Vinyl Component ----------------
 interface VinylProps {
   position: [number, number, number]
   path: string
@@ -13,22 +11,47 @@ interface VinylProps {
 
 const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
   const { scene } = useGLTF(path)
-  if (!scene) return null
-
   const [hover, setHover] = useState(false)
 
-  // Deep-clone the scene and its materials so each instance is independent.
+  // Deep-clone the scene and then override materials with MeshPhysicalMaterial for a sheen
   const clonedScene = useMemo(() => {
+    if (!scene) return null
+
     const clone = scene.clone()
     clone.traverse((child) => {
       if (child instanceof THREE.Mesh && child.material) {
-        child.material = child.material.clone()
+        // Store original material references
+        const originalMat = child.material as THREE.MeshStandardMaterial
+
+        // Create a new MeshPhysicalMaterial, preserving the original texture maps if they exist.
+        const physicalMat = new THREE.MeshPhysicalMaterial({
+          // Transfer common properties from original material (maps, color, etc.)
+          map: originalMat.map || null,
+          normalMap: originalMat.normalMap || null,
+          roughnessMap: originalMat.roughnessMap || null,
+          metalnessMap: originalMat.metalnessMap || null,
+          color: originalMat.color.clone(),
+
+          // --- The 'magic' PBR properties for a nice sheen ---
+          metalness: 0.2,        // tweak to your liking
+          roughness: 0.4,        // tweak to your liking
+          clearcoat: 1.0,        // strong clearcoat
+          clearcoatRoughness: 0.5,
+          
+          // Sheen requires WebGL2 / MeshPhysicalMaterial
+          sheen: 1.0,
+          sheenColor: new THREE.Color('#ffffff'),   // or any tint
+          sheenRoughness: 0.5,
+        })
+
+        // Assign the new physical material
+        child.material = physicalMat
       }
     })
     return clone
   }, [scene])
 
-  // Function to update emissive effect.
+  // Update emissive glow on hover (you can keep or remove)
   const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
     object.traverse((child) => {
       if (child instanceof THREE.Mesh && child.material && 'emissive' in child.material) {
@@ -45,21 +68,25 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
 
   useEffect(() => {
     document.body.style.cursor = hover ? 'pointer' : 'auto'
-    setEmissive(clonedScene, hover)
+    if (clonedScene) setEmissive(clonedScene, hover)
   }, [hover, clonedScene])
 
+  if (!clonedScene) return null
 
   return (
     <primitive
       object={clonedScene}
-      rotation={[0, Math.PI, -Math.PI]}
+      rotation={[0, Math.PI - 0.4, -Math.PI]}
       position={position}
+      castShadow
+      receiveShadow
       onPointerOver={() => setHover(true)}
       onPointerOut={() => setHover(false)}
       onClick={() => setShowModal(path)}
     />
   )
 }
+
 interface FloatingVinylsProps {
   setShowModal: (show: string | null) => void
   isMobile: boolean
@@ -113,6 +140,9 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
           finalScale * progressRef.current
         )
         child.rotation.z -= 0.001
+
+        child.rotation.y += 0.001
+        child.rotation.y -= 0.0012
       })
       // Optionally, add a slow rotation to the whole group.
       parentRef.current.rotation.z -= 0.001

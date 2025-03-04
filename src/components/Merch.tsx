@@ -26,18 +26,25 @@ export default function Merch() {
     setEmissive(scene, hover)
   }, [hover, scene])
     // Optionally scale and adjust as needed
-    const position = [0, -8, -25];
+    const position = [0, -8, -20];
 
   return (
     <>
         <group>
-        <ambientLight intensity={2} />
-        <directionalLight intensity={4} position={[10, 10, 5]} />
+
+        <directionalLight intensity={1} position={[13, -4, -10]} castShadow shadow-mapSize={[2024, 2024]}/>
+        <directionalLight intensity={3} position={[-13, 5, -10]} castShadow shadow-mapSize={[2024, 2024]}/>
+        <spotLight
+          distance={5}
+          angle={0.15}
+        />
           <primitive 
             object={scene} 
             position={position} 
-            scale={0.006}
-            rotation={[0, Math.PI / 3, 0]}
+            scale={0.1}
+            castShadow
+            receiveShadow
+            rotation={[0, Math.PI / 4, 0]}
             onPointerOver={(e: any) => {
               e.stopPropagation()
               setHover(true)
