@@ -83,6 +83,7 @@ export const FloatingTVModel: React.FC<FloatingTVModelProps> = ({ isMobile }) =>
     <>
       <group>
         <primitive 
+          castShadow
           object={scene} 
           position={position} 
           onPointerOver={() => setHover(true)}

@@ -6,16 +6,17 @@ import * as THREE from 'three'
 import { ChevronDown, DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
 import { FloatingTVModel } from './FloatingTVModel'
 import Merch from './Merch'
-import RecordPlayer from './RecordPlayer'
-import Image from 'next/image'
 import { FloatingVinyls } from './FloatingVinyls'
 import Modal, { ModalData } from './Modal'
 import { albums } from '@/lib/constants'
 import retroFont from './RetroFont'
 import { RemoveScroll } from 'react-remove-scroll'
+import dynamic from 'next/dynamic'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
+
+const RecordPlayer = dynamic(() => import('../components/RecordPlayer'), { ssr: false })
 
 function Tunnel() {
   return (
@@ -224,13 +225,19 @@ export default function TunnelScene() {
         <ambientLight intensity={0.015} />
         <CameraController checkpointIndex={checkpointIndex} />
         <Tunnel />
-        <Suspense fallback={null}>
           <Preload all />
+          <Suspense fallback={null}>
           {pageLoaded && <Merch />}
+          </Suspense>
+          <Suspense fallback={null}>
           {pageLoaded && <FloatingTVModel isMobile={isMobile} />}
+          </Suspense>
+          <Suspense fallback={null}>
           {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
+          </Suspense>
+          <Suspense fallback={null}>
           {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
-        </Suspense>
+          </Suspense>
         
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
         <Stars
