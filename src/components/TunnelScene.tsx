@@ -11,12 +11,10 @@ import Modal, { ModalData } from './Modal'
 import { albums } from '@/lib/constants'
 import retroFont from './RetroFont'
 import { RemoveScroll } from 'react-remove-scroll'
-import dynamic from 'next/dynamic'
+import RecordPlayer from './RecordPlayer'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
-
-const RecordPlayer = dynamic(() => import('../components/RecordPlayer'), { ssr: false })
 
 function Tunnel() {
   return (
