@@ -13,6 +13,7 @@ import retroFont from './RetroFont'
 import { RemoveScroll } from 'react-remove-scroll'
 import RecordPlayer from './RecordPlayer'
 import { TourBus } from './TourBus'
+import TourDates from './TourDates'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -77,6 +78,7 @@ export default function TunnelScene() {
   const [showVinyls, setShowVinyls] = useState(false);
   const [showModal, setShowModal] = useState<string | null>(null);
   const [modalData, setModalData] = useState<ModalData | null>(null);
+  const [showTourDates, setShowTourDates] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
@@ -238,7 +240,7 @@ export default function TunnelScene() {
           {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
           </Suspense>
           <Suspense fallback={null}>
-          {pageLoaded && checkpointIndex === 2 && <TourBus isMobile={isMobile} />}
+          {pageLoaded && checkpointIndex === 2 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
           </Suspense>
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
         <Stars
@@ -278,6 +280,7 @@ export default function TunnelScene() {
             isMobile={isMobile}
           />
       }
+         {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
             </RemoveScroll>
     </div>
   )

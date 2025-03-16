@@ -5,10 +5,11 @@ import { videos } from '@/lib/constants'
 import { useFrame } from '@react-three/fiber'
 
 interface TourBusProps {
-  isMobile: boolean
+  isMobile: boolean;
+  setShowTourDates: (show: boolean) => void;
 }
 
-export const TourBus: React.FC<TourBusProps> = ({ isMobile }) =>{
+export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) =>{
   const { scene } = useGLTF('/models/tourbus.glb')
   const [hover, setHover] = useState(false)
   const [position, setPosition] = useState([0,-2,40]);
@@ -38,7 +39,7 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile }) =>{
 
 
   // Adjust model scale and position
-  scene.scale.set(1.5, 1.5, 1.5);
+  isMobile ? scene.scale.set(1.2, 1.2, 1.2): scene.scale.set(1.5, 1.5, 1.5);
     
 
   const frontWheelRef = useRef<THREE.Object3D | null>(null)
@@ -91,7 +92,7 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile }) =>{
           position={position} 
           onPointerOver={() => setHover(true)}
           onPointerOut={() => setHover(false)}
-          onClick={() => window.open("https://www.youtube.com/@ThisIsDafna")}
+          onClick={() => setShowTourDates(true)}
         />
       </group>
     </>
