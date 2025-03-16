@@ -14,6 +14,7 @@ import { RemoveScroll } from 'react-remove-scroll'
 import RecordPlayer from './RecordPlayer'
 import { TourBus } from './TourBus'
 import TourDates from './TourDates'
+import ProgressNav from './ProgressNav'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -281,7 +282,8 @@ export default function TunnelScene() {
           />
       }
          {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
-            </RemoveScroll>
+      {pageLoaded && <ProgressNav isMobile={isMobile} checkpointIndex={checkpointIndex} setCheckpointIndex={setCheckpointIndex}/>}
+      </RemoveScroll>
     </div>
   )
 }

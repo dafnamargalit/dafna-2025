@@ -200,3 +200,20 @@ export const IconInstagram = ({ fill, size }: { fill?: string, size?: string }) 
         </style>
     </svg>
   );
+
+  export const HamburgerMenu = ({ stroke, size, isOpen }: {stroke?: string, size?: string, isOpen?: boolean }) => (
+    <svg className={"hover:opacity-60"} width={size || "50px"} id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 40">
+    <g id="Layer_1-2" data-name="Layer 1">
+      <line fill="none" stroke={ stroke || "#22D3EE"} strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} x1="2" y1="2" x2="48" y2="2" className={`transition-transform duration-300 ${
+                isOpen ? "rotate-45 translate-x-1 translate-y-0.5" : ""
+              }`} />
+      <line fill="none" stroke={ stroke || "#22D3EE"} strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} x1="2" y1="11" x2="48" y2="11" className={`transition-opacity duration-300 ${
+                  isOpen ? "opacity-0" : ""
+              }`} />
+      <line fill="none" stroke={ stroke || "#22D3EE"} strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} x1="2" y1="20" x2="48" y2="20"  className={`transition-transform duration-300 ${
+                  isOpen ? "-rotate-45 translate-y-6 -translate-x-3" : ""
+              }`} />
+    </g>
+  </svg>
+  );
+  
