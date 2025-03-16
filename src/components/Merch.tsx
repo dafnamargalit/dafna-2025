@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 export default function Merch() {
     const { scene } = useGLTF('/models/tshirts.glb')
     const [hover, setHover] = useState(false);
+    const handlePointerOver = useCallback(() => setHover(true), []);
+    const handlePointerOut = useCallback(() => setHover(false), []);
   // Function to set emissive glow on all meshes in the scene
   const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
     object.traverse((child) => {
@@ -47,15 +49,15 @@ export default function Merch() {
             rotation={[0, Math.PI / 4, 0]}
             onPointerOver={(e: any) => {
               e.stopPropagation()
-              setHover(true)
+              handlePointerOver()
             }}
             onPointerOut={(e: any) => {
               e.stopPropagation()
-              setHover(false)
+              handlePointerOut()
             }}
             onClick={(e: any) => {
               e.stopPropagation()
-              setHover(true); 
+              handlePointerOver()
               window.open("https://shop.dafna.rocks");
             }}
           />
@@ -63,6 +65,3 @@ export default function Merch() {
     </>
   )
 }
-
-useGLTF.preload('/models/tshirts.glb')
-

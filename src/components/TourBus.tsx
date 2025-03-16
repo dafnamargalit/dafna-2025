@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { videos } from '@/lib/constants'
@@ -14,6 +14,8 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) 
   const [hover, setHover] = useState(false)
   const [position, setPosition] = useState([0,-2,40]);
   const [rotation, setRotation] = useState([0,0, 0]);
+  const handlePointerOver = useCallback(() => setHover(true), []);
+  const handlePointerOut = useCallback(() => setHover(false), []);
 
   const finalPosition = [0,-2,90];
   // Update emissive effect on hover
@@ -90,13 +92,11 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) 
           object={scene} 
           rotation={rotation}
           position={position} 
-          onPointerOver={() => setHover(true)}
-          onPointerOut={() => setHover(false)}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
           onClick={() => setShowTourDates(true)}
         />
       </group>
     </>
   )
 }
-
-useGLTF.preload('/models/tourbus.glb')

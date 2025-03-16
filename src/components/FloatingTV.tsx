@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { videos } from '@/lib/constants'
@@ -31,6 +31,9 @@ export const FloatingTV: React.FC<FloatingTVProps> = ({ isMobile }) =>{
     document.body.style.cursor = hover ? 'pointer' : 'auto'
     setEmissive(scene, hover)
   }, [hover, scene])
+
+  const handlePointerOver = useCallback(() => setHover(true), []);
+  const handlePointerOut = useCallback(() => setHover(false), []);
 
   // Setup video texture on the TV screen
   useEffect(() => {
@@ -86,13 +89,11 @@ export const FloatingTV: React.FC<FloatingTVProps> = ({ isMobile }) =>{
           castShadow
           object={scene} 
           position={position} 
-          onPointerOver={() => setHover(true)}
-          onPointerOut={() => setHover(false)}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
           onClick={() => window.open("https://www.youtube.com/@ThisIsDafna")}
         />
       </group>
     </>
   )
 }
-
-useGLTF.preload('/models/old_tv.glb')

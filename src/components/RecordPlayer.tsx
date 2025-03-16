@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { useThree } from '@react-three/fiber'
@@ -6,7 +6,8 @@ import { useThree } from '@react-three/fiber'
 export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { setShowVinyls: (set: boolean) => void, showVinyls: boolean, isMobile: boolean }) {
   const { scene } = useGLTF('/models/recordplayer.glb')
   const [hover, setHover] = useState(false)
-
+  const handlePointerOver = useCallback(() => setHover(true), []);
+  const handlePointerOut = useCallback(() => setHover(false), []);
   // Create a target for the spotlight
   const targetRef = useRef<THREE.Object3D>(new THREE.Object3D())
 
@@ -82,11 +83,11 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { 
           receiveShadow
           onPointerOver={(e: any) => {
             e.stopPropagation()
-            setHover(true)
+            handlePointerOver()
           }}
           onPointerOut={(e: any) => {
             e.stopPropagation()
-            setHover(false)
+            handlePointerOut()
           }}
           onClick={(e: any) => {
             e.stopPropagation()
@@ -98,5 +99,3 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { 
     </>
   )
 }
-
-useGLTF.preload('/models/recordplayer.glb')

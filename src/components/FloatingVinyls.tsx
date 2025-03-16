@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
@@ -13,6 +13,8 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
   const { scene } = useGLTF(path)
   const [hover, setHover] = useState(false)
 
+  const handlePointerOver = useCallback(() => setHover(true), []);
+  const handlePointerOut = useCallback(() => setHover(false), []);
   // Deep-clone the scene and then override materials with MeshPhysicalMaterial for a sheen
   const clonedScene = useMemo(() => {
     if (!scene) return null
@@ -80,8 +82,8 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
       position={position}
       castShadow
       receiveShadow
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
       onClick={() => setShowModal(path)}
     />
   )
@@ -159,8 +161,3 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
     </group>
   )
 }
-
-useGLTF.preload('/models/paradox.glb')
-useGLTF.preload('/models/wiwwy.glb')
-useGLTF.preload('/models/ily.glb')
-useGLTF.preload('/models/submerge.glb')
