@@ -4,7 +4,7 @@ import GridPlane from './GridPlane'
 import { CameraShake, OrbitControls, Preload, Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import { ChevronDown, DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
-import { FloatingTVModel } from './FloatingTVModel'
+import { FloatingTV } from './FloatingTV'
 import Merch from './Merch'
 import { FloatingVinyls } from './FloatingVinyls'
 import Modal, { ModalData } from './Modal'
@@ -12,6 +12,7 @@ import { albums } from '@/lib/constants'
 import retroFont from './RetroFont'
 import { RemoveScroll } from 'react-remove-scroll'
 import RecordPlayer from './RecordPlayer'
+import { TourBus } from './TourBus'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
@@ -228,7 +229,7 @@ export default function TunnelScene() {
           {pageLoaded && <Merch />}
           </Suspense>
           <Suspense fallback={null}>
-          {pageLoaded && <FloatingTVModel isMobile={isMobile} />}
+          {pageLoaded && <FloatingTV isMobile={isMobile} />}
           </Suspense>
           <Suspense fallback={null}>
           {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
@@ -236,7 +237,9 @@ export default function TunnelScene() {
           <Suspense fallback={null}>
           {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
           </Suspense>
-        
+          <Suspense fallback={null}>
+          {pageLoaded && checkpointIndex === 2 && <TourBus isMobile={isMobile} />}
+          </Suspense>
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
         <Stars
           radius={500}   // Stars distributed within a sphere of radius 500

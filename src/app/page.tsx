@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 
-const TunnelScene = dynamic(() => import('../components/TunnelScene'), { ssr: false })
+const TunnelScene = dynamic(() => import('../components/TunnelScene'), { ssr: true })
 
 export default function Home() {
   return (
