@@ -3,7 +3,7 @@ import { Float, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 export default function Merch() {
-    const { scene } = useGLTF('/models/tshirts.glb')
+    const { scene } = useGLTF('/models/tshirts_draco.glb')
     const [hover, setHover] = useState(false);
     const handlePointerOver = useCallback(() => setHover(true), []);
     const handlePointerOut = useCallback(() => setHover(false), []);

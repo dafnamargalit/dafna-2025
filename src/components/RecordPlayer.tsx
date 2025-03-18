@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { useThree } from '@react-three/fiber'
 
 export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: { setShowVinyls: (set: boolean) => void, showVinyls: boolean, isMobile: boolean }) {
-  const { scene } = useGLTF('/models/recordplayer.glb')
+  const { scene } = useGLTF('/models/recordplayer_draco.glb')
   const [hover, setHover] = useState(false)
   const handlePointerOver = useCallback(() => setHover(true), []);
   const handlePointerOut = useCallback(() => setHover(false), []);

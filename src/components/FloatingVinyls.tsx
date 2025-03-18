@@ -109,9 +109,9 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
 
   const paths = [
     '/models/paradox.glb',
-    '/models/wiwwy.glb',
+    '/models/wiwwy_draco.glb',
     '/models/ily.glb',
-    '/models/submerge.glb'
+    '/models/submerge_draco.glb'
   ]
 
   // A ref to store the animation progress (from 0: at center to 1: full offset).

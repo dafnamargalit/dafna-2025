@@ -12,30 +12,26 @@ const ProgressNav = ({ checkpointIndex, setCheckpointIndex, isMobile }: Progress
     const pages = [
         {
             name: "home",
-            index: 6,
-        },
-        {
-            name: "music",
             index: 5,
         },
         {
-            name: "videos",
+            name: "music",
             index: 4,
         },
         {
-            name: "merch",
+            name: "videos",
             index: 3,
         },
         {
-            name: "tour",
+            name: "merch",
             index: 2,
         },
         {
-            name: "about",
+            name: "tour",
             index: 1,
         },
         {
-            name: "new",
+            name: "about",
             index: 0,
         },
     ];

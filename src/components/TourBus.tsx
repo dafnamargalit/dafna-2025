@@ -10,7 +10,7 @@ interface TourBusProps {
 }
 
 export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) =>{
-  const { scene } = useGLTF('/models/tourbus.glb')
+  const { scene } = useGLTF('/models/tourbus_draco.glb')
   const [hover, setHover] = useState(false)
   const [position, setPosition] = useState([0,-2,40]);
   const [rotation, setRotation] = useState([0,0, 0]);

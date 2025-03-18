@@ -8,7 +8,7 @@ interface FloatingTVProps {
 }
 
 export const FloatingTV: React.FC<FloatingTVProps> = ({ isMobile }) =>{
-  const { scene } = useGLTF('/models/old_tv.glb')
+  const { scene } = useGLTF('/models/old_tv_draco.glb')
   const [hover, setHover] = useState(false)
 
   // Update emissive effect on hover

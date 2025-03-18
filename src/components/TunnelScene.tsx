@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, Suspense } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import GridPlane from './GridPlane'
-import { CameraShake, OrbitControls, Preload, Stars } from '@react-three/drei'
+import { CameraShake, OrbitControls, Preload, Stars, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { ChevronDown, DafnaLogo, IconGithub, IconInstagram, IconSpotify, IconYoutube } from './Icons'
 import { FloatingTV } from './FloatingTV'
@@ -15,11 +15,21 @@ import RecordPlayer from './RecordPlayer'
 import { TourBus } from './TourBus'
 import TourDates from './TourDates'
 import ProgressNav from './ProgressNav'
+import Link from 'next/link'
 
 // Define checkpoints along the Z axis.
-const CHECKPOINTS = [500, 300, 100, 0, -100, -300, -480]
+const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
 
 function Tunnel() {
+  useGLTF.preload('/models/paradox.glb');
+  useGLTF.preload('/models/wiwwy_draco.glb');
+  useGLTF.preload('/models/ily_draco.glb');
+  useGLTF.preload('/models/submerge_draci.glb');
+  useGLTF.preload('/models/tourbus_draco.glb');
+  useGLTF.preload('/models/recordplayer_draco.glb');
+  useGLTF.preload('/models/tshirts_draco.glb');
+  useGLTF.preload('/models/old_tv_draco.glb');
+
   return (
     <>
       {/* Left Wall */}
@@ -149,7 +159,7 @@ export default function TunnelScene() {
     }
     setTimeout(() => {
       setPageLoaded(true);
-    }, 1000);
+    }, isMobile ? 4000 : 1000);
   }, [pageLoaded])
 
   // Handle scroll events to trigger checkpoint changes.
@@ -241,7 +251,7 @@ export default function TunnelScene() {
           {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
           </Suspense>
           <Suspense fallback={null}>
-          {pageLoaded && checkpointIndex === 2 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
+          {pageLoaded && checkpointIndex === 1 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
           </Suspense>
         <fogExp2 attach="fog" args={[0x000000, 0.005]} />
         <Stars
@@ -254,6 +264,9 @@ export default function TunnelScene() {
       </Canvas>
       {(checkpointIndex === CHECKPOINTS.length - 1) && 
       <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
+       <Link href={'https://linktree.com/dafnamusic'} className='hover:opacity-70 bg-cyan-300 w-30 flex items-center justify-center p-2 border-solid border-2 border-cyan-500 text-cyan-700'>
+        <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
+       </Link>
        <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
        <div className='flex flex-row space-x-2'>
             <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w'>
