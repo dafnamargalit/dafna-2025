@@ -23,8 +23,8 @@ const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
 function Tunnel() {
   useGLTF.preload('/models/paradox.glb');
   useGLTF.preload('/models/wiwwy_draco.glb');
-  useGLTF.preload('/models/ily_draco.glb');
-  useGLTF.preload('/models/submerge_draci.glb');
+  useGLTF.preload('/models/ily.glb');
+  useGLTF.preload('/models/submerge_draco.glb');
   useGLTF.preload('/models/tourbus_draco.glb');
   useGLTF.preload('/models/recordplayer_draco.glb');
   useGLTF.preload('/models/tshirts_draco.glb');
@@ -157,10 +157,12 @@ export default function TunnelScene({ onPageLoad } : { onPageLoad: boolean }) {
     if(!pageLoaded){
         setCheckpointIndex(CHECKPOINTS.length - 1);
         setCheckpointIndex(0);
+        setShowVinyls(true);
     }
     setTimeout(() => {
       setPageLoaded(true);
-    }, isMobile ? 4000 : 1000);
+      setShowVinyls(false);
+    }, 1000);
 
     if(onPageLoad){
       setCheckpointIndex(CHECKPOINTS.length - 1);
@@ -237,7 +239,7 @@ export default function TunnelScene({ onPageLoad } : { onPageLoad: boolean }) {
   return (
     <div onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <RemoveScroll  className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} >
-      <Canvas shadows ref={canvasRef} gl={{ preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }}>
+      <Canvas shadows ref={canvasRef} gl={{ antialias: false, powerPreference: 'low-power', preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }} dpr={[1, 1.5]} performance={{ min: 0.1, max: 0.5 }}>
         <CameraShake {...config} />
         <ambientLight intensity={0.015} />
         <CameraController checkpointIndex={checkpointIndex} />
@@ -269,7 +271,7 @@ export default function TunnelScene({ onPageLoad } : { onPageLoad: boolean }) {
       </Canvas>
       {(checkpointIndex === CHECKPOINTS.length - 1) && 
       <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
-       <Link href={'https://linktree.com/dafnamusic'} className='hover:opacity-70 bg-cyan-300 w-30 flex items-center justify-center p-2 border-solid border-2 border-cyan-500 text-cyan-700'>
+       <Link href={'https://linktree.com/dafnamusic'} className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700`}>
         <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
        </Link>
        <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>

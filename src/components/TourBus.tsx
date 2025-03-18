@@ -12,8 +12,8 @@ interface TourBusProps {
 export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) =>{
   const { scene } = useGLTF('/models/tourbus_draco.glb')
   const [hover, setHover] = useState(false)
-  const [position, setPosition] = useState([0,-2,40]);
-  const [rotation, setRotation] = useState([0,0, 0]);
+  const [position, setPosition] = useState(isMobile ? [0,-2,90] : [0,-2,40]);
+  const [rotation, setRotation] = useState(isMobile ? [0,-0.6, 0] : [0,0,0]);
   const handlePointerOver = useCallback(() => setHover(true), []);
   const handlePointerOut = useCallback(() => setHover(false), []);
 
@@ -56,6 +56,7 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) 
   useMemo(() => {
     if (!scene) return
 
+    if(!isMobile){
     // For example, if your wheel objects are named "Wheel_FL", "Wheel_FR", etc.
     frontWheelRef.current = scene.getObjectByName('Tyres_-_front') || null
     backWheelRef.current = scene.getObjectByName('Tyres_-_rear') || null
@@ -65,10 +66,11 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) 
 
     frontHubcapsRef.current = scene.getObjectByName('Hubcaps_-_front') || null
     backHubcapsRef.current = scene.getObjectByName('Hubcaps_-_rear') || null
+    }
   }, [scene])
 
   useFrame(() => {
-    if(position[2] !== finalPosition[2]){
+    if(position[2] !== finalPosition[2] && !isMobile){
     // If the references exist, rotate them
     if (frontWheelRef.current) frontWheelRef.current.rotation.x += 0.05
     if (backWheelRef.current) backWheelRef.current.rotation.x += 0.05
