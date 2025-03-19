@@ -79,7 +79,7 @@ function CameraController({ checkpointIndex }: { checkpointIndex: number }) {
   return null
 }
 
-export default function TunnelScene({ onPageLoad } : { onPageLoad: boolean }) {
+export default function TunnelScene() {
   const [checkpointIndex, setCheckpointIndex] = useState(0)
   const [pageLoaded, setPageLoaded] = useState(false);
   // Ref for throttling scroll events.
@@ -156,7 +156,6 @@ export default function TunnelScene({ onPageLoad } : { onPageLoad: boolean }) {
   useEffect(() => {
     if(!pageLoaded){
         setCheckpointIndex(CHECKPOINTS.length - 1);
-        setCheckpointIndex(0);
         setShowVinyls(true);
     }
     setTimeout(() => {
@@ -164,10 +163,7 @@ export default function TunnelScene({ onPageLoad } : { onPageLoad: boolean }) {
       setShowVinyls(false);
     }, 1000);
 
-    if(onPageLoad){
-      setCheckpointIndex(CHECKPOINTS.length - 1);
-    }
-  }, [pageLoaded, onPageLoad])
+  }, [pageLoaded])
 
   // Handle scroll events to trigger checkpoint changes.
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
