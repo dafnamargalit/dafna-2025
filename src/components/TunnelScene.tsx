@@ -88,7 +88,6 @@ function ModelPreloader() {
 
 function TunnelSceneContent() {
   const { checkpointIndex, setCheckpointIndex, handleNext, handleBack } = useNavigation();
-  const [pageLoaded, setPageLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const throttleTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const touchStartY = useRef<number | null>(null)
@@ -154,20 +153,25 @@ function TunnelSceneContent() {
 
   // Initialize page and show loading indicator
   useEffect(() => {
-    if(!pageLoaded){
-      setCheckpointIndex(CHECKPOINTS.length - 1);
-      setShowVinyls(true);
+    if(isLoading){
+      setTimeout(() => {
+        setCheckpointIndex(CHECKPOINTS.length - 2);
+        setShowVinyls(true);
+      }, 400);
+      setShowVinyls(false)
+      setCheckpointIndex(0);
     }
     
     // Simulate loading completion
     const timer = setTimeout(() => {
-      setPageLoaded(true);
-      setShowVinyls(false);
+      setCheckpointIndex(CHECKPOINTS.length - 1);
       setIsLoading(false);
-    }, 200);
+      setShowVinyls(false);
+    }, 2000);
+
 
     return () => clearTimeout(timer);
-  }, [pageLoaded, setCheckpointIndex]);
+  }, [setCheckpointIndex]);
 
   // Handle wheel events for navigation
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -263,15 +267,15 @@ function TunnelSceneContent() {
           <Preload all />
           
           <Suspense fallback={null}>
-            {pageLoaded && <Merch />}
+            <Merch />
           </Suspense>
           
           <Suspense fallback={null}>
-            {pageLoaded && <FloatingTV isMobile={isMobile} />}
+            <FloatingTV isMobile={isMobile} />
           </Suspense>
           
           <Suspense fallback={null}>
-            {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
+            <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />
           </Suspense>
           
           <Suspense fallback={null}>
@@ -279,7 +283,7 @@ function TunnelSceneContent() {
           </Suspense>
           
           <Suspense fallback={null}>
-            {pageLoaded && checkpointIndex === 1 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
+            {checkpointIndex === 1 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
           </Suspense>
           
           <fogExp2 attach="fog" args={[0x000000, 0.005]} />
@@ -337,7 +341,7 @@ function TunnelSceneContent() {
         
         {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
         
-        {pageLoaded && <ProgressNav isMobile={isMobile} />}
+        <ProgressNav isMobile={isMobile} />
       </RemoveScroll>
     </div>
   )
