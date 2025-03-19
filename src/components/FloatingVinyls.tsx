@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState, useMemo, useCallback } from 'react'
+import React, { useEffect, useRef, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { use3DInteraction } from '../hooks/use3DInteraction'
 
 interface VinylProps {
   position: [number, number, number]
@@ -11,10 +12,8 @@ interface VinylProps {
 
 const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
   const { scene } = useGLTF(path)
-  const [hover, setHover] = useState(false)
+  const { hover, handlePointerOver, handlePointerOut } = use3DInteraction(scene)
 
-  const handlePointerOver = useCallback(() => setHover(true), []);
-  const handlePointerOut = useCallback(() => setHover(false), []);
   // Deep-clone the scene and then override materials with MeshPhysicalMaterial for a sheen
   const clonedScene = useMemo(() => {
     if (!scene) return null
@@ -34,15 +33,15 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
           metalnessMap: originalMat.metalnessMap || null,
           color: originalMat.color.clone(),
 
-          // --- The 'magic' PBR properties for a nice sheen ---
-          metalness: 0.2,        // tweak to your liking
-          roughness: 0.4,        // tweak to your liking
-          clearcoat: 1.0,        // strong clearcoat
+          // PBR properties for vinyl sheen
+          metalness: 0.2,
+          roughness: 0.4,
+          clearcoat: 1.0,
           clearcoatRoughness: 0.5,
           
           // Sheen requires WebGL2 / MeshPhysicalMaterial
           sheen: 1.0,
-          sheenColor: new THREE.Color('#ffffff'),   // or any tint
+          sheenColor: new THREE.Color('#ffffff'),
           sheenRoughness: 0.5,
         })
 
@@ -53,26 +52,6 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
     return clone
   }, [scene])
 
-  // Update emissive glow on hover (you can keep or remove)
-  const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
-    object.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material && 'emissive' in child.material) {
-        if (highlight) {
-          child.material.emissive = new THREE.Color('#67E8F9')
-          child.material.emissiveIntensity = 0.3
-        } else {
-          child.material.emissive = new THREE.Color('black')
-          child.material.emissiveIntensity = 0.1
-        }
-      }
-    })
-  }
-
-  useEffect(() => {
-    document.body.style.cursor = hover ? 'pointer' : 'auto'
-    if (clonedScene) setEmissive(clonedScene, hover)
-  }, [hover, clonedScene])
-
   if (!clonedScene) return null
 
   return (
@@ -82,9 +61,19 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
       position={position}
       castShadow
       receiveShadow
-      onPointerOver={handlePointerOver}
-      onPointerOut={handlePointerOut}
-      onClick={() => setShowModal(path)}
+      onPointerOver={(e: any) => {
+        e.stopPropagation()
+        handlePointerOver()
+      }}
+      onPointerOut={(e: any) => {
+        e.stopPropagation()
+        handlePointerOut()
+      }}
+      onClick={(e: any) => {
+        e.stopPropagation()
+        const albumName = path.split('/').pop()?.split('.')[0]
+        setShowModal(albumName || null)
+      }}
     />
   )
 }
@@ -95,7 +84,6 @@ interface FloatingVinylsProps {
 }
 
 export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, isMobile }) => {
-  
   const parentRef = useRef<THREE.Group>(null)
   const offsetDistance = isMobile ? 3.5 : 5.5
 
@@ -114,49 +102,59 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
     '/models/submerge_draco.glb'
   ]
 
-  // A ref to store the animation progress (from 0: at center to 1: full offset).
+  // Animation progress reference
   const progressRef = useRef(0)
 
-  // Animate the parent group: update position and scale for each child vinyl.
+  // Vinyl rotation animation
   useFrame((state, delta) => {
     // Increase progress gradually until it reaches 1.
     if (progressRef.current < 1) {
       progressRef.current = Math.min(progressRef.current + delta, 1)
     }
+    
     if (parentRef.current) {
-      // Define final scale based on device type.
+      // Define final scale based on device type
       const finalScale = isMobile ? 0.08 : 0.1
 
       parentRef.current.children.forEach((child, idx) => {
         const finalOffset = finalOffsets[idx]
-        // Update position: from center ([0,0,0]) to finalOffset.
+        
+        // Update position: from center ([0,0,0]) to finalOffset
         child.position.set(
           finalOffset.x * progressRef.current,
           finalOffset.y * progressRef.current,
           finalOffset.z * progressRef.current
         )
-        // Update scale: start from 0 and grow to finalScale.
+        
+        // Update scale: start from 0 and grow to finalScale
         child.scale.set(
           finalScale * progressRef.current,
           finalScale * progressRef.current,
           finalScale * progressRef.current
         )
+        
+        // Rotate each vinyl
         child.rotation.z -= 0.001
-
         child.rotation.y += 0.001
         child.rotation.y -= 0.0012
       })
-      // Optionally, add a slow rotation to the whole group.
+      
+      // Optionally, add a slow rotation to the whole group
       parentRef.current.rotation.z -= 0.001
     }
   })
 
   return (
-    // The parent group is positioned as before.
+    // The parent group is positioned in the tunnel
     <group ref={parentRef} position={[0.5, 0, -313]}>
       {finalOffsets.map((_, idx) => (
-        // Initially, each vinyl is placed at the center with position [0,0,0].
-        <Vinyl setShowModal={setShowModal} path={paths[idx]} key={idx} position={[0, 0, 0]} />
+        // Initially, each vinyl is placed at the center with position [0,0,0]
+        <Vinyl 
+          setShowModal={setShowModal} 
+          path={paths[idx]} 
+          key={idx} 
+          position={[0, 0, 0]} 
+        />
       ))}
     </group>
   )

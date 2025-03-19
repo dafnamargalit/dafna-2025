@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { HamburgerMenu, IconAppleMusic, IconSpotify, IconTidal, IconYoutube } from "./Icons";
+import React, { useState } from "react";
+import { HamburgerMenu } from "./Icons";
+import { useNavigation } from '../contexts/NavigationContext';
 
 interface ProgressNavProps {
-  checkpointIndex: number;
-  setCheckpointIndex: (checkpoint: number) => void;
   isMobile: boolean;
 }
 
-const ProgressNav = ({ checkpointIndex, setCheckpointIndex, isMobile }: ProgressNavProps) => {
+const ProgressNav = ({ isMobile }: ProgressNavProps) => {
+    const { checkpointIndex, setCheckpointIndex } = useNavigation();
 
     const pages = [
         {
@@ -39,26 +39,45 @@ const ProgressNav = ({ checkpointIndex, setCheckpointIndex, isMobile }: Progress
     const [showPages, setShowPages] = useState(false);
 
     return(
-        <div className={`fixed ${isMobile ? 'top-4' : 'top-1/4'} left-6 flex flex-col items-start space-y-4 z-20`}>
-        {isMobile && <button onClick={() => setShowPages(prev => !prev)}><HamburgerMenu isOpen={showPages} size={showPages ? '30px' : '40px'} /></button>}
-        {((isMobile && showPages) || (!isMobile)) && pages.map(({ name, index }, i) => (
-          <div key={i} className="flex justify-between items-center space-x-3">
-            {/* Progress Line */}
-            <div className={`w-1 h-10 ${checkpointIndex === index ? 'bg-cyan-400' : 'bg-gray-400'}`}></div>
-            {/* Page Link */}
-            <button onClick={() => {setCheckpointIndex(index); setShowPages(false);}}>
-              <span
-                className={`cursor-pointer text-lg font-medium transition-colors ${
-                  checkpointIndex === index ? 'text-cyan-400 font-bold' : 'text-gray-600'
-                }`}
-              >
-                {name}
-              </span>
-            </button>
-          </div>
-        ))}
-      </div>
+        <nav 
+            className={`fixed ${isMobile ? 'top-4' : 'top-1/4'} left-6 flex flex-col items-start space-y-4 z-20`}
+        >
+            {isMobile && (
+                <button 
+                    onClick={() => setShowPages(prev => !prev)}
+                >
+                    <HamburgerMenu isOpen={showPages} size={showPages ? '30px' : '40px'} />
+                </button>
+            )}
+            
+            {((isMobile && showPages) || (!isMobile)) && (
+                <div className="flex flex-col space-y-4 mt-2">
+                    {pages.map(({ name, index }, i) => (
+                        <div key={i} className="flex justify-between items-center space-x-3">
+                            {/* Progress Line */}
+                            <div 
+                                className={`w-1 h-10 ${checkpointIndex === index ? 'bg-cyan-400' : 'bg-gray-400'}`}
+                                aria-hidden="true"
+                            />
+                            {/* Page Link */}
+                            <button 
+                                onClick={() => {
+                                    setCheckpointIndex(index); 
+                                    setShowPages(false);
+                                }}
+                                aria-current={checkpointIndex === index ? "page" : undefined}
+                                className={`cursor-pointer text-lg font-medium transition-colors ${
+                                    checkpointIndex === index ? 'text-cyan-400 font-bold' : 'text-gray-600'
+                                }`}
+                            >
+                                {name}
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </nav>
     )
-    }
+}
 
 export default ProgressNav;

@@ -16,37 +16,30 @@ import { TourBus } from './TourBus'
 import TourDates from './TourDates'
 import ProgressNav from './ProgressNav'
 import Link from 'next/link'
+import { NavigationProvider, useNavigation } from '../contexts/NavigationContext'
+import { LoadingIndicator } from './LoadingIndicator'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
 
-function Tunnel() {
-  useGLTF.preload('/models/paradox.glb');
-  useGLTF.preload('/models/wiwwy_draco.glb');
-  useGLTF.preload('/models/ily.glb');
-  useGLTF.preload('/models/submerge_draco.glb');
-  useGLTF.preload('/models/tourbus_draco.glb');
-  useGLTF.preload('/models/recordplayer_draco.glb');
-  useGLTF.preload('/models/tshirts_draco.glb');
-  useGLTF.preload('/models/old_tv_draco.glb');
-
+function Tunnel({ isMobile } : {isMobile: boolean}) {
   return (
     <>
       {/* Left Wall */}
       <group position={[-8, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <GridPlane width={1000} height={20} widthSegments={1000} heightSegments={20} color="#25b5f7" />
+        <GridPlane width={1000} height={20} widthSegments={isMobile ? 500 : 1000} heightSegments={20} color="#25b5f7" />
       </group>
       {/* Right Wall */}
       <group position={[8, 0, 0]} rotation={[0, -Math.PI / 2, 0]}>
-        <GridPlane width={1000} height={20} widthSegments={1000} heightSegments={20} color="#25b5f7" />
+        <GridPlane width={1000} height={20} widthSegments={isMobile ? 500 : 1000} heightSegments={20} color="#25b5f7" />
       </group>
       {/* Floor */}
       <group position={[0, -10, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <GridPlane width={16} height={1000} widthSegments={20} heightSegments={1000} color="#25b5f7" />
+        <GridPlane width={16} height={1000} widthSegments={20} heightSegments={isMobile ? 500 : 1000} color="#25b5f7" />
       </group>
       {/* Ceiling */}
       <group position={[0, 10, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <GridPlane width={16} height={1000} widthSegments={20} heightSegments={1000} color="#25b5f7" />
+        <GridPlane width={16} height={1000} widthSegments={20} heightSegments={isMobile ? 500 : 1000} color="#25b5f7" />
       </group>
       {/* End Wall */}
       <group position={[0, 0, -500]}>
@@ -56,14 +49,15 @@ function Tunnel() {
   )
 }
 
-function CameraController({ checkpointIndex }: { checkpointIndex: number }) {
+function CameraController() {
+  const { checkpointIndex } = useNavigation();
+  
   useFrame(({ camera, mouse }) => {
     // 1) Smoothly move the camera along the z-axis toward the selected checkpoint
     const targetZ = CHECKPOINTS[checkpointIndex]
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.1)
 
     // 2) Slightly rotate camera based on mouse position (-1 to +1)
-    //    Adjust `rotationFactor` and `lerp` to make the effect stronger or smoother.
     const rotationFactor = 0.4
     camera.rotation.x = THREE.MathUtils.lerp(
       camera.rotation.x,
@@ -79,10 +73,23 @@ function CameraController({ checkpointIndex }: { checkpointIndex: number }) {
   return null
 }
 
-export default function TunnelScene() {
-  const [checkpointIndex, setCheckpointIndex] = useState(0)
+// Preload all models to improve performance
+function ModelPreloader() {
+  useGLTF.preload('/models/paradox.glb');
+  useGLTF.preload('/models/wiwwy_draco.glb');
+  useGLTF.preload('/models/ily.glb');
+  useGLTF.preload('/models/submerge_draco.glb');
+  useGLTF.preload('/models/tourbus_draco.glb');
+  useGLTF.preload('/models/recordplayer_draco.glb');
+  useGLTF.preload('/models/tshirts_draco.glb');
+  useGLTF.preload('/models/old_tv_draco.glb');
+  return null;
+}
+
+function TunnelSceneContent() {
+  const { checkpointIndex, setCheckpointIndex, handleNext, handleBack } = useNavigation();
   const [pageLoaded, setPageLoaded] = useState(false);
-  // Ref for throttling scroll events.
+  const [isLoading, setIsLoading] = useState(true);
   const throttleTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const touchStartY = useRef<number | null>(null)
   const [isMobile, setIsMobile] = useState(false);
@@ -92,13 +99,13 @@ export default function TunnelScene() {
   const [showTourDates, setShowTourDates] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
+  // Prevent touch move events on canvas to avoid scrolling the page
   useEffect(() => {
     const canvas = canvasRef.current
     const handleTouchMove = (e: TouchEvent) => {
-      e.preventDefault()  // Prevent scrolling
+      e.preventDefault()
     }
 
-    // Be sure to set passive: false so preventDefault works
     canvas && canvas.addEventListener('touchmove', handleTouchMove, { passive: false })
 
     return () => {
@@ -106,68 +113,64 @@ export default function TunnelScene() {
     }
   }, [])
 
+  // Handle streaming service selection from localStorage
   useEffect(() => {
     const service = localStorage.getItem("streaming-service");
-    albums.map((album: ModalData) => {if (showModal?.includes(album.name)) {
-      switch (service) {
-        case "spotify":
-          window.open(album.spotify);
-        break;
-        case "youtube":
-          window.open(album.youtube);
-        break;
-        case "tidal":
-          window.open(album.tidal);
-        break;
-        case "apple":
-          window.open(album.apple);
-        break;
-        case null:
-          setModalData(album);
-        break;
-        default:
-          setModalData(album);
-          break;
+    if (!showModal) return;
+    
+    albums.forEach((album: ModalData) => {
+      if (showModal.includes(album.name)) {
+        switch (service) {
+          case "spotify":
+            window.open(album.spotify);
+            break;
+          case "youtube":
+            window.open(album.youtube);
+            break;
+          case "tidal":
+            window.open(album.tidal);
+            break;
+          case "apple":
+            window.open(album.apple);
+            break;
+          default:
+            setModalData(album);
+            break;
+        }
       }
-    }});
+    });
   }, [showModal]);
 
+  // Check if device is mobile
   useEffect(() => {
-    // Check the screen size only after the component has mounted
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+      setIsMobile(window.innerWidth <= 768);
     };
 
-    // Run the resize handler once on mount
     handleResize();
-
-    // Add a resize event listener
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize); // Cleanup on unmount
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleBack = () => {
-    setCheckpointIndex(prev => Math.min(prev + 1, CHECKPOINTS.length - 1))
-  }
-  const handleNext = () => {
-    setCheckpointIndex(prev => Math.max(prev - 1, 0))
-  }
-
+  // Initialize page and show loading indicator
   useEffect(() => {
     if(!pageLoaded){
-        setCheckpointIndex(CHECKPOINTS.length - 1);
-        setShowVinyls(true);
+      setCheckpointIndex(CHECKPOINTS.length - 1);
+      setShowVinyls(true);
     }
-    setTimeout(() => {
+    
+    // Simulate loading completion
+    const timer = setTimeout(() => {
       setPageLoaded(true);
       setShowVinyls(false);
-    }, 1000);
+      setIsLoading(false);
+    }, 200);
 
-  }, [pageLoaded])
+    return () => clearTimeout(timer);
+  }, [pageLoaded, setCheckpointIndex]);
 
-  // Handle scroll events to trigger checkpoint changes.
+  // Handle wheel events for navigation
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    // Throttle to one scroll action per 800ms (adjust as needed)
     if (throttleTimeoutRef.current) return
 
     if (e.deltaY > 0) {
@@ -180,6 +183,7 @@ export default function TunnelScene() {
     }, 1000)
   }
   
+  // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (throttleTimeoutRef.current) return
@@ -190,23 +194,22 @@ export default function TunnelScene() {
       else if (e.key === "ArrowDown") {
         handleNext()
       }
-        throttleTimeoutRef.current = null
     }
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [])
+  }, [handleBack, handleNext])
 
+  // Handle touch navigation for mobile
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     touchStartY.current = e.touches[0].clientY
   }
 
-  // Handle touch end event (for mobile)
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (touchStartY.current === null) return
     const touchEndY = e.changedTouches[0].clientY
     const deltaY = touchStartY.current - touchEndY
-    // Use a threshold of 50px to determine if it's a swipe.
+    
     if (!throttleTimeoutRef.current) {
       if (deltaY > 50) {
         handleNext()
@@ -219,87 +222,131 @@ export default function TunnelScene() {
     }
     touchStartY.current = null
   }
-  const config = {
-    maxYaw: 0.1, // Max amount camera can yaw in either direction
-    maxPitch: 0.2, // Max amount camera can pitch in either direction
-    maxRoll: 0.1, // Max amount camera can roll in either direction
-    yawFrequency: 0.1, // Frequency of the yaw rotation
-    pitchFrequency: 0.2, // Frequency of the pitch rotation
-    rollFrequency: 0.1, // Frequency of the roll rotation
-    intensity: 0.6, // initial intensity of the shake
-    decay: false, // should the intensity decay over time
-    decayRate: 0.65, // if decay = true this is the rate at which intensity will reduce at
-    controls: undefined, // if using orbit controls, pass a ref here so we can update the rotation
+
+  // Camera shake configuration
+  const cameraShakeConfig = {
+    maxYaw: 0.1,
+    maxPitch: 0.2,
+    maxRoll: 0.1,
+    yawFrequency: 0.1,
+    pitchFrequency: 0.2,
+    rollFrequency: 0.1,
+    intensity: 0.6,
+    decay: false,
+    decayRate: 0.65,
+    controls: undefined,
   }
   
   return (
-    <div onWheel={handleWheel} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <RemoveScroll  className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`} >
-      <Canvas shadows ref={canvasRef} gl={{ antialias: false, powerPreference: 'low-power', preserveDrawingBuffer: true }} style={{ touchAction: 'auto !important'}} camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }} dpr={[1, 1.5]} performance={{ min: 0.1, max: 0.5 }}>
-        <CameraShake {...config} />
-        <ambientLight intensity={0.015} />
-        <CameraController checkpointIndex={checkpointIndex} />
-        <Tunnel />
+    <div 
+      onWheel={handleWheel} 
+      onTouchStart={handleTouchStart} 
+      onTouchEnd={handleTouchEnd}
+    >
+      {isLoading && <LoadingIndicator />}
+      
+      <RemoveScroll className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`}>
+        <Canvas 
+          shadows 
+          ref={canvasRef} 
+          gl={{ antialias: false, powerPreference: 'low-power', preserveDrawingBuffer: true }} 
+          style={{ touchAction: 'auto !important'}} 
+          camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }} 
+          dpr={[1, 1.5]} 
+          performance={{ min: 0.1, max: 0.5 }}
+        >
+          <CameraShake {...cameraShakeConfig} />
+          <ambientLight intensity={0.015} />
+          <ModelPreloader />
+          <CameraController />
+          <Tunnel isMobile={isMobile} />
           <Preload all />
+          
           <Suspense fallback={null}>
-          {pageLoaded && <Merch />}
+            {pageLoaded && <Merch />}
           </Suspense>
+          
           <Suspense fallback={null}>
-          {pageLoaded && <FloatingTV isMobile={isMobile} />}
+            {pageLoaded && <FloatingTV isMobile={isMobile} />}
           </Suspense>
+          
           <Suspense fallback={null}>
-          {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
+            {pageLoaded && <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />}
           </Suspense>
+          
           <Suspense fallback={null}>
-          {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
+            {showVinyls && <FloatingVinyls isMobile={isMobile} setShowModal={setShowModal} />}
           </Suspense>
+          
           <Suspense fallback={null}>
-          {pageLoaded && checkpointIndex === 1 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
+            {pageLoaded && checkpointIndex === 1 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
           </Suspense>
-        <fogExp2 attach="fog" args={[0x000000, 0.005]} />
-        <Stars
-          radius={500}   // Stars distributed within a sphere of radius 500
-          depth={10}     // Spread over 90 units in depth
-          count={20000}  // More stars for more wow
-          factor={15}    // Controls star size
-          saturation={0} // Optional: adjust color saturation        // Optional: fade stars with distance
-        />
-      </Canvas>
-      {(checkpointIndex === CHECKPOINTS.length - 1) && 
-      <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
-       <Link href={'https://linktree.com/dafnamusic'} className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700`}>
-        <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
-       </Link>
-       <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
-       <div className='flex flex-row space-x-2'>
-            <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w'>
-            <IconSpotify />
-            </a>
-            <a href="https://instagram.com/dafnamusic">
-            <IconInstagram />
-            </a>
-            <a href='https://www.youtube.com/channel/UCzPtND9EY5MkOepLzllAbiw'>
-            <IconYoutube />
-            </a>
-            <a href='https://github.com/dafnamargalit'>
-            <IconGithub />
-            </a>
-        </div>
-        <button className={`absolute text-cyan-300 items-center justify-center flex flex-col bottom-4`} onClick={handleNext}>
-          <div>{isMobile ? 'swipe down' : 'scroll down'}</div>
-        <ChevronDown fill="#67E8F9"/>
-        </button>
-      </div>}
-      {modalData &&
+          
+          <fogExp2 attach="fog" args={[0x000000, 0.005]} />
+          <Stars
+            radius={500}
+            depth={10}
+            count={isMobile ? 10000 : 20000}
+            factor={15}
+            saturation={0}
+          />
+        </Canvas>
+        
+        {(checkpointIndex === CHECKPOINTS.length - 1) && 
+          <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
+            <Link 
+              href={'https://linktree.com/dafnamusic'} 
+              className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700`}
+              aria-label="Pre-save Bad People Bad Things"
+            >
+              <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
+            </Link>
+            <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
+            <div className='flex flex-row space-x-2'>
+              <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify">
+                <IconSpotify />
+              </a>
+              <a href="https://instagram.com/dafnamusic" aria-label="Instagram">
+                <IconInstagram />
+              </a>
+              <a href='https://www.youtube.com/channel/UCzPtND9EY5MkOepLzllAbiw' aria-label="YouTube">
+                <IconYoutube />
+              </a>
+              <a href='https://github.com/dafnamargalit' aria-label="GitHub">
+                <IconGithub />
+              </a>
+            </div>
+            <button 
+              className={`absolute text-cyan-300 items-center justify-center flex flex-col bottom-4`} 
+              onClick={handleNext}
+              aria-label={isMobile ? 'Swipe down to explore' : 'Scroll down to explore'}
+            >
+              <div>{isMobile ? 'swipe down' : 'scroll down'}</div>
+              <ChevronDown fill="#67E8F9"/>
+            </button>
+          </div>
+        }
+        
+        {modalData && (
           <Modal
             modalData={modalData}
             closeModal={() => setModalData(null)}
             isMobile={isMobile}
           />
-      }
-         {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
-      {pageLoaded && <ProgressNav isMobile={isMobile} checkpointIndex={checkpointIndex} setCheckpointIndex={setCheckpointIndex}/>}
+        )}
+        
+        {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
+        
+        {pageLoaded && <ProgressNav isMobile={isMobile} />}
       </RemoveScroll>
     </div>
   )
+}
+
+export default function TunnelScene() {
+  return (
+    <NavigationProvider>
+      <TunnelSceneContent />
+    </NavigationProvider>
+  );
 }

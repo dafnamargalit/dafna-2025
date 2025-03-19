@@ -1,99 +1,150 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Float, useGLTF } from '@react-three/drei'
+import React, { useCallback, useEffect, useState, useMemo, useRef } from 'react'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { videos } from '@/lib/constants'
+import { use3DInteraction } from '../hooks/use3DInteraction'
+import { useThree, useFrame } from '@react-three/fiber'
 
 interface FloatingTVProps {
   isMobile: boolean
 }
 
-export const FloatingTV: React.FC<FloatingTVProps> = ({ isMobile }) =>{
+export const FloatingTV: React.FC<FloatingTVProps> = ({ isMobile }) => {
   const { scene } = useGLTF('/models/old_tv_draco.glb')
-  const [hover, setHover] = useState(false)
-
-  // Update emissive effect on hover
-  const setEmissive = (object: THREE.Object3D, highlight: boolean) => {
-    object.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.material && 'emissive' in child.material) {
-        if (highlight) {
-          child.material.emissive = new THREE.Color('#67E8F9')
-          child.material.emissiveIntensity = 0.3
-        } else {
-          child.material.emissive = new THREE.Color('black')
-          child.material.emissiveIntensity = 0
-        }
+  const { hover, handlePointerOver, handlePointerOut } = use3DInteraction(scene)
+  const { camera } = useThree()
+  const videoRefs = useRef<HTMLVideoElement[]>([])
+  const videoTexturesRef = useRef<THREE.VideoTexture[]>([])
+  const [videoTexturesLoaded, setVideoTexturesLoaded] = useState(false)
+  const distanceToCamera = useRef(0)
+  
+  // Optimize model scale and position with memoization
+  const modelProps = useMemo(() => {
+    const scale = isMobile ? 0.011 : 0.012
+    const position = isMobile ? [0, -8, -125] : [0, -8, -120]
+    
+    scene.scale.set(scale, scale, scale)
+    
+    return { position }
+  }, [isMobile, scene])
+  
+  // Check distance to camera to enable/disable video playback
+  useFrame(() => {
+    if (!videoTexturesLoaded) return
+    
+    const tvPosition = new THREE.Vector3(modelProps.position[0], modelProps.position[1], modelProps.position[2])
+    distanceToCamera.current = camera.position.distanceTo(tvPosition)
+    
+    // Only play videos when camera is close enough (performance optimization)
+    const shouldPlay = distanceToCamera.current < 150
+    
+    videoRefs.current.forEach(video => {
+      if (shouldPlay && video.paused) {
+        video.play().catch(err => console.warn('Video play failed:', err))
+      } else if (!shouldPlay && !video.paused) {
+        video.pause()
       }
     })
-  }
-
-  // Update cursor and emissive effect on hover change
+  })
+    
+  // Set up videos for TV screens with optimized loading
   useEffect(() => {
-    document.body.style.cursor = hover ? 'pointer' : 'auto'
-    setEmissive(scene, hover)
-  }, [hover, scene])
-
-  const handlePointerOver = useCallback(() => setHover(true), []);
-  const handlePointerOut = useCallback(() => setHover(false), []);
-
-  // Setup video texture on the TV screen
+    // Clean up old video references when component unmounts
+    return () => {
+      videoRefs.current.forEach(video => {
+        video.pause()
+        video.src = ''
+        video.load()
+      })
+      
+      videoTexturesRef.current.forEach(texture => {
+        texture.dispose()
+      })
+    }
+  }, [])
+  
+  // Initialize videos on first render
   useEffect(() => {
-    // Create a video element with your provided URL
-    videos.map((vid, i) => {
+    let mounted = true
+    let videosLoaded = 0
+    const totalVideos = videos.length
+    videoRefs.current = []
+    videoTexturesRef.current = []
+    
+    // Create video elements for each screen
+    videos.forEach((vid, i) => {
       const video = document.createElement('video')
-      video.src = vid.src;
+      video.src = vid.src
       video.crossOrigin = 'Anonymous'
       video.loop = true
       video.muted = true
-      video.autoplay = true
       video.playsInline = true
-  
-      video.addEventListener('canplay', () => {
-        video.play().catch((err) => {
-          console.error('Video play failed:', err)
-        })
-  
-        // Create a VideoTexture from the video element
+      video.preload = 'metadata' // Just load metadata first
+      
+      // Use lower quality for mobile
+      if (isMobile) {
+        video.width = 256
+        video.height = 144
+      }
+      
+      // Keep track of video elements
+      videoRefs.current.push(video)
+      
+      // Handle video loaded event
+      const handleCanPlay = () => {
+        if (!mounted) return
+        
+        // Create optimized VideoTexture
         const videoTexture = new THREE.VideoTexture(video)
-        videoTexture.flipY = false;
         videoTexture.minFilter = THREE.LinearFilter
         videoTexture.magFilter = THREE.LinearFilter
         videoTexture.format = THREE.RGBFormat
-  
+        videoTexture.flipY = false
+        videoTexturesRef.current.push(videoTexture)
+        
         // Find the mesh representing the TV screen
         const screenObj = scene.getObjectByName(vid.name)
         if (screenObj && screenObj instanceof THREE.Mesh) {
-          // For testing, replace the material entirely with a basic material:
-          screenObj.material = new THREE.MeshBasicMaterial({ map: videoTexture })
-        } else {
-          console.warn("Screen mesh not found or it doesn't support materials!")
+          // Use a simpler material with no specular or reflections
+          screenObj.material = new THREE.MeshBasicMaterial({ 
+            map: videoTexture,
+            toneMapped: false
+          })
         }
-      })
-  
-      // Clean up event listeners on unmount
-      return () => {
-        video.removeEventListener('canplay', () => {})
+        
+        // Count loaded videos
+        videosLoaded++
+        if (videosLoaded === totalVideos) {
+          setVideoTexturesLoaded(true)
+        }
       }
+      
+      // Type assertion for TypeScript
+      (video as HTMLVideoElement).addEventListener('canplaythrough', handleCanPlay, { once: true })
+      
+      // Start loading
+      video.load()
     })
     
-  }, [scene])
+    return () => {
+      mounted = false
+    }
+  }, [scene, isMobile])
 
-  // Adjust model scale and position
-  isMobile ? scene.scale.set(0.011, 0.011, 0.011) : scene.scale.set(0.012, 0.012, 0.012)
-  const position = isMobile ? [0,-8,-125] : [0,-8,-120];
-    
+  // Optimize onClick handler with memoization
+  const handleClick = useCallback(() => {
+    window.open("https://www.youtube.com/@ThisIsDafna", "_blank", "noopener,noreferrer")
+  }, [])
 
   return (
-    <>
-      <group>
-        <primitive 
-          castShadow
-          object={scene} 
-          position={position} 
-          onPointerOver={handlePointerOver}
-          onPointerOut={handlePointerOut}
-          onClick={() => window.open("https://www.youtube.com/@ThisIsDafna")}
-        />
-      </group>
-    </>
+    <group>
+      <primitive 
+        object={scene} 
+        position={modelProps.position}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
+        onClick={handleClick}
+      />
+    </group>
   )
 }
