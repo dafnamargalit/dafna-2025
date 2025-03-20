@@ -157,9 +157,9 @@ function TunnelSceneContent() {
       setTimeout(() => {
         setCheckpointIndex(CHECKPOINTS.length - 2);
         setShowVinyls(true);
-      }, 400);
-      setShowVinyls(false)
+      }, 600);
       setCheckpointIndex(0);
+      setShowVinyls(false);
     }
     
     // Simulate loading completion

@@ -51,7 +51,7 @@ const ProgressNav = ({ isMobile }: ProgressNavProps) => {
             )}
             
             {((isMobile && showPages) || (!isMobile)) && (
-                <div className="flex flex-col space-y-4 mt-2">
+                <div className={`flex flex-col space-y-4 mt-2 ${isMobile ? 'bg-black/70 p-4' : ''}`}>
                     {pages.map(({ name, index }, i) => (
                         <div key={i} className="flex justify-between items-center space-x-3">
                             {/* Progress Line */}
