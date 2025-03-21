@@ -1,12 +1,9 @@
 'use client'
 
-import SongQuiz from '@/components/SongQuiz';
 import retroFont from '../../components/RetroFont'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react';
 
-
-const TubeScene = dynamic(() => import('../../components/TubeScene'), { ssr: true })
+const SongQuiz = dynamic(() => import('../../components/SongQuiz'), { ssr: true })
 
 export default function Quiz() {
   return (
