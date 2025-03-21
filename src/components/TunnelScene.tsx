@@ -22,7 +22,7 @@ import { LoadingIndicator } from './LoadingIndicator'
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
 
-function Tunnel({ isMobile } : {isMobile: boolean}) {
+export function Tunnel({ isMobile } : {isMobile: boolean}) {
   return (
     <>
       {/* Left Wall */}
@@ -49,7 +49,7 @@ function Tunnel({ isMobile } : {isMobile: boolean}) {
   )
 }
 
-function CameraController() {
+export function CameraController() {
   const { checkpointIndex } = useNavigation();
   
   useFrame(({ camera, mouse }) => {
@@ -349,7 +349,7 @@ function TunnelSceneContent() {
 
 export default function TunnelScene() {
   return (
-    <NavigationProvider>
+    <NavigationProvider checkpoints={CHECKPOINTS}>
       <TunnelSceneContent />
     </NavigationProvider>
   );

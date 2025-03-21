@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 // Define checkpoints along the Z axis
-const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
 
 type NavigationContextType = {
+  checkpoints: number[]
   checkpointIndex: number
   setCheckpointIndex: (index: number) => void
   handleNext: () => void
@@ -12,7 +12,7 @@ type NavigationContextType = {
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
 
-export const NavigationProvider: React.FC<{children: ReactNode}> = ({ children }) => {
+export const NavigationProvider: React.FC<{checkpoints: number[], children: ReactNode}> = ({ checkpoints, children }) => {
   const [checkpointIndex, setCheckpointIndex] = useState(0)
   
   const handleNext = () => {
@@ -20,11 +20,11 @@ export const NavigationProvider: React.FC<{children: ReactNode}> = ({ children }
   }
   
   const handleBack = () => {
-    setCheckpointIndex(prev => Math.min(prev + 1, CHECKPOINTS.length - 1))
+    setCheckpointIndex(prev => Math.min(prev + 1, checkpoints.length - 1))
   }
   
   return (
-    <NavigationContext.Provider value={{ checkpointIndex, setCheckpointIndex, handleNext, handleBack }}>
+    <NavigationContext.Provider value={{ checkpoints, checkpointIndex, setCheckpointIndex, handleNext, handleBack }}>
       {children}
     </NavigationContext.Provider>
   )
