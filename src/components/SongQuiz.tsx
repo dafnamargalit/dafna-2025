@@ -8,7 +8,7 @@ import { CameraShake, Stars } from "@react-three/drei";
 import { quizQuestions } from "@/lib/constants";
 
 // Adjust checkpoints to match tunnel length and ensure proper positioning
-const CHECKPOINTS = [2000, 1900, 1800, 1700, 1600, 1500, 1400, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 0]
+const CHECKPOINTS = [4000, 3000, 2000, 1900, 1800, 1700, 1600, 1500, 1400, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 0]
 
 function SongQuizContent() {
   const [currentQuestion, setCurrentQuestion] = useState(1);
