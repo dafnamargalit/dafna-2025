@@ -43,7 +43,7 @@ function SongQuizContent() {
       setResult(nextStep.result);
     } else {
       setCurrentQuestion(nextId);
-      setComplete(false);
+      setComplete(0);
     }
   };
 
