@@ -9,7 +9,7 @@ import { quizQuestions } from "@/lib/constants";
 import TypewriterText from "./TypewriterText";
 
 // Adjust checkpoints to match tunnel length and ensure proper positioning
-const CHECKPOINTS = [4000, 3000, 2000, 1900, 1800, 1700, 1600, 1500, 1400, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 0]
+const CHECKPOINTS = [4000, 3900, 3500, 3000, 2500, 2000];
 
 function SongQuizContent() {
   const [currentQuestion, setCurrentQuestion] = useState(1);
@@ -17,7 +17,7 @@ function SongQuizContent() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isMobile, setIsMobile] = useState(false);
   const [complete, setComplete] = useState(0);
-  const { setCheckpointIndex, handleBack } = useNavigation();
+  const { checkpointIndex, setCheckpointIndex, handleBack } = useNavigation();
   const [key, setKey] = useState(0); // Add key for forcing Canvas remount
 
   useEffect(() => {
@@ -36,14 +36,15 @@ function SongQuizContent() {
   }, []);
 
   const handleAnswer = (nextId: number) => {
-    handleBack();
+    if(checkpointIndex < 5) {
+      handleBack();
+    }
 
     const nextStep = quizQuestions.find((q) => q.id === nextId);
     if (nextStep?.result) {
       setResult(nextStep.result);
     } else {
       setCurrentQuestion(nextId);
-      setComplete(0);
     }
   };
 
@@ -51,6 +52,7 @@ function SongQuizContent() {
     setCurrentQuestion(1);
     setResult(null);
     setCheckpointIndex(0);
+    setComplete(0);
     setKey(prev => prev + 1); // Force Canvas remount
   };
 
@@ -118,8 +120,9 @@ function SongQuizContent() {
                 {question?.options?.map((option, index) => (
                   <button 
                     key={index} 
-                    className="w-full hover:text-cyan-400 transition-colors" 
-                    onClick={() => handleAnswer(option.next)}
+                    disabled={complete < 3}
+                    className={`w-full ${complete < 3 ? 'cursor-not-allowed' : 'hover:text-cyan-400 transition-colors'}`} 
+                    onClick={() => {setComplete(0); handleAnswer(option.next)}}
                   >
                     {complete >= index + 1 && <TypewriterText 
                       text={option.text}
