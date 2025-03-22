@@ -6,6 +6,7 @@ import { CameraController, Tunnel } from "./TunnelScene";
 import { NavigationProvider, useNavigation } from "@/contexts/NavigationContext";
 import { CameraShake, Stars } from "@react-three/drei";
 import { quizQuestions } from "@/lib/constants";
+import TypewriterText from "./TypewriterText";
 
 // Adjust checkpoints to match tunnel length and ensure proper positioning
 const CHECKPOINTS = [4000, 3000, 2000, 1900, 1800, 1700, 1600, 1500, 1400, 1300, 1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 0]
@@ -15,7 +16,8 @@ function SongQuizContent() {
   const [result, setResult] = useState<string | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isMobile, setIsMobile] = useState(false);
-  const { checkpointIndex, setCheckpointIndex, handleBack } = useNavigation();
+  const [complete, setComplete] = useState(0);
+  const { setCheckpointIndex, handleBack } = useNavigation();
   const [key, setKey] = useState(0); // Add key for forcing Canvas remount
 
   useEffect(() => {
@@ -35,11 +37,13 @@ function SongQuizContent() {
 
   const handleAnswer = (nextId: number) => {
     handleBack();
+
     const nextStep = quizQuestions.find((q) => q.id === nextId);
     if (nextStep?.result) {
       setResult(nextStep.result);
     } else {
       setCurrentQuestion(nextId);
+      setComplete(false);
     }
   };
 
@@ -104,7 +108,12 @@ function SongQuizContent() {
             </div> 
             :  
             <div className="flex flex-col items-center p-6 text-center text-white">
-              <h1 className="text-2xl font-bold">{question?.question}</h1>
+              <h1 className="text-2xl font-bold">
+                <TypewriterText 
+                  text={question?.question || ''}
+                  setComplete={setComplete}
+                  complete={1}
+                /></h1>
               <div className="mt-4 space-y-4">
                 {question?.options?.map((option, index) => (
                   <button 
@@ -112,7 +121,11 @@ function SongQuizContent() {
                     className="w-full hover:text-cyan-400 transition-colors" 
                     onClick={() => handleAnswer(option.next)}
                   >
-                    {option.text}
+                    {complete >= index + 1 && <TypewriterText 
+                      text={option.text}
+                      setComplete={setComplete}
+                      complete={index + 2}
+                    />}
                   </button>
                 ))}
               </div>
