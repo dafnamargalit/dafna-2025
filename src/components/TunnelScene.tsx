@@ -299,7 +299,7 @@ function TunnelSceneContent() {
         {(checkpointIndex === CHECKPOINTS.length - 1) && 
           <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
             <Link 
-              href={'https://linktree.com/dafnamusic'} 
+              href={'https://dafna.ffm.to/badpeoplebadthings'} 
               className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700`}
               aria-label="Pre-save Bad People Bad Things"
             >
