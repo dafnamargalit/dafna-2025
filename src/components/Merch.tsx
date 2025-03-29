@@ -46,7 +46,7 @@ export default function Merch() {
           }}
           onClick={(e: any) => {
             e.stopPropagation()
-            window.open("https://shop.dafna.rocks", "_blank", "noopener,noreferrer");
+            window.open("https://shop.dafna.music", "_blank", "noopener,noreferrer");
           }}
         />
       </group>
