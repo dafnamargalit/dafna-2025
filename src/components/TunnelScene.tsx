@@ -97,12 +97,15 @@ function TunnelSceneContent() {
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [showTourDates, setShowTourDates] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const isNavigating = useRef(false)
 
   // Prevent touch move events on canvas to avoid scrolling the page
   useEffect(() => {
     const canvas = canvasRef.current
     const handleTouchMove = (e: TouchEvent) => {
-      e.preventDefault()
+      if (!isNavigating.current) {
+        e.preventDefault()
+      }
     }
 
     canvas && canvas.addEventListener('touchmove', handleTouchMove, { passive: false })
@@ -206,26 +209,64 @@ function TunnelSceneContent() {
 
   // Handle touch navigation for mobile
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (isNavigating.current) return
     touchStartY.current = e.touches[0].clientY
   }
 
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (touchStartY.current === null) return
+    if (touchStartY.current === null || isNavigating.current) return
     const touchEndY = e.changedTouches[0].clientY
     const deltaY = touchStartY.current - touchEndY
     
     if (!throttleTimeoutRef.current) {
+      isNavigating.current = true
       if (deltaY > 50) {
         handleNext()
       } else if (deltaY < -50) {
         handleBack()
       }
-      throttleTimeoutRef.current = setTimeout(() => {
-        throttleTimeoutRef.current = null
-      }, 1000)
+      
+      // Reset navigation lock after animation
+      setTimeout(() => {
+        isNavigating.current = false
+        throttleTimeoutRef.current = setTimeout(() => {
+          throttleTimeoutRef.current = null
+        }, 1000)
+      }, 500) // Adjust this timing based on your animation duration
     }
     touchStartY.current = null
   }
+
+  // Optimize model loading
+  useEffect(() => {
+    if (isMobile) {
+      // Only preload essential models for mobile
+      useGLTF.preload('/models/paradox.glb');
+      useGLTF.preload('/models/wiwwy_draco.glb');
+    } else {
+      // Preload all models for desktop
+      useGLTF.preload('/models/paradox.glb');
+      useGLTF.preload('/models/wiwwy_draco.glb');
+      useGLTF.preload('/models/ily.glb');
+      useGLTF.preload('/models/submerge_draco.glb');
+      useGLTF.preload('/models/tourbus_draco.glb');
+      useGLTF.preload('/models/recordplayer_draco.glb');
+      useGLTF.preload('/models/tshirts_draco.glb');
+      useGLTF.preload('/models/old_tv_draco.glb');
+    }
+  }, [isMobile])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      // Clear any pending timeouts
+      if (throttleTimeoutRef.current) {
+        clearTimeout(throttleTimeoutRef.current)
+      }
+      // Reset navigation state
+      isNavigating.current = false
+    }
+  }, [])
 
   // Camera shake configuration
   const cameraShakeConfig = {

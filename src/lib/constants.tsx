@@ -46,7 +46,7 @@ export const quizQuestions = [
       id: 1,
       question: "You wake up on the side of an unfamiliar road. You notice a figure in the distance, watching you. What do you do?",
       options: [
-        { text: "A. Ask the figure for help", next: 31 },
+        { text: "A. Ask the figure for help", next: 2 },
         { text: "B. Run the opposite way.", next: 3 },
       ],
     },
@@ -261,6 +261,6 @@ export const quizQuestions = [
     // Final results
     { id: 29, result: "ISHOULDAKNOWN" },
     { id: 30, result: "FILINGCABINET" },
-    { id: 31, result: "CONDITIONALLOVE" }
+    { id: 31, result: "DOYALALA" }
   ];
   

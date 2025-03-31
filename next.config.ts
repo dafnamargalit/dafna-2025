@@ -15,7 +15,10 @@ const nextConfig: NextConfig = {
     return config;
   },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ['*'],
+      bodySizeLimit: '10mb'
+    }
   },
   images: {
     domains: ['teck.s3.us-east-1.amazonaws.com'],
