@@ -23,7 +23,7 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
     return(
         <>
         <div
-        className={`absolute text-cyan-300 flex flex-col bg-gray-700/75 bottom-0 z-50 justify-center items-center w-screen h-screen`}
+        className={`absolute text-cyan-300 flex flex-col bg-gray-700/75 bottom-0 z-50 justify-center items-center w-screen h-screen cursor-pointer`}
         onClick={closeModal} // Close modal when clicking outside the content
         >
         {/* Modal Content */}
@@ -33,16 +33,16 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
         >
         <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl'}`}>select your preferred service:</h2>
         <div className='flex flex-row space-x-2'>
-            <button onClick={() => rememberService("spotify", modalData.spotify)}>
+            <button onClick={() => rememberService("spotify", modalData.spotify)} className="cursor-pointer">
             <IconSpotify />
             </button>
-            <button onClick={() => rememberService("apple", modalData.apple)}>
+            <button onClick={() => rememberService("apple", modalData.apple)} className="cursor-pointer">
             <IconAppleMusic />
             </button>
-            <button onClick={() => rememberService("youtube", modalData.youtube)}>
+            <button onClick={() => rememberService("youtube", modalData.youtube)} className="cursor-pointer">
             <IconYoutube />
             </button>
-            <button onClick={() => rememberService("tidal", modalData.tidal)}>
+            <button onClick={() => rememberService("tidal", modalData.tidal)} className="cursor-pointer">
             <IconTidal />
             </button>
         </div>
@@ -55,7 +55,7 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
             </svg>
         </span>
         </label>
-       Check here to remember your selection
+       <span className="cursor-pointer">Check here to remember your selection</span>
        </div>
         </div>
       </div>

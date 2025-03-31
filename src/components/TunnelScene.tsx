@@ -55,19 +55,19 @@ export function CameraController() {
   useFrame(({ camera, mouse }) => {
     // 1) Smoothly move the camera along the z-axis toward the selected checkpoint
     const targetZ = CHECKPOINTS[checkpointIndex]
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.1)
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.2)
 
     // 2) Slightly rotate camera based on mouse position (-1 to +1)
     const rotationFactor = 0.4
     camera.rotation.x = THREE.MathUtils.lerp(
       camera.rotation.x,
       -mouse.y * rotationFactor,
-      0.1
+      0.2
     )
     camera.rotation.y = THREE.MathUtils.lerp(
       camera.rotation.y,
       mouse.x * rotationFactor,
-      0.1
+      0.2
     )
   })
   return null
@@ -209,51 +209,50 @@ function TunnelSceneContent() {
 
   // Handle touch navigation for mobile
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (isNavigating.current) return
+    if (isNavigating.current || showModal || showTourDates) return
     touchStartY.current = e.touches[0].clientY
   }
 
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (isNavigating.current || showModal || showTourDates) return
+  }
+
   const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (touchStartY.current === null || isNavigating.current) return
+    if (touchStartY.current === null || isNavigating.current || showModal || showTourDates) return
     const touchEndY = e.changedTouches[0].clientY
     const deltaY = touchStartY.current - touchEndY
     
     if (!throttleTimeoutRef.current) {
       isNavigating.current = true
-      if (deltaY > 50) {
-        handleNext()
-      } else if (deltaY < -50) {
-        handleBack()
+      if (Math.abs(deltaY) > 50) {
+        if (deltaY > 0) {
+          handleNext()
+        } else {
+          handleBack()
+        }
       }
       
-      // Reset navigation lock after animation
       setTimeout(() => {
         isNavigating.current = false
         throttleTimeoutRef.current = setTimeout(() => {
           throttleTimeoutRef.current = null
-        }, 1000)
-      }, 500) // Adjust this timing based on your animation duration
+        }, 500)
+      }, 300)
     }
     touchStartY.current = null
   }
 
   // Optimize model loading
   useEffect(() => {
-    if (isMobile) {
-      // Only preload essential models for mobile
-      useGLTF.preload('/models/paradox.glb');
-      useGLTF.preload('/models/wiwwy_draco.glb');
-    } else {
-      // Preload all models for desktop
-      useGLTF.preload('/models/paradox.glb');
-      useGLTF.preload('/models/wiwwy_draco.glb');
-      useGLTF.preload('/models/ily.glb');
-      useGLTF.preload('/models/submerge_draco.glb');
-      useGLTF.preload('/models/tourbus_draco.glb');
-      useGLTF.preload('/models/recordplayer_draco.glb');
-      useGLTF.preload('/models/tshirts_draco.glb');
-      useGLTF.preload('/models/old_tv_draco.glb');
-    }
+    // Preload all models immediately for smoother transitions
+    useGLTF.preload('/models/paradox.glb');
+    useGLTF.preload('/models/wiwwy_draco.glb');
+    useGLTF.preload('/models/ily.glb');
+    useGLTF.preload('/models/submerge_draco.glb');
+    useGLTF.preload('/models/tourbus_draco.glb');
+    useGLTF.preload('/models/recordplayer_draco.glb');
+    useGLTF.preload('/models/tshirts_draco.glb');
+    useGLTF.preload('/models/old_tv_draco.glb');
   }, [isMobile])
 
   // Cleanup on unmount
@@ -285,7 +284,8 @@ function TunnelSceneContent() {
   return (
     <div 
       onWheel={handleWheel} 
-      onTouchStart={handleTouchStart} 
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {isLoading && <LoadingIndicator />}
@@ -294,7 +294,11 @@ function TunnelSceneContent() {
         <Canvas 
           shadows 
           ref={canvasRef} 
-          gl={{ antialias: false, powerPreference: 'low-power', preserveDrawingBuffer: true }} 
+          gl={{ 
+            antialias: false, 
+            powerPreference: 'low-power',
+            preserveDrawingBuffer: true
+          }} 
           style={{ touchAction: 'auto !important'}} 
           camera={{ position: [0, 0, CHECKPOINTS[0]], fov: 75 }} 
           dpr={[1, 1.5]} 
@@ -341,28 +345,28 @@ function TunnelSceneContent() {
           <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
             <Link 
               href={'https://dafna.ffm.to/badpeoplebadthings'} 
-              className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700`}
+              className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
               aria-label="Pre-save Bad People Bad Things"
             >
               <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
             </Link>
             <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
             <div className='flex flex-row space-x-2'>
-              <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify">
+              <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify" className="cursor-pointer">
                 <IconSpotify />
               </a>
-              <a href="https://instagram.com/dafnamusic" aria-label="Instagram">
+              <a href="https://instagram.com/dafnamusic" aria-label="Instagram" className="cursor-pointer">
                 <IconInstagram />
               </a>
-              <a href='https://www.youtube.com/channel/UCzPtND9EY5MkOepLzllAbiw' aria-label="YouTube">
+              <a href='https://www.youtube.com/channel/UCzPtND9EY5MkOepLzllAbiw' aria-label="YouTube" className="cursor-pointer">
                 <IconYoutube />
               </a>
-              <a href='https://github.com/dafnamargalit' aria-label="GitHub">
+              <a href='https://github.com/dafnamargalit' aria-label="GitHub" className="cursor-pointer">
                 <IconGithub />
               </a>
             </div>
             <button 
-              className={`absolute text-cyan-300 items-center justify-center flex flex-col bottom-4`} 
+              className={`absolute text-cyan-300 items-center justify-center flex flex-col bottom-4 cursor-pointer`} 
               onClick={handleNext}
               aria-label={isMobile ? 'Swipe down to explore' : 'Scroll down to explore'}
             >

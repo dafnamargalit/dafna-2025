@@ -12,7 +12,7 @@ interface VinylProps {
 
 const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
   const { scene } = useGLTF(path)
-  const { hover, handlePointerOver, handlePointerOut } = use3DInteraction(scene)
+  const [hover, setHover] = useState(false)
 
   // Deep-clone the scene and then override materials with MeshPhysicalMaterial for a sheen
   const clonedScene = useMemo(() => {
@@ -52,23 +52,42 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
     return clone
   }, [scene])
 
+  // Handle hover effects
+  useEffect(() => {
+    if (!clonedScene) return
+
+    clonedScene.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.material && 'emissive' in child.material) {
+        if (hover) {
+          child.material.emissive = new THREE.Color('#67E8F9')
+          child.material.emissiveIntensity = 0.3
+        } else {
+          child.material.emissive = new THREE.Color('black')
+          child.material.emissiveIntensity = 0
+        }
+      }
+    })
+  }, [hover, clonedScene])
+
+  // Handle cursor style
+  useEffect(() => {
+    document.body.style.cursor = hover ? 'pointer' : 'auto'
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [hover])
+
   if (!clonedScene) return null
 
   return (
     <primitive
       object={clonedScene}
-      rotation={[0, Math.PI - 0.4, -Math.PI]}
+      rotation={[Math.PI, 0, 0]}
       position={position}
       castShadow
       receiveShadow
-      onPointerOver={(e: any) => {
-        e.stopPropagation()
-        handlePointerOver()
-      }}
-      onPointerOut={(e: any) => {
-        e.stopPropagation()
-        handlePointerOut()
-      }}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
       onClick={(e: any) => {
         e.stopPropagation()
         const albumName = path.split('/').pop()?.split('.')[0]
@@ -133,10 +152,10 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
           finalScale * progressRef.current
         )
         
-        // Rotate each vinyl
-        child.rotation.z -= 0.001
-        child.rotation.y += 0.001
-        child.rotation.y -= 0.0012
+        // Create gentle back-and-forth rotation using sine wave
+        const time = state.clock.getElapsedTime()
+        child.rotation.z = Math.sin(time * 0.5) * 0.05 // Gentle oscillation
+        child.rotation.y = Math.sin(time * 0.5) * 0.7 // Keep slight continuous rotation on Y axis
       })
       
       // Optionally, add a slow rotation to the whole group
