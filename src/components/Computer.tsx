@@ -21,7 +21,7 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
   const [displayText, setDisplayText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
   const typingSpeed = 50 // milliseconds per character
-  const fullText = "Hello, I'm Dafna. I built this website so you can listen to my music and watch my videos. Keep scrolling to see more."
+  const fullText = "Hello, I'm Dafna. I built this digital tunnel so you could listen to my music and watch my videos. Keep scrolling to explore my world."
   
   // 2. Memoized values
   const modelProps = useMemo(() => {
@@ -105,7 +105,18 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       video.loop = true
       video.muted = true
       video.playsInline = true
-      video.preload = 'metadata'
+      video.preload = 'auto'
+      video.autoplay = true
+      
+      // Add event listeners for better mobile handling
+      video.addEventListener('ended', () => {
+        video.currentTime = 0
+        video.play().catch(err => console.warn('Video replay failed:', err))
+      })
+      
+      video.addEventListener('error', (e) => {
+        console.error('Video error:', e)
+      })
       
       if (isMobile) {
         video.width = 256
@@ -171,15 +182,15 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
         object={scene} 
         position={modelProps.position}
       />
-      <Html
-        position={isMobile ? [0, 5, -320] : [4.5, 0, -320]}
+      {showing && <Html
+        position={isMobile ? [0, 5, -320] : [4.5, 0.5, -320]}
         center
         style={{
           color: '#ffeb3b',
           fontSize: isMobile ? '1rem' : '1.2rem',
           fontWeight: 'bold',
           textShadow: '0 0 10px #ffeb3b',
-          fontFamily: 'RetroTech',
+          fontFamily: 'var(--font-retrotech), system-ui, sans-serif',
           pointerEvents: 'none',
           userSelect: 'none',
           width: isMobile ? '250px' : '300px',
@@ -193,7 +204,7 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
         <div>
           {displayText}
         </div>
-      </Html>
+      </Html>}
     </group>
   )
 }
