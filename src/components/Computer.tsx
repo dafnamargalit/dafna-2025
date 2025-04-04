@@ -20,7 +20,7 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
   const distanceToCamera = useRef(0)
   const [displayText, setDisplayText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
-  const typingSpeed = 50 // milliseconds per character
+  const typingSpeed = 30 // milliseconds per character
   const fullText = `Hello, I'm Dafna. I built this digital tunnel so you could listen to my music and watch my videos. Keep scrolling to explore my world.`
   
   // 2. Memoized values
@@ -67,28 +67,57 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
     const shouldPlay = distanceToCamera.current < 300
     
     videoRefs.current.forEach(video => {
-      if (shouldPlay && video.paused) {
-        video.play().catch(err => console.warn('Video play failed:', err))
-      } else if (!shouldPlay && !video.paused) {
-        video.pause()
+      if (shouldPlay) {
+        if (video.paused && video.readyState >= 3) { // Only play if video is ready
+          video.play().catch(err => {
+            if (err.name !== 'AbortError') {
+              console.warn('Video play failed:', err);
+            }
+          });
+        }
+      } else if (!video.paused) {
+        video.pause();
       }
-    })
+      
+      // On mobile, ensure video stays loaded when paused
+      if (isMobile && video.paused && video.readyState < 3) {
+        video.load();
+      }
+    });
   })
   
   // 4. Cleanup effect
   useEffect(() => {
     return () => {
       videoRefs.current.forEach(video => {
-        video.pause()
-        video.src = ''
-        video.load()
-      })
+        // Remove all event listeners
+        video.removeEventListener('ended', () => {});
+        video.removeEventListener('error', () => {});
+        video.removeEventListener('loadstart', () => {});
+        video.removeEventListener('loadedmetadata', () => {});
+        video.removeEventListener('waiting', () => {});
+        video.removeEventListener('playing', () => {});
+        
+        // Clean up video
+        video.pause();
+        video.src = '';
+        video.load();
+        
+        // Release video resources
+        if (isMobile) {
+          video.removeAttribute('src');
+          video.load();
+        }
+      });
       
       videoTexturesRef.current.forEach(texture => {
-        texture.dispose()
-      })
-    }
-  }, [])
+        texture.dispose();
+      });
+      
+      videoRefs.current = [];
+      videoTexturesRef.current = [];
+    };
+  }, [isMobile]);
   
   // 5. Video initialization effect
   useEffect(() => {
@@ -107,6 +136,22 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       video.playsInline = true
       video.preload = 'auto'
       video.autoplay = true
+      
+      // Optimize for mobile
+      if (isMobile) {
+        video.width = 256
+        video.height = 144
+        // Lower quality for better performance
+        video.playsInline = true
+        video.preload = 'metadata'
+        // Add buffer monitoring
+        video.addEventListener('waiting', () => {
+          console.log('Video buffering...');
+        });
+        video.addEventListener('playing', () => {
+          console.log('Video playing');
+        });
+      }
       
       // Add event listeners for better mobile handling
       video.addEventListener('ended', () => {
@@ -131,12 +176,11 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       
       video.addEventListener('loadedmetadata', () => {
         console.log('Video metadata loaded:', vid.src);
+        // Start loading the video data
+        if (isMobile) {
+          video.load();
+        }
       });
-      
-      if (isMobile) {
-        video.width = 256
-        video.height = 144
-      }
       
       videoRefs.current.push(video)
       
@@ -206,7 +250,7 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
         center
         style={{
           color: '#ffeb3b',
-          fontSize: isMobile ? '1rem' : '1.2rem',
+          fontSize: isMobile ? '0.8rem' : '1.2rem',
           fontWeight: 'bold',
           textShadow: '0 0 10px #ffeb3b',
           fontFamily: 'var(--font-retrotech), system-ui, sans-serif',
