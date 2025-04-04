@@ -4,9 +4,10 @@ import { useNavigation } from '../contexts/NavigationContext';
 
 interface ProgressNavProps {
   isMobile: boolean;
+  is2D: boolean;
 }
 
-const ProgressNav = ({ isMobile }: ProgressNavProps) => {
+const ProgressNav = ({ isMobile, is2D }: ProgressNavProps) => {
     const { checkpointIndex, setCheckpointIndex } = useNavigation();
 
     const pages = [
@@ -62,7 +63,11 @@ const ProgressNav = ({ isMobile }: ProgressNavProps) => {
                             {/* Page Link */}
                             <button 
                                 onClick={() => {
-                                    setCheckpointIndex(index); 
+                                    if (!is2D) {
+                                        setCheckpointIndex(index); 
+                                    } else {
+                                        document.getElementById(name)?.scrollIntoView({ behavior: 'smooth' });
+                                    }
                                     setShowPages(false);
                                 }}
                                 aria-current={checkpointIndex === index ? "page" : undefined}

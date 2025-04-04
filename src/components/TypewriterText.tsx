@@ -13,7 +13,7 @@ const TypewriterText: React.FC<TypewriterTextProps> = ({ text, speed = 50, setCo
   useEffect(() => {
     const type = async () => {
       for (let i = 0; i < text.length; i++) {
-        setDisplayedText(text.slice(0, i + 1));
+        text[i - 1] === '.' ? setTimeout(() => setDisplayedText(text.slice(0, i + 1)), 500) : setDisplayedText(text.slice(0, i + 1));
         await new Promise(resolve => setTimeout(resolve, speed));
       }
       setComplete?.(complete);

@@ -21,7 +21,7 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
   const [displayText, setDisplayText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
   const typingSpeed = 30 // milliseconds per character
-  const fullText = `Hello, I'm Dafna. I built this digital tunnel so you could listen to my music and watch my videos. Keep scrolling to explore my world.`
+  const fullText = `Hi, I'm Dafna! I'm a software engineer and musician based in Los Angeles. I make indie pop music and write code. This website is one of my experiments– keep scrolling to explore!`
   
   // 2. Memoized values
   const modelProps = useMemo(() => {

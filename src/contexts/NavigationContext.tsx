@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react'
 // Define checkpoints along the Z axis
 
 type NavigationContextType = {
-  checkpoints: number[]
+  checkpoints: string[] | number[]
   checkpointIndex: number
   setCheckpointIndex: (index: number) => void
   handleNext: () => void
@@ -12,7 +12,7 @@ type NavigationContextType = {
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
 
-export const NavigationProvider: React.FC<{checkpoints: number[], children: ReactNode}> = ({ checkpoints, children }) => {
+export const NavigationProvider: React.FC<{checkpoints: string[] | number[], children: ReactNode}> = ({ checkpoints, children }) => {
   const [checkpointIndex, setCheckpointIndex] = useState(0)
   
   const handleNext = () => {

@@ -406,7 +406,7 @@ function TunnelSceneContent() {
             </button>
           </div>}
         {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
-        <ProgressNav isMobile={isMobile} />
+        <ProgressNav isMobile={isMobile} is2D={false} />
       </RemoveScroll>
     </div>
   )
