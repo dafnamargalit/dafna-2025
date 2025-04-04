@@ -48,7 +48,7 @@ const About: React.FC = () => {
         <div className="w-full md:w-1/2 md:absolute md:top-0 md:right-0 md:transform md:translate-x-1/4 space-y-2 text-base md:text-xl text-yellow-300 text-center md:text-left">
           {isVisible && (
             <TypewriterText
-              text="Hi, I'm Dafna! I'm a software engineer and musician based in Los Angeles. I make indie pop music and write code. This website is one of my experiments– hit the toggle on the top right to view it in 3D."
+              text="Hi, I'm Dafna! I'm a software engineer and musician based in Los Angeles. I make indie pop music and write code. This website is one of my experiments– hit the toggle on the top right to view it in 3D or keep scrolling for more."
             />
           )}
         </div>
