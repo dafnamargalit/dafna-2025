@@ -67,57 +67,28 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
     const shouldPlay = distanceToCamera.current < 300
     
     videoRefs.current.forEach(video => {
-      if (shouldPlay) {
-        if (video.paused && video.readyState >= 3) { // Only play if video is ready
-          video.play().catch(err => {
-            if (err.name !== 'AbortError') {
-              console.warn('Video play failed:', err);
-            }
-          });
-        }
-      } else if (!video.paused) {
-        video.pause();
+      if (shouldPlay && video.paused) {
+        video.play().catch(err => console.warn('Video play failed:', err))
+      } else if (!shouldPlay && !video.paused) {
+        video.pause()
       }
-      
-      // On mobile, ensure video stays loaded when paused
-      if (isMobile && video.paused && video.readyState < 3) {
-        video.load();
-      }
-    });
+    })
   })
   
   // 4. Cleanup effect
   useEffect(() => {
     return () => {
       videoRefs.current.forEach(video => {
-        // Remove all event listeners
-        video.removeEventListener('ended', () => {});
-        video.removeEventListener('error', () => {});
-        video.removeEventListener('loadstart', () => {});
-        video.removeEventListener('loadedmetadata', () => {});
-        video.removeEventListener('waiting', () => {});
-        video.removeEventListener('playing', () => {});
-        
-        // Clean up video
-        video.pause();
-        video.src = '';
-        video.load();
-        
-        // Release video resources
-        if (isMobile) {
-          video.removeAttribute('src');
-          video.load();
-        }
-      });
+        video.pause()
+        video.src = ''
+        video.load()
+      })
       
       videoTexturesRef.current.forEach(texture => {
-        texture.dispose();
-      });
-      
-      videoRefs.current = [];
-      videoTexturesRef.current = [];
-    };
-  }, [isMobile]);
+        texture.dispose()
+      })
+    }
+  }, [])
   
   // 5. Video initialization effect
   useEffect(() => {
@@ -137,28 +108,6 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       video.preload = 'auto'
       video.autoplay = true
       
-      // Optimize for mobile
-      if (isMobile) {
-        video.width = 256
-        video.height = 144
-        // Lower quality for better performance
-        video.playsInline = true
-        video.preload = 'metadata'
-        // Add buffer monitoring
-        video.addEventListener('waiting', () => {
-          console.log('Video buffering...');
-        });
-        video.addEventListener('playing', () => {
-          console.log('Video playing');
-        });
-      }
-      
-      // Add event listeners for better mobile handling
-      video.addEventListener('ended', () => {
-        video.currentTime = 0
-        video.play().catch(err => console.warn('Video replay failed:', err))
-      })
-      
       video.addEventListener('error', (e) => {
         const videoError = video.error;
         console.error('Video error:', {
@@ -176,11 +125,12 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       
       video.addEventListener('loadedmetadata', () => {
         console.log('Video metadata loaded:', vid.src);
-        // Start loading the video data
-        if (isMobile) {
-          video.load();
-        }
       });
+      
+      if (isMobile) {
+        video.width = 256
+        video.height = 144
+      }
       
       videoRefs.current.push(video)
       
