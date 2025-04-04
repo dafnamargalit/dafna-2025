@@ -4,6 +4,10 @@ import Home from './Home';
 import ProgressNav from '../ProgressNav';
 import { NavigationProvider, useNavigation } from '@/contexts/NavigationContext';
 import About from './About';
+import Music from './Music';
+import Videos from './Videos';
+import Merch from './Merch';
+import Tour from './Tour';
 
 const FlatSite: React.FC = () => {
   const sections = {
@@ -83,22 +87,22 @@ const FlatSite: React.FC = () => {
 
           {/* Music Section */}
           <section ref={sections.music} id="music" className="h-screen flex items-center justify-center bg-transparent snap-center">
-            <h1 className="text-6xl font-bold text-[#67E8F9] drop-shadow-[0_0_10px_rgba(103,232,249,0.5)]">Music</h1>
+            <Music />
           </section>
 
           {/* Videos Section */}
           <section ref={sections.videos} id="videos" className="h-screen flex items-center justify-center bg-transparent snap-center">
-            <h1 className="text-6xl font-bold text-[#67E8F9] drop-shadow-[0_0_10px_rgba(103,232,249,0.5)]">Videos</h1>
+            <Videos />
           </section>
 
           {/* Merch Section */}
           <section ref={sections.merch} id="merch" className="h-screen flex items-center justify-center bg-transparent snap-center">
-            <h1 className="text-6xl font-bold text-[#67E8F9] drop-shadow-[0_0_10px_rgba(103,232,249,0.5)]">Merch</h1>
+            <Merch />
           </section>
 
           {/* Tour Section */}
           <section ref={sections.tour} id="tour" className="h-screen flex items-center justify-center bg-transparent snap-center">
-            <h1 className="text-6xl font-bold text-[#67E8F9] drop-shadow-[0_0_10px_rgba(103,232,249,0.5)]">Tour</h1>
+            <Tour />
           </section>
         </div>
       </>

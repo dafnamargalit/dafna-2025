@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TunnelSceneContent from '../Tunnel';
+import { LoadingIndicator } from '../LoadingIndicator';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const [isTunnelLoaded, setIsTunnelLoaded] = useState(false);
+
+  useEffect(() => {
+    // Simulate tunnel loading
+    const timer = setTimeout(() => {
+      setIsTunnelLoaded(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-black">
       {/* Fixed background */}
@@ -17,6 +29,13 @@ export default function Layout({ children }: LayoutProps) {
       <div className="relative z-10">
         {children}
       </div>
+
+      {/* Loading overlay */}
+      {!isTunnelLoaded && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
+          <LoadingIndicator />
+        </div>
+      )}
     </div>
   );
 } 

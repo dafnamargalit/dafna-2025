@@ -18,11 +18,11 @@ export default function Home() {
 
   return (
     
-    <div className={`bg-black ${is3D ? 'overscroll-none overflow-y-none' : ''} flex justify-center items-center ${retroFont.className}`}>
-      <div className="fixed top-4 right-4 z-50">
+    <div className={`bg-black ${is3D ? 'overscroll-none overflow-y-none' : ''} flex justify-center items-center ${retroFont.className} cursor-default`}>
+      <div className="fixed top-4 right-4 z-50 cursor-pointer">
         <button
-          className={`w-14 h-8 rounded-full p-1 transition-colors duration-200 ease-in-out ${
-            is3D ? 'bg-blue-500' : 'bg-gray-200'
+          className={`w-14 h-8 rounded-full p-1 transition-colors duration-200 ease-in-out cursor-pointer ${
+            is3D ? 'bg-cyan-300' : 'bg-gray-200'
           }`}
           onClick={() => {
             setIs3D(!is3D);

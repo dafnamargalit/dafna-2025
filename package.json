@@ -17,6 +17,8 @@
     "@types/styled-components": "^5.1.34",
     "@types/three": "^0.173.0",
     "@vercel/analytics": "^1.5.0",
+    "embla-carousel-autoplay": "^8.5.2",
+    "embla-carousel-react": "^8.5.2",
     "fbx2gltf": "^0.9.7-p1",
     "framer-motion": "^12.4.7",
     "next": "^15.2.4",

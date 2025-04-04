@@ -14,10 +14,11 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
     const [isChecked, setIsChecked] = useState(false);
 
     const rememberService = (service: string, url: string) => {
-        if (isChecked){
+        if (isChecked) {
             localStorage.setItem("streaming-service", service);
-        } 
-        window.open(url);
+        }
+        closeModal();
+        window.open(url, '_blank');
     }
 
     return(
