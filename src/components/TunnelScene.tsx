@@ -392,6 +392,19 @@ function TunnelSceneContent() {
           />
         )}
         
+        {checkpointIndex === 0 &&   
+        <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-40 cursor-pointer w-screen z-10`}>
+        <button 
+              className={`absolute text-cyan-300 items-center justify-center flex flex-col bottom-4 cursor-pointer`} 
+              onClick={() => setCheckpointIndex(CHECKPOINTS.length - 1)}
+              aria-label={'back to home'}
+            >
+              <div className='transform rotate-180'>
+                <ChevronDown fill="#67E8F9"/>
+              </div>
+              <div>back to home</div>
+            </button>
+          </div>}
         {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
         <ProgressNav isMobile={isMobile} />
       </RemoveScroll>

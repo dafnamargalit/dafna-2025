@@ -21,7 +21,7 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
   const [displayText, setDisplayText] = useState('')
   const [isTyping, setIsTyping] = useState(true)
   const typingSpeed = 50 // milliseconds per character
-  const fullText = "Hello, I'm Dafna. I built this digital tunnel so you could listen to my music and watch my videos. Keep scrolling to explore my world."
+  const fullText = `Hello, I'm Dafna. I built this digital tunnel so you could listen to my music and watch my videos. Keep scrolling to explore my world.`
   
   // 2. Memoized values
   const modelProps = useMemo(() => {
@@ -115,8 +115,23 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       })
       
       video.addEventListener('error', (e) => {
-        console.error('Video error:', e)
-      })
+        const videoError = video.error;
+        console.error('Video error:', {
+          code: videoError?.code,
+          message: videoError?.message,
+          src: vid.src,
+          networkState: video.networkState,
+          readyState: video.readyState
+        });
+      });
+      
+      video.addEventListener('loadstart', () => {
+        console.log('Video load started:', vid.src);
+      });
+      
+      video.addEventListener('loadedmetadata', () => {
+        console.log('Video metadata loaded:', vid.src);
+      });
       
       if (isMobile) {
         video.width = 256
@@ -128,42 +143,46 @@ export const Computer: React.FC<ComputerProps> = ({ isMobile, showing }) => {
       const handleCanPlay = () => {
         if (!mounted) return
         
-        const videoTexture = new THREE.VideoTexture(video)
-        videoTexture.minFilter = THREE.LinearFilter
-        videoTexture.magFilter = THREE.LinearFilter
-        videoTexture.format = THREE.RGBFormat
-        videoTexture.flipY = true
-        videoTexturesRef.current.push(videoTexture)
-        
-        const screenObj = scene.getObjectByName(vid.name)
-        if (screenObj && screenObj instanceof THREE.Mesh) {
-          screenObj.material = new THREE.MeshBasicMaterial({ 
-            map: videoTexture,
-            toneMapped: false,
-            side: THREE.FrontSide
-          })
+        try {
+          const videoTexture = new THREE.VideoTexture(video)
+          videoTexture.minFilter = THREE.LinearFilter
+          videoTexture.magFilter = THREE.LinearFilter
+          videoTexture.format = THREE.RGBFormat
+          videoTexture.flipY = true
+          videoTexturesRef.current.push(videoTexture)
           
-          if (screenObj.geometry) {
-            const geometry = screenObj.geometry.clone()
+          const screenObj = scene.getObjectByName(vid.name)
+          if (screenObj && screenObj instanceof THREE.Mesh) {
+            screenObj.material = new THREE.MeshBasicMaterial({ 
+              map: videoTexture,
+              toneMapped: false,
+              side: THREE.FrontSide
+            })
             
-            const uvAttribute = geometry.attributes.uv
-            if (uvAttribute) {
-              for (let i = 0; i < uvAttribute.count; i++) {
-                const u = uvAttribute.getX(i)
-                const v = uvAttribute.getY(i)
-                
-                uvAttribute.setXY(i, v, 1 - u)
+            if (screenObj.geometry) {
+              const geometry = screenObj.geometry.clone()
+              
+              const uvAttribute = geometry.attributes.uv
+              if (uvAttribute) {
+                for (let i = 0; i < uvAttribute.count; i++) {
+                  const u = uvAttribute.getX(i)
+                  const v = uvAttribute.getY(i)
+                  
+                  uvAttribute.setXY(i, v, 1 - u)
+                }
+                uvAttribute.needsUpdate = true
               }
-              uvAttribute.needsUpdate = true
+              
+              screenObj.geometry = geometry
             }
-            
-            screenObj.geometry = geometry
           }
-        }
-        
-        videosLoaded++
-        if (videosLoaded === totalVideos) {
-          setVideoTexturesLoaded(true)
+          
+          videosLoaded++
+          if (videosLoaded === totalVideos) {
+            setVideoTexturesLoaded(true)
+          }
+        } catch (error) {
+          console.error('Error creating video texture:', error);
         }
       }
       

@@ -5,7 +5,6 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-retrotech: var(--font-retrotech);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,7 +18,7 @@ html,
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-retrotech), system-ui, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   overflow: hidden;
   scrollbar-width: 0;
   box-sizing: border-box;
