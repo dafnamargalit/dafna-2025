@@ -15,23 +15,23 @@ const ProgressNav = ({ isMobile }: ProgressNavProps) => {
             index: 5,
         },
         {
-            name: "music",
+            name: "about",
             index: 4,
         },
         {
-            name: "videos",
+            name: "music",
             index: 3,
         },
         {
-            name: "merch",
+            name: "videos",
             index: 2,
         },
         {
-            name: "tour",
+            name: "merch",
             index: 1,
         },
         {
-            name: "about",
+            name: "tour",
             index: 0,
         },
     ];

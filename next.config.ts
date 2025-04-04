@@ -23,12 +23,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['teck.s3.us-east-1.amazonaws.com'],
   },
-  // Increase the maximum payload size for API routes
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
-  },
+  // API configuration is handled through middleware or route handlers in Next.js 13+
 };
 
 export default nextConfig;

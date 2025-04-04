@@ -18,6 +18,8 @@ import ProgressNav from './ProgressNav'
 import Link from 'next/link'
 import { NavigationProvider, useNavigation } from '../contexts/NavigationContext'
 import { LoadingIndicator } from './LoadingIndicator'
+import { Computer } from './Computer'
+import TypewriterText from './TypewriterText'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
@@ -83,6 +85,7 @@ function ModelPreloader() {
   useGLTF.preload('/models/recordplayer_draco.glb');
   useGLTF.preload('/models/tshirts_draco.glb');
   useGLTF.preload('/models/old_tv_draco.glb');
+  useGLTF.preload('/models/tvandcomputer.glb');
   return null;
 }
 
@@ -158,7 +161,7 @@ function TunnelSceneContent() {
   useEffect(() => {
     if(isLoading){
       setTimeout(() => {
-        setCheckpointIndex(CHECKPOINTS.length - 2);
+        setCheckpointIndex(CHECKPOINTS.length - 3);
         setShowVinyls(true);
       }, 600);
       setCheckpointIndex(0);
@@ -310,15 +313,11 @@ function TunnelSceneContent() {
           <CameraController />
           <Tunnel isMobile={isMobile} />
           <Preload all />
-          
+
           <Suspense fallback={null}>
-            <Merch />
+            <Computer showing={checkpointIndex === CHECKPOINTS.length - 2} isMobile={isMobile} />
           </Suspense>
-          
-          <Suspense fallback={null}>
-            <FloatingTV isMobile={isMobile} />
-          </Suspense>
-          
+
           <Suspense fallback={null}>
             <RecordPlayer isMobile={isMobile} setShowVinyls={setShowVinyls} showVinyls={showVinyls} />
           </Suspense>
@@ -328,8 +327,17 @@ function TunnelSceneContent() {
           </Suspense>
           
           <Suspense fallback={null}>
-            {checkpointIndex === 1 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
+            <FloatingTV isMobile={isMobile} />
           </Suspense>
+          
+          <Suspense fallback={null}>
+            <Merch />
+          </Suspense>
+
+          <Suspense fallback={null}>
+            {checkpointIndex === 0 && <TourBus setShowTourDates={setShowTourDates} isMobile={isMobile} />}
+          </Suspense>
+          
           
           <fogExp2 attach="fog" args={[0x000000, 0.005]} />
           <Stars
@@ -385,7 +393,6 @@ function TunnelSceneContent() {
         )}
         
         {showTourDates && <TourDates isMobile={isMobile} closeModal={() => setShowTourDates(false)} />}
-        
         <ProgressNav isMobile={isMobile} />
       </RemoveScroll>
     </div>

@@ -12,10 +12,10 @@ interface TourBusProps {
 export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) => {
   const { scene } = useGLTF('/models/tourbus_draco.glb')
   const { hover, handlePointerOver, handlePointerOut } = use3DInteraction(scene);
-  const [position, setPosition] = useState(isMobile ? [0,-2,90] : [0,-2,40]);
+  const [position, setPosition] = useState(isMobile ? [0,-2,290] : [0,-2,230]);
   const [rotation, setRotation] = useState(isMobile ? [0,-0.6, 0] : [0,0,0]);
 
-  const finalPosition = [0,-2,90];
+  const finalPosition = [0,-2,290];
 
   // Adjust model scale based on device type
   useEffect(() => {
@@ -62,7 +62,7 @@ export const TourBus: React.FC<TourBusProps> = ({ isMobile, setShowTourDates }) 
       setPosition(prev => [0, -2, Math.min(prev[2] + 0.5, finalPosition[2])]);
       
       // Rotate bus when it gets near the final position
-      if(position[2] >= 85 && rotation[1] > -Math.PI/2 + 1){
+      if(position[2] >= 285 && rotation[1] > -Math.PI/2 + 1){
         setRotation(prev => [0, prev[1] - 0.2, 0]);
       }
     }

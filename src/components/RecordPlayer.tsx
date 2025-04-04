@@ -23,7 +23,7 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: Re
   // Add the spotlight target to the scene and set its position
   useEffect(() => {
     if (targetRef.current) {
-      targetRef.current.position.set(0, 0, -330) // Adjust as needed
+      targetRef.current.position.set(0, 0, -140) // Adjust as needed
       threeScene.add(targetRef.current)
       
       // Clean up on component unmount
@@ -42,14 +42,14 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: Re
     }
   }, [scene, isMobile])
 
-  const recordPlayerPosition = [0, 0, -330]
+  const recordPlayerPosition = [0, 0, -140]
 
   return (
     <>
       <group>
         {/* Spotlight */}
         <spotLight
-          position={[0, 6, -320]} // Above the record player
+          position={[0, 6, -130]} // Above the record player
           angle={0.9}           // Wide beam angle
           penumbra={0.5}
           intensity={10}
@@ -66,7 +66,7 @@ export default function RecordPlayer({ setShowVinyls, showVinyls, isMobile }: Re
         <primitive object={targetRef.current} />
 
         {/* Ambient light */}
-        <ambientLight intensity={2} />
+        <ambientLight intensity={3} />
         <directionalLight position={[10,-30,-10]} intensity={0.2} castShadow shadow-mapSize={[2024, 2024]} />
         <directionalLight position={[-10,30,0]} intensity={0.2} castShadow shadow-mapSize={[2024, 2024]} />
         <directionalLight position={[0,-30,0]} intensity={0.2} castShadow shadow-mapSize={[2024, 2024]} />

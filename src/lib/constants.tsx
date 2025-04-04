@@ -41,6 +41,11 @@ export const videos = [
   ];
   
 
+  export const aboutVideos = [
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/spinninghead.mp4", name: "Screen" },
+    { src: "https://teck.s3.us-east-1.amazonaws.com/portfolio/spinninghead.mp4", name: "Computer_Screen_0" },
+  ];
+  
 export const quizQuestions = [
     {
       id: 1,

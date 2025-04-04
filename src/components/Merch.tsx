@@ -8,7 +8,7 @@ export default function Merch() {
   const { hover, handlePointerOver, handlePointerOut } = use3DInteraction(scene);
 
   // Optionally scale and adjust as needed
-  const position = [0, -8, -20];
+  const position = [0, -8, 80];
 
   return (
     <>

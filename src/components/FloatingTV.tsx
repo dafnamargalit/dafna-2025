@@ -21,7 +21,7 @@ export const FloatingTV: React.FC<FloatingTVProps> = ({ isMobile }) => {
   // Optimize model scale and position with memoization
   const modelProps = useMemo(() => {
     const scale = isMobile ? 0.011 : 0.012
-    const position = isMobile ? [0, -8, -125] : [0, -8, -120]
+    const position = isMobile ? [0, -8, -25] : [0, -8, -20]
     
     scene.scale.set(scale, scale, scale)
     
