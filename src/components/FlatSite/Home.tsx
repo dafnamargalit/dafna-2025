@@ -22,7 +22,7 @@ const Home: React.FC = () => {
             >
               <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
             </Link>
-            <DafnaLogo width={isMobile ? 300 : 400} height={isMobile ? 200 : 400}/>
+            <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
             <div className='flex flex-row space-x-2'>
               <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify" className="cursor-pointer">
                 <IconSpotify size={isMobile ? '30' : '40'}/>
