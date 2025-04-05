@@ -22,19 +22,19 @@ const Home: React.FC = () => {
             >
               <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
             </Link>
-            <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
+            <DafnaLogo width={isMobile ? 300 : 400} height={isMobile ? 200 : 400}/>
             <div className='flex flex-row space-x-2'>
               <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify" className="cursor-pointer">
-                <IconSpotify />
+                <IconSpotify size={isMobile ? '30' : '40'}/>
               </a>
               <a href="https://instagram.com/dafnamusic" aria-label="Instagram" className="cursor-pointer">
-                <IconInstagram />
+                <IconInstagram size={isMobile ? '30' : '40'}/>
               </a>
               <a href='https://www.youtube.com/channel/UCzPtND9EY5MkOepLzllAbiw' aria-label="YouTube" className="cursor-pointer">
-                <IconYoutube />
+                <IconYoutube size={isMobile ? '30' : '40'}/>
               </a>
               <a href='https://github.com/dafnamargalit' aria-label="GitHub" className="cursor-pointer">
-                <IconGithub />
+                <IconGithub size={isMobile ? '30' : '40'}/>
               </a>
             </div>
             <button 
