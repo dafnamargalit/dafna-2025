@@ -28,9 +28,9 @@ const Videos: React.FC = () => {
         <Image
           src="/images/videos.png"
           alt="Videos thumbnail"
-          width={isMobile ? 300 : 400}
-          height={isMobile ? 300 : 400}
-          className={`transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}
+          width={isMobile ? 250 : 400}
+          height={isMobile ? 250 : 400}
+          className={`transition-transform duration-300 mb-10 ${isHovered ? 'scale-110' : 'scale-100'}`}
         />
       </a>
     </div>

@@ -10,12 +10,6 @@ const TunnelScene = dynamic(() => import('../components/TunnelScene'), { ssr: tr
 export default function Home() {
   const [is3D, setIs3D] = useState(false);
 
-  useEffect(() => {
-    // Check user preference from localStorage
-    const preferredView = localStorage.getItem('preferredView');
-    setIs3D(preferredView !== '2d');
-  }, []);
-
   return (
     
     <div className={`bg-black ${is3D ? 'overscroll-none overflow-y-none' : ''} flex justify-center items-center ${retroFont.className} cursor-default`}>
@@ -26,7 +20,6 @@ export default function Home() {
           }`}
           onClick={() => {
             setIs3D(!is3D);
-            localStorage.setItem('preferredView', is3D ? '2d' : '3d');
           }}
         >
           <div

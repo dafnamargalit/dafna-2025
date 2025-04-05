@@ -28,8 +28,8 @@ const Tour: React.FC = () => {
         <Image
           src="/images/tourbus.png"
           alt="Tour thumbnail"
-          width={isMobile ? 700 : 800}
-          height={isMobile ? 700 : 800}
+          width={isMobile ? 800 : 900}
+          height={isMobile ? 800 : 900}
           className={`transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}
         />
       </div>

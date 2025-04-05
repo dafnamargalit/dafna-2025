@@ -45,7 +45,7 @@ const About: React.FC = () => {
             className="w-full h-auto" 
           />
         </div>
-        <div className="w-full md:w-1/2 md:absolute md:top-0 md:right-0 md:transform md:translate-x-1/4 space-y-2 text-base md:text-xl text-yellow-300 text-center md:text-left">
+        <div className="w-full md:w-1/2 md:absolute md:top-0 md:right-0 md:transform md:translate-x-1/4 space-y-2 text-xs md:text-lg text-yellow-300 text-center md:text-left">
           {isVisible && (
             <TypewriterText
               text={`Hi, I'm Dafna! I'm a software engineer and musician based in Los Angeles. I make indie pop music and write code. This website is one of my experiments– hit the toggle on the top right to view it in 3D ${isMobile ? '(better on desktop)' : ''} or keep scrolling for more.`}
