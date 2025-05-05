@@ -16,7 +16,7 @@ const Home: React.FC = () => {
   return (
     <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
             <Link 
-              href={'https://dafna.ffm.to/badpeoplebadthings'} 
+              href={'https://apollodistro.lnk.to/Dafna-BPBT'} 
               className={`hover:opacity-70 bg-cyan-300 flex ${isMobile ? 'mt-40' : ''} items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
               aria-label="Pre-save Bad People Bad Things"
             >
