@@ -23,7 +23,7 @@ export default function Tickets() {
 
   useEffect(() => {
     // Get the source from URL parameters
-    const source = searchParams.get('source') || 'direct'
+    const source = searchParams?.get('source') || 'direct'
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 
     // Track the event in Google Analytics
