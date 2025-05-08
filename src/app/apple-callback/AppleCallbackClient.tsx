@@ -5,12 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function AppleCallbackClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const code = searchParams?.get('code');
+
   const [status, setStatus] = useState('Connecting to Apple Music...');
 
   useEffect(() => {
     const handleCallback = async () => {
-      const code = searchParams.get('code');
-
       if (code) {
         try {
           setStatus('Exchanging authorization code...');
