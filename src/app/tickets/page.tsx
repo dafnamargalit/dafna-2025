@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 // Add type declaration for gtag
@@ -18,7 +18,7 @@ declare global {
   }
 }
 
-export default function Tickets() {
+function TicketsContent() {
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -40,4 +40,12 @@ export default function Tickets() {
   }, [searchParams])
 
   return null
+}
+
+export default function Tickets() {
+  return (
+    <Suspense fallback={null}>
+      <TicketsContent />
+    </Suspense>
+  )
 }
