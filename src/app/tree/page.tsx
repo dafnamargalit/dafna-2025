@@ -4,7 +4,7 @@ import Layout from '@/components/FlatSite/Layout'
 import Link from 'next/link'
 import retroFont from '@/components/RetroFont'
 import { DafnaLogo } from '@/components/Icons'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, Suspense } from 'react'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { pageview, event } from '@/lib/gtag'
@@ -259,6 +259,8 @@ function TreeContent() {
 
 export default function TreePage() {
   return (
-    <TreeContent />
+    <Suspense fallback={null}>
+      <TreeContent />
+    </Suspense>
   )
 }
