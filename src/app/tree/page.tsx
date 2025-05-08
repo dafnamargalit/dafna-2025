@@ -4,10 +4,9 @@ import Layout from '@/components/FlatSite/Layout'
 import Link from 'next/link'
 import retroFont from '@/components/RetroFont'
 import { DafnaLogo } from '@/components/Icons'
-import { useEffect, useRef, useState, Suspense } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Script from 'next/script'
-import { useSearchParams } from 'next/navigation'
 
 // Google Analytics event tracking
 const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
@@ -17,7 +16,6 @@ const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
 }
 
 function TreeContent() {
-  const searchParams = useSearchParams()
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -28,12 +26,13 @@ function TreeContent() {
 
   // Track page view and source
   useEffect(() => {
-    const source = searchParams.get('source') || 'direct'
+    const urlParams = new URLSearchParams(window.location.search)
+    const source = urlParams.get('source') || 'direct'
     trackEvent('page_view', {
       page_title: 'Tree Page',
       source: source
     })
-  }, [searchParams])
+  }, [])
 
   const announcements = [
     {
@@ -278,8 +277,6 @@ function TreeContent() {
 
 export default function TreePage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <TreeContent />
-    </Suspense>
+    <TreeContent />
   )
 }
