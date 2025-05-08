@@ -6,6 +6,14 @@ import retroFont from '@/components/RetroFont'
 import { DafnaLogo } from '@/components/Icons'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Script from 'next/script'
+
+// Google Analytics event tracking
+const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    ;(window as any).gtag('event', eventName, eventParams)
+  }
+}
 
 export default function TreePage() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -16,10 +24,20 @@ export default function TreePage() {
   const progressBarRef = useRef<HTMLDivElement>(null)
   const TOTAL_DURATION = 30 // 30 seconds total duration
 
+  // Track page view and source
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const source = urlParams.get('source') || 'direct'
+    trackEvent('page_view', {
+      page_title: 'Tree Page',
+      source: source
+    })
+  }, [])
+
   const announcements = [
     {
       title: 'Dafna at Hotel Cafe on June 9th',
-      link: 'https://dafna.music/tickets',
+      link: 'https://www.hotelcafe.com/tickets/?s=events_view&id=14653',
       description: 'Playing my songs with a string quartet!'
     },
     {
@@ -33,19 +51,22 @@ export default function TreePage() {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause()
+        trackEvent('audio_pause', {
+          current_time: audioRef.current.currentTime
+        })
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current)
         }
       } else {
-        audioRef.current.currentTime = 0 // Reset to start
+        audioRef.current.currentTime = 0
         setCurrentTime(0)
         audioRef.current.play()
-        // Set timeout to stop after 30 seconds
+        trackEvent('audio_play')
         timeoutRef.current = setTimeout(() => {
           if (audioRef.current) {
             audioRef.current.pause()
             setIsPlaying(false)
-            setCurrentTime(0)
+            trackEvent('audio_complete')
           }
         }, TOTAL_DURATION * 1000)
       }
@@ -64,6 +85,9 @@ export default function TreePage() {
     
     audioRef.current.currentTime = newTime
     setCurrentTime(newTime)
+    trackEvent('audio_seek', {
+      seek_time: newTime
+    })
   }
 
   const handleDragStart = () => {
@@ -143,6 +167,24 @@ export default function TreePage() {
 
   return (
     <Layout>
+      {/* Google Analytics Script */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
+          `,
+        }}
+      />
+
       <div className={`min-h-screen flex justify-center p-4 text-cyan-700 ${retroFont.className}`}>
         <div className="max-w-2xl w-full space-y-2">
 
@@ -216,6 +258,10 @@ export default function TreePage() {
                 href={announcement.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent('announcement_click', {
+                  announcement_title: announcement.title,
+                  announcement_index: index
+                })}
                 className="block p-4 sm:p-6 bg-cyan/40 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
               >
                 <h2 className="text-lg sm:text-2xl font-semibold text-cyan-500 mb-1 sm:mb-2">{announcement.title}</h2>
