@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect } from 'react'
 import { GA_MEASUREMENT_ID, pageview } from '@/lib/gtag'
 
-export default function GoogleAnalytics() {
+function AnalyticsContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -15,12 +15,16 @@ export default function GoogleAnalytics() {
     }
   }, [pathname, searchParams])
 
+  return null
+}
+
+export default function GoogleAnalytics() {
   if (process.env.NODE_ENV !== 'production') {
     return null
   }
 
   return (
-    <Suspense fallback={null}>
+    <>
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
@@ -39,6 +43,9 @@ export default function GoogleAnalytics() {
           `,
         }}
       />
-    </Suspense>
+      <Suspense fallback={null}>
+        <AnalyticsContent />
+      </Suspense>
+    </>
   )
 } 
