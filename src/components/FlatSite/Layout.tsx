@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import TunnelSceneContent from '../Tunnel';
 import { LoadingIndicator } from '../LoadingIndicator';
+import retroFont from '../RetroFont';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -19,7 +20,7 @@ export default function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-black">
+    <div className={`relative min-h-screen bg-black ${retroFont.className}`}>
       {/* Fixed background */}
       <div className="fixed inset-0 z-0">
         <TunnelSceneContent />
