@@ -2,7 +2,7 @@
 
 import Script from 'next/script'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { GA_MEASUREMENT_ID, pageview } from '@/lib/gtag'
 
 export default function GoogleAnalytics() {
@@ -20,7 +20,7 @@ export default function GoogleAnalytics() {
   }
 
   return (
-    <>
+    <Suspense fallback={null}>
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
@@ -39,6 +39,6 @@ export default function GoogleAnalytics() {
           `,
         }}
       />
-    </>
+    </Suspense>
   )
 } 

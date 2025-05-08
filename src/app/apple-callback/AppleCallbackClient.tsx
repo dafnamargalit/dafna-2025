@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AppleCallbackClient() {
@@ -49,8 +49,10 @@ export default function AppleCallbackClient() {
   }, [searchParams, router]);
 
   return (
+    <Suspense fallback={null}>
     <div className="flex items-center justify-center min-h-screen bg-black text-white">
       <p>{status}</p>
     </div>
+    </Suspense>
   );
 } 

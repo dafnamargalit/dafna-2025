@@ -6,13 +6,12 @@ import retroFont from '@/components/RetroFont'
 import { DafnaLogo } from '@/components/Icons'
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import Script from 'next/script'
+import { useSearchParams } from 'next/navigation'
+import { pageview, event } from '@/lib/gtag'
 
 // Google Analytics event tracking
 const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    ;(window as any).gtag('event', eventName, eventParams)
-  }
+  event({ action: eventName, params: eventParams })
 }
 
 function TreeContent() {
@@ -23,16 +22,17 @@ function TreeContent() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const progressBarRef = useRef<HTMLDivElement>(null)
   const TOTAL_DURATION = 30 // 30 seconds total duration
+  const searchParams = useSearchParams()
 
   // Track page view and source
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const source = urlParams.get('source') || 'direct'
+    const source = searchParams?.get('source') || 'direct'
+    pageview(window.location.pathname + window.location.search)
     trackEvent('page_view', {
       page_title: 'Tree Page',
       source: source
     })
-  }, [])
+  }, [searchParams])
 
   const announcements = [
     {
@@ -167,24 +167,6 @@ function TreeContent() {
 
   return (
     <Layout>
-      {/* Google Analytics Script */}
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
-      />
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
-          `,
-        }}
-      />
-
       <div className={`min-h-screen flex justify-center p-4 text-cyan-700 ${retroFont.className}`}>
         <div className="max-w-2xl w-full space-y-2">
 
