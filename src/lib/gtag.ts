@@ -5,7 +5,9 @@ export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID
 export const pageview = (url: string) => {
   if (typeof window.gtag !== 'undefined') {
     window.gtag('config', GA_MEASUREMENT_ID as string, {
-      page_path: url,
+      source: 'web',
+      is_mobile: false,
+      timestamp: new Date().toISOString()
     })
   }
 }
