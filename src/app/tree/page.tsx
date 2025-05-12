@@ -44,6 +44,11 @@ function TreeContent() {
       title: 'Stream "BADPEOPLEBADTHINGS"',
       link: 'https://apollodistro.lnk.to/Dafna-BPBT',
       description: 'Listen to my latest release'
+    },
+    {
+      title: 'Watch the "BADPEOPLEBADTHINGS" music video',
+      link: 'https://www.youtube.com/watch?v=LeB_e6n4J34',
+      description: 'Watch me wreak some havoc'
     }
   ]
 
@@ -167,16 +172,16 @@ function TreeContent() {
 
   return (
     <Layout>
-      <div className={`min-h-screen flex justify-center p-4 text-cyan-700 ${retroFont.className}`}>
-        <div className="max-w-2xl w-full space-y-2">
+      <div className={`flex justify-center p-4 text-cyan-700 ${retroFont.className}`}>
+        <div className="max-w-2xl w-full space-y-2 py-8 overflow-y-auto">
 
-          <div className="flex justify-center mb-2">
+          <Link href="/" className="flex justify-center mb-2">
             <DafnaLogo width={200} height={100} />
-          </div>
+          </Link>
 
           <div className="h-8"></div>
 
-          <div className="flex justify-center mb-24">
+          <div className="flex justify-center mb-12">
             <div className="bg-cyan-300/20 backdrop-blur-sm rounded-xl border border-cyan-300/40 p-4 w-full max-w-md">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-cyan-300 text-lg">BADPEOPLEBADTHINGS</span>

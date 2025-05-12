@@ -8,13 +8,13 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [isTunnelLoaded, setIsTunnelLoaded] = useState(false);
+  const [isTunnelLoaded, setIsTunnelLoaded] = useState(true);
 
   useEffect(() => {
     // Simulate tunnel loading
     const timer = setTimeout(() => {
       setIsTunnelLoaded(true);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
