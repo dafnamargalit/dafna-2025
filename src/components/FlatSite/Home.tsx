@@ -20,10 +20,10 @@ const Home: React.FC = () => {
               className={`hover:opacity-70 bg-cyan-300 flex ${isMobile ? 'mt-40' : ''} items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
               aria-label="Pre-save Bad People Bad Things"
             >
-              <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
+              <i>STREAM "BADPEOPLEBADTHINGS"</i>
             </Link>
             <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
-            <div className='flex flex-row space-x-2'>
+            <div className={`flex flex-row space-x-2 ${isMobile ? 'mb-16' : ''}`}>
               <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify" className="cursor-pointer">
                 <IconSpotify size={isMobile ? '30' : '40'}/>
               </a>
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
               </a>
             </div>
             <button 
-              className={`absolute text-cyan-300 items-center justify-center flex flex-col bottom-4 cursor-pointer`} 
+              className={`text-cyan-300 items-center justify-center flex flex-col cursor-pointer`} 
               onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
               aria-label={isMobile ? 'Swipe down to explore' : 'Scroll down to explore'}
             >
