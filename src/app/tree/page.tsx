@@ -49,6 +49,11 @@ function TreeContent() {
       title: 'Watch the "BADPEOPLEBADTHINGS" music video',
       link: 'https://www.youtube.com/watch?v=LeB_e6n4J34',
       description: 'Watch me wreak some havoc'
+    },
+    {
+      title: 'Watch the "BADPEOPLEBADTHINGS" production breakdown',
+      link: 'https://www.youtube.com/watch?v=PHWLVJMrTto',
+      description: 'Learn about the making of the song!'
     }
   ]
 
@@ -172,8 +177,8 @@ function TreeContent() {
 
   return (
     <Layout>
-      <div className={`flex justify-center p-4 text-cyan-700 ${retroFont.className}`}>
-        <div className="max-w-2xl w-full space-y-2 py-8 overflow-y-auto">
+      <div className={`flex justify-center p-4 text-cyan-700 min-h-screen ${retroFont.className}`}>
+        <div className="max-w-2xl w-full space-y-2 py-8 overflow-y-auto h-full">
 
           <Link href="/" className="flex justify-center mb-2">
             <DafnaLogo width={200} height={100} />
