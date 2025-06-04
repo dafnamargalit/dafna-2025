@@ -36,6 +36,11 @@ function TreeContent() {
 
   const announcements = [
     {
+      title: 'Presave "LOVEISFUN"',
+      link: 'https://apollodistro.lnk.to/Dafna-LOVEISFUN',
+      description: 'Presave to my next release'
+    },
+    {
       title: 'Dafna at Hotel Cafe on June 9th',
       link: 'https://www.hotelcafe.com/tickets/?s=events_view&id=14653',
       description: 'Playing my songs with a string quartet!'
@@ -184,9 +189,9 @@ function TreeContent() {
             <DafnaLogo width={200} height={100} />
           </Link>
 
-          <div className="h-8"></div>
+          {/* <div className="h-8"></div> */}
 
-          <div className="flex justify-center mb-12">
+          {/* <div className="flex justify-center mb-12">
             <div className="bg-cyan-300/20 backdrop-blur-sm rounded-xl border border-cyan-300/40 p-4 w-full max-w-md">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-cyan-300 text-lg">BADPEOPLEBADTHINGS</span>
@@ -239,7 +244,7 @@ function TreeContent() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="h-8"></div>
 
