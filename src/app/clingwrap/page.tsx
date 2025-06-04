@@ -2,6 +2,13 @@
 
 import { useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { pageview, event } from '@/lib/gtag'
+import { DafnaLogo } from '@/components/Icons'
+import Layout from '@/components/FlatSite/Layout'
+import retroFont from '@/components/RetroFont'
+import Link from 'next/link'
+import Image from 'next/image'
+import AudioPlayer from '@/components/AudioPlayer'
 
 // Add type declaration for gtag
 declare global {
@@ -18,28 +25,57 @@ declare global {
   }
 }
 
+const trackEvent = (eventName: string, eventParams?: Record<string, any>) => {
+  event({ action: eventName, params: eventParams })
+}
+
 function ClingwrapContent() {
-  const searchParams = useSearchParams()
+  return <Layout>
+      <div className={`flex justify-center p-4 text-cyan-700 min-h-screen ${retroFont.className}`}>
+        <div className="max-w-2xl w-full space-y-2 py-8 overflow-y-auto h-full">
 
-  useEffect(() => {
-    // Get the source from URL parameters
-    const source = searchParams?.get('source') || 'direct'
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+          <Link href="/" className="flex justify-center mb-2">
+            <DafnaLogo width={200} height={100} />
+          </Link>
 
-    // Track the event in Google Analytics
-    if (typeof window.gtag !== 'undefined') {
-      window.gtag('event', 'clingwrap_redirect', {
-        source: source,
-        is_mobile: isMobile,
-        timestamp: new Date().toISOString()
-      })
-    }
+          <div className="flex justify-center mb-8">
+            <Image
+              src="/images/CLINGWRAP.jpg"
+              alt="CLINGWRAP Cover"
+              width={400}
+              height={400}
+              className="rounded-lg shadow-lg"
+              priority
+            />
+          </div>
 
-    // Redirect to the ticket page
-    window.location.href = 'https://on.soundcloud.com/DkUVsyrQL1p6Xkfrk1'
-  }, [searchParams])
+          <div className="flex justify-center mb-12">
+            <AudioPlayer
+              src="/audio/clingwrapsnippet.mp3"
+              title="CLINGWRAP - PREVIEW"
+              onPlay={() => trackEvent('audio_play')}
+              onPause={() => trackEvent('audio_pause')}
+              onComplete={() => trackEvent('audio_complete')}
+              onSeek={(time) => trackEvent('audio_seek', { seek_time: time })}
+            />
+          </div>
 
-  return null
+          <div className="flex justify-center mb-8">
+            <Link
+              href="https://dafna.ffm.to/clingwrap"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('presave_click', {
+                button_location: 'below_cover'
+              })}
+              className="px-16 py-3 bg-cyan-400 hover:bg-cyan-500 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            >
+              PRESAVE NOW – OUT JULY 11TH
+            </Link>
+          </div>
+          </div>
+      </div>
+    </Layout>
 }
 
 export default function Clingwrap() {
