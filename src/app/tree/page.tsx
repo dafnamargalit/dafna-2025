@@ -29,19 +29,9 @@ function TreeContent() {
 
   const announcements = [
     {
-      title: 'Presave "LOVEISFUN"',
+      title: 'Stream "LOVEISFUN"',
       link: 'https://apollodistro.lnk.to/Dafna-LOVEISFUN',
-      description: 'Presave to my next release'
-    },
-    {
-      title: 'Dafna at Hotel Cafe on June 9th',
-      link: 'https://www.hotelcafe.com/tickets/?s=events_view&id=14653',
-      description: 'Playing my songs with a string quartet!'
-    },
-    {
-      title: 'Stream "BADPEOPLEBADTHINGS"',
-      link: 'https://apollodistro.lnk.to/Dafna-BPBT',
-      description: 'Listen to my latest release'
+      description: 'Stream to my new single'
     },
     {
       title: 'Watch the "BADPEOPLEBADTHINGS" music video',
