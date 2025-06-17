@@ -34,7 +34,7 @@ function TreeContent() {
       description: 'Stream to my new single'
     },
     {
-      title: 'Check out new "CONTROEDCHAOS" merch!',
+      title: 'Check out new "CONTROLLEDCHAOS" merch!',
       link: 'https://shop.dafna.music/collections/controlledchaos',
       description: '',
     },
