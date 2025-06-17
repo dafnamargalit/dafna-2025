@@ -34,6 +34,11 @@ function TreeContent() {
       description: 'Stream to my new single'
     },
     {
+      title: 'Check out new "CONTROEDCHAOS" merch!',
+      link: 'https://shop.dafna.music/collections/controlledchaos',
+      description: '',
+    },
+    {
       title: 'Watch the "BADPEOPLEBADTHINGS" music video',
       link: 'https://www.youtube.com/watch?v=LeB_e6n4J34',
       description: 'Watch me wreak some havoc'
