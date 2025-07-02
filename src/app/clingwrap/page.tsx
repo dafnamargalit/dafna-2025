@@ -62,7 +62,7 @@ function ClingwrapContent() {
 
           <div className="flex justify-center mb-8">
             <Link
-              href="https://dafna.ffm.to/clingwrap"
+              href="https://apollodistro.lnk.to/Dafna-CLINGWRAP"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent('presave_click', {
