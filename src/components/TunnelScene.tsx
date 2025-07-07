@@ -20,6 +20,7 @@ import { NavigationProvider, useNavigation } from '../contexts/NavigationContext
 import { LoadingIndicator } from './LoadingIndicator'
 import { Computer } from './Computer'
 import TypewriterText from './TypewriterText'
+import Announcement from './Announcement'
 
 // Define checkpoints along the Z axis.
 const CHECKPOINTS = [300, 100, 0, -100, -300, -480]
@@ -351,13 +352,7 @@ function TunnelSceneContent() {
         
         {(checkpointIndex === CHECKPOINTS.length - 1) && 
           <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
-            <Link 
-              href={'https://dafna.ffm.to/badpeoplebadthings'} 
-              className={`hover:opacity-70 bg-cyan-300 flex items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
-              aria-label="Pre-save Bad People Bad Things"
-            >
-              <i>PRE-SAVE "BADPEOPLEBADTHINGS"</i>
-            </Link>
+            <Announcement isMobile={isMobile} />
             <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
             <div className='flex flex-row space-x-2'>
               <a href='https://open.spotify.com/artist/6FR2ARlfDqNU7BMBaWjGZP?si=DSyNj67wTyi1A4G7JZF-0w' aria-label="Spotify" className="cursor-pointer">
