@@ -34,14 +34,14 @@ function TreeContent() {
       description: 'Presave to my next release'
     },
     {
+      title: 'Watch the "LOVEISFUN" music video',
+      link: 'https://www.youtube.com/watch?v=fDDajX4vuU8',
+      description: 'Watch me bleed blue blood'
+    },
+    {
       title: 'Stream LOVEISFUN',
       link: 'https://apollodistro.lnk.to/Dafna-LOVEISFUN',
       description: 'Listen to my latest release'
-    },
-    {
-      title: 'Watch the "BADPEOPLEBADTHINGS" music video',
-      link: 'https://www.youtube.com/watch?v=LeB_e6n4J34',
-      description: 'Watch me wreak some havoc'
     },
     {
       title: 'Watch the "BADPEOPLEBADTHINGS" production breakdown',
