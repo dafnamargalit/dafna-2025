@@ -29,19 +29,14 @@ function TreeContent() {
 
   const announcements = [
     {
-      title: 'Presave "CLINGWRAP"',
+      title: 'STREAM "CLINGWRAP"',
       link: 'https://apollodistro.lnk.to/Dafna-CLINGWRAP',
-      description: 'Presave to my next release'
+      description: 'Stream my new release'
     },
     {
       title: 'Watch the "LOVEISFUN" music video',
       link: 'https://www.youtube.com/watch?v=fDDajX4vuU8',
       description: 'Watch me bleed blue blood'
-    },
-    {
-      title: 'Stream LOVEISFUN',
-      link: 'https://apollodistro.lnk.to/Dafna-LOVEISFUN',
-      description: 'Listen to my latest release'
     },
     {
       title: 'Watch the "BADPEOPLEBADTHINGS" production breakdown',
