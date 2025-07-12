@@ -42,6 +42,11 @@ function TreeContent() {
       title: 'Watch the "BADPEOPLEBADTHINGS" production breakdown',
       link: 'https://www.youtube.com/watch?v=PHWLVJMrTto',
       description: 'Learn about the making of the song!'
+    },
+{
+      title:'visit full site',
+      link: 'https://dafna.music',
+      description: ''
     }
   ]
 
