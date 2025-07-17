@@ -28,6 +28,11 @@ function TreeContent() {
   }, [searchParams])
 
   const announcements = [
+{
+      title: 'WATCH THE "CLINGWRAP" MUSIC VIDEO',
+      link: 'https://youtu.be/YS3W7p2rYLg?si=uKzSbENfhQy4hqzl',
+      description: 'watch my new music video'
+    },
     {
       title: 'STREAM "CLINGWRAP"',
       link: 'https://apollodistro.lnk.to/Dafna-CLINGWRAP',
