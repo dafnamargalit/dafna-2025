@@ -28,7 +28,12 @@ function TreeContent() {
   }, [searchParams])
 
   const announcements = [
-{
+    {
+      title: 'Watch the "CLINGWRAP" production breakdown',
+      link: 'https://www.youtube.com/watch?v=wvj3XM4gC30',
+      description: 'dive in deep behind the song !!!'
+    },
+    {
       title: 'WATCH THE "CLINGWRAP" MUSIC VIDEO',
       link: 'https://youtu.be/YS3W7p2rYLg?si=uKzSbENfhQy4hqzl',
       description: 'watch my new music video'
