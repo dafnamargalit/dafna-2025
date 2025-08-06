@@ -29,6 +29,11 @@ function TreeContent() {
 
   const announcements = [
     {
+      title: 'Presave "BADBADNEWS"!',
+      link: 'https://apollodistro.lnk.to/Dafna-BADBADNEWS',
+      description: 'Out August 15th'
+    },
+    {
       title: 'Watch the "CLINGWRAP" production breakdown',
       link: 'https://www.youtube.com/watch?v=wvj3XM4gC30',
       description: 'dive in deep behind the song !!!'
