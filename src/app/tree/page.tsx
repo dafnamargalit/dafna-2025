@@ -29,6 +29,11 @@ function TreeContent() {
 
   const announcements = [
     {
+      title: 'Watch the "BADBADNEWS" music video',
+      link: 'https://www.youtube.com/watch?v=Vo0xX_MkdCU',
+      description: 'watch me get screwed over by a man'
+    },
+    {
       title: 'STREAM "BADBADNEWS"!',
       link: 'https://apollodistro.lnk.to/Dafna-BADBADNEWS',
       description: 'Out Now'
@@ -44,21 +49,11 @@ function TreeContent() {
       description: 'watch my new music video'
     },
     {
-      title: 'STREAM "CLINGWRAP"',
-      link: 'https://apollodistro.lnk.to/Dafna-CLINGWRAP',
-      description: 'Stream my new release'
-    },
-    {
       title: 'Watch the "LOVEISFUN" music video',
       link: 'https://www.youtube.com/watch?v=fDDajX4vuU8',
       description: 'Watch me bleed blue blood'
     },
     {
-      title: 'Watch the "BADPEOPLEBADTHINGS" production breakdown',
-      link: 'https://www.youtube.com/watch?v=PHWLVJMrTto',
-      description: 'Learn about the making of the song!'
-    },
-{
       title:'visit full site',
       link: 'https://dafna.music',
       description: ''
