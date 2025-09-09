@@ -29,6 +29,11 @@ function TreeContent() {
 
   const announcements = [
     {
+      title: 'LA SHOW SUNDAY 9/14',
+      link: 'https://dice.fm/event/k6egl9-fwango-dafna-zuli-jr-presented-by-the-luna-collective-14th-sep-gold-diggers-los-angeles-tickets?lng=en-US',
+      description: 'get ur tix'
+    },
+    {
       title: 'Watch the "BADBADNEWS" music video',
       link: 'https://www.youtube.com/watch?v=Vo0xX_MkdCU',
       description: 'watch me get screwed over by a man'
@@ -47,11 +52,6 @@ function TreeContent() {
       title: 'WATCH THE "CLINGWRAP" MUSIC VIDEO',
       link: 'https://youtu.be/YS3W7p2rYLg?si=uKzSbENfhQy4hqzl',
       description: 'watch my new music video'
-    },
-    {
-      title: 'Watch the "LOVEISFUN" music video',
-      link: 'https://www.youtube.com/watch?v=fDDajX4vuU8',
-      description: 'Watch me bleed blue blood'
     },
     {
       title:'visit full site',
