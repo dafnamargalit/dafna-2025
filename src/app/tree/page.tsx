@@ -29,6 +29,11 @@ function TreeContent() {
 
   const announcements = [
     {
+      title: 'PRESAVE SH!TTALKING',
+      link: 'https://ffm.to/dafna-shittalking',
+      description: 'out sept 19th'
+    },
+    {
       title: 'LA SHOW SUNDAY 9/14',
       link: 'https://dice.fm/event/k6egl9-fwango-dafna-zuli-jr-presented-by-the-luna-collective-14th-sep-gold-diggers-los-angeles-tickets?lng=en-US',
       description: 'get ur tix'
