@@ -34,8 +34,8 @@ function TreeContent() {
       description: 'out sept 19th'
     },
     {
-      title: 'LA SHOW SUNDAY 9/14',
-      link: 'https://dice.fm/event/k6egl9-fwango-dafna-zuli-jr-presented-by-the-luna-collective-14th-sep-gold-diggers-los-angeles-tickets?lng=en-US',
+      title: 'NYC SHOW 10/20',
+      link: 'https://link.dice.fm/j62b787fbab3',
       description: 'get ur tix'
     },
     {
