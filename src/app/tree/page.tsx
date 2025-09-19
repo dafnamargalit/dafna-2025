@@ -29,9 +29,9 @@ function TreeContent() {
 
   const announcements = [
     {
-      title: 'PRESAVE SH!TTALKING',
+      title: 'STREAM SH!TTALKING',
       link: 'https://ffm.to/dafna-shittalking',
-      description: 'out sept 19th'
+      description: 'out now!'
     },
     {
       title: 'NYC SHOW 10/20',
