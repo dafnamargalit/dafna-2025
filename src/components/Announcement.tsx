@@ -9,9 +9,9 @@ export default function Announcement({ isMobile }: AnnouncementProps) {
     <Link 
       href={'https://ffm.to/dafna-shittalking'} 
       className={`hover:opacity-70 bg-cyan-300 flex ${isMobile ? 'mt-40' : ''} items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
-      aria-label="PRESAVE SH!TTALKING"
+      aria-label="STREAM SH!TTALKING"
     >
-      <i>PRESAVE SH!TTALKING</i>
+      <i>STREAM SH!TTALKING</i>
     </Link>
   );
 }
