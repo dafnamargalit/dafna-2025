@@ -1,5 +1,13 @@
 export const albums = [
     {
+      name: "chaos",
+      title: "CONTROLLEDCHAOS",
+      spotify: "https://open.spotify.com/prerelease/5VkB7CNu3fyQpPP1gndS9q?si=1bd0983a56164d03",
+      youtube: "",
+      tidal: "",
+      apple: ""
+    },
+    {
         name: "paradox",
         title: "THE PARADOX OF CHOICE",
         spotify: "https://open.spotify.com/album/5bTAQ3akvkB2lW3rfxBopT?si=7dBP18xjSv-7r0asYBILOQ",

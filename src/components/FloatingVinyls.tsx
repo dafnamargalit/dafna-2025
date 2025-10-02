@@ -82,7 +82,7 @@ const Vinyl: React.FC<VinylProps> = ({ path, position, setShowModal }) => {
   return (
     <primitive
       object={clonedScene}
-      rotation={[Math.PI, 0, 0]}
+      rotation={path === '/models/chaos.glb' ? [-Math.PI/2, -Math.PI/2, 0] : [Math.PI, -Math.PI/2, 0]}
       position={position}
       castShadow
       receiveShadow
@@ -106,73 +106,85 @@ export const FloatingVinyls: React.FC<FloatingVinylsProps> = ({ setShowModal, is
   const parentRef = useRef<THREE.Group>(null)
   const offsetDistance = isMobile ? 3.5 : 5.5
 
-  // Define final offsets for each vinyl (east, north, west, south).
-  const finalOffsets: THREE.Vector3[] = [
-    new THREE.Vector3(1, 0, 0).setLength(offsetDistance),
-    new THREE.Vector3(0, 1, 0).setLength(offsetDistance),
-    new THREE.Vector3(-1, 0, 0).setLength(offsetDistance),
-    new THREE.Vector3(0, -1, 0).setLength(offsetDistance),
-  ]
+  // 1) Add your new model here
+  const paths = useMemo(
+    () => [
+      '/models/chaos.glb',
+      '/models/paradox.glb',
+      '/models/wiwwy_draco.glb',
+      '/models/ily.glb',
+      '/models/submerge_draco.glb',
+    ],
+    []
+  )
 
-  const paths = [
-    '/models/paradox.glb',
-    '/models/wiwwy_draco.glb',
-    '/models/ily.glb',
-    '/models/submerge_draco.glb'
-  ]
+  // (Optional) Preload to avoid a pop-in on first hover/click
+  useMemo(() => {
+    paths.forEach((p) => useGLTF.preload(p))
+  }, [paths])
+
+  // 2) Compute evenly spaced offsets around a circle for however many paths we have
+  const finalOffsets = useMemo(() => {
+    const N = paths.length
+    const angleOffset = Math.PI / 2 // start one at the top (nice layout)
+    return Array.from({ length: N }, (_, i) => {
+      const theta = (i / N) * Math.PI * 2 + angleOffset
+      return new THREE.Vector3(
+        Math.cos(theta) * offsetDistance,
+        Math.sin(theta) * offsetDistance,
+        0
+      )
+    })
+  }, [paths.length, offsetDistance, paths])
 
   // Animation progress reference
   const progressRef = useRef(0)
 
-  // Vinyl rotation animation
+  // Vinyl rotation + entrance animation
   useFrame((state, delta) => {
-    // Increase progress gradually until it reaches 1.
     if (progressRef.current < 1) {
       progressRef.current = Math.min(progressRef.current + delta, 1)
     }
-    
-    if (parentRef.current) {
-      // Define final scale based on device type
-      const finalScale = isMobile ? 0.08 : 0.1
 
-      parentRef.current.children.forEach((child, idx) => {
+    if (parentRef.current) {
+      const finalScale = isMobile ? 0.08 : 0.1
+      const time = state.clock.getElapsedTime()
+
+      // make sure we only iterate over the children we actually render
+      const childCount = Math.min(parentRef.current.children.length, finalOffsets.length)
+
+      for (let idx = 0; idx < childCount; idx++) {
+        const child = parentRef.current.children[idx] as THREE.Object3D
         const finalOffset = finalOffsets[idx]
-        
-        // Update position: from center ([0,0,0]) to finalOffset
+
+        // Position: center -> ring
         child.position.set(
           finalOffset.x * progressRef.current,
           finalOffset.y * progressRef.current,
-          finalOffset.z * progressRef.current
+          finalOffset.z * progressRef.current + 0.5
         )
-        
-        // Update scale: start from 0 and grow to finalScale
-        child.scale.set(
-          finalScale * progressRef.current,
-          finalScale * progressRef.current,
-          finalScale * progressRef.current
-        )
-        
-        // Create gentle back-and-forth rotation using sine wave
-        const time = state.clock.getElapsedTime()
-        child.rotation.z = Math.sin(time * 0.5) * 0.05 // Gentle oscillation
-        child.rotation.y = Math.sin(time * 0.5) * 0.7 // Keep slight continuous rotation on Y axis
-      })
-      
-      // Optionally, add a slow rotation to the whole group
+
+        // Scale: 0 -> final
+        const s = finalScale * progressRef.current
+        child.scale.set(s, s, s)
+
+        // Gentle wobble + slow spin
+        child.rotation.z = Math.sin(time * 0.5 + idx * 0.3) * 0.05
+        child.rotation.y = Math.sin(time * 0.5 + idx * 0.2) * 0.7
+      }
+
       parentRef.current.rotation.z -= 0.001
     }
   })
 
   return (
-    // The parent group is positioned in the tunnel
     <group ref={parentRef} position={[0.5, 0, -120]}>
-      {finalOffsets.map((_, idx) => (
-        // Initially, each vinyl is placed at the center with position [0,0,0]
-        <Vinyl 
-          setShowModal={setShowModal} 
-          path={paths[idx]} 
-          key={idx} 
-          position={[0, 0, 0]} 
+      {paths.map((path, idx) => (
+        <Vinyl
+          key={path}
+          path={path}
+          setShowModal={setShowModal}
+          position={[0, 0, 0]} // they animate outward from center
         />
       ))}
     </group>
