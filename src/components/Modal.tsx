@@ -9,16 +9,16 @@ export type ModalData = {
     apple: string
 }
 
-const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, modalData: ModalData, isMobile: boolean}) => {
+const Modal = ({ closeModal, modalData, isMobile, optional = true }: {closeModal: () => void, modalData?: ModalData, isMobile: boolean, optional: boolean}) => {
 
-    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked, setIsChecked] = useState(optional ? false: true);
 
-    const rememberService = (service: string, url: string) => {
+    const rememberService = (service: string, url?: string) => {
         if (isChecked) {
             localStorage.setItem("streaming-service", service);
         }
         closeModal();
-        window.open(url, '_blank');
+        if(url) window.open(url, '_blank');
     }
 
     return(
@@ -34,20 +34,20 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
         >
         <h2 className={`${isMobile ? 'text-2xl' : 'text-3xl'}`}>select your preferred service:</h2>
         <div className='flex flex-row space-x-2'>
-            <button onClick={() => rememberService("spotify", modalData.spotify)} className="cursor-pointer">
+            <button onClick={() => rememberService("spotify", modalData?.spotify)} className="cursor-pointer">
             <IconSpotify />
             </button>
-            <button onClick={() => rememberService("apple", modalData.apple)} className="cursor-pointer">
+            <button onClick={() => rememberService("apple", modalData?.apple)} className="cursor-pointer">
             <IconAppleMusic />
             </button>
-            <button onClick={() => rememberService("youtube", modalData.youtube)} className="cursor-pointer">
+            <button onClick={() => rememberService("youtube", modalData?.youtube)} className="cursor-pointer">
             <IconYoutube />
             </button>
-            <button onClick={() => rememberService("tidal", modalData.tidal)} className="cursor-pointer">
+            <button onClick={() => rememberService("tidal", modalData?.tidal)} className="cursor-pointer">
             <IconTidal />
             </button>
         </div>
-        <div className="flex flex-row justify-center items-center">
+        {optional && <div className="flex flex-row justify-center items-center">
         <label className="flex justify-center items-center cursor-pointer relative mx-2">
         <input type="checkbox" onInput={() => setIsChecked(!isChecked)} className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-cyan-300 checked:bg-cyan-300 checked:border-cyan-400" id="check1" />
         <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -57,7 +57,7 @@ const Modal = ({ closeModal, modalData, isMobile }: {closeModal: () => void, mod
         </span>
         </label>
        <span className="cursor-pointer">Check here to remember your selection</span>
-       </div>
+       </div>}
         </div>
       </div>
       </>

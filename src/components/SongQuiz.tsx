@@ -5,11 +5,9 @@ import retroFont from "./RetroFont";
 import { CameraController, Tunnel } from "./TunnelScene";
 import { NavigationProvider, useNavigation } from "@/contexts/NavigationContext";
 import { CameraShake, Stars } from "@react-three/drei";
-import { quizQuestions } from "@/lib/constants";
+import { quizQuestions, controlledChaosResultUrls, albums } from "@/lib/constants";
 import TypewriterText from "./TypewriterText";
-import StreamingServiceModal from "./StreamingServiceModal";
-import { spotifyApi, appleMusicApi } from "@/lib/streamingServices";
-import { presaveApi } from "@/lib/presaveApi";
+import Modal from "./Modal";
 
 // Adjust checkpoints to match tunnel length and ensure proper positioning
 const CHECKPOINTS = [4000, 3900, 3500, 3000, 2500, 2000];
@@ -17,31 +15,12 @@ const CHECKPOINTS = [4000, 3900, 3500, 3000, 2500, 2000];
 function SongQuizContent() {
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [result, setResult] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState<boolean>(true);
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isMobile, setIsMobile] = useState(false);
   const [complete, setComplete] = useState(0);
   const { checkpointIndex, setCheckpointIndex, handleBack } = useNavigation();
   const [key, setKey] = useState(0);
-  const [showStreamingModal, setShowStreamingModal] = useState(true);
-  const [streamingService, setStreamingService] = useState<string | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Check for existing streaming service and token
-    const savedService = localStorage.getItem("streaming-service");
-    const savedToken = localStorage.getItem("access-token");
-    console.log('Saved service:', savedService);
-    console.log('Saved token:', savedToken);
-    
-    if (savedService && savedToken) {
-      console.log('Setting streaming service and token');
-      setStreamingService(savedService);
-      setAccessToken(savedToken);
-      setShowStreamingModal(false);
-    } else {
-      console.log('No saved service or token found');
-    }
-  }, []);
 
   useEffect(() => {
     // Set initial position to the start of the tunnel
@@ -58,12 +37,28 @@ function SongQuizContent() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleStreamingServiceSelect = (service: string, token: string) => {
-    setStreamingService(service);
-    setAccessToken(token);
-    localStorage.setItem("streaming-service", service);
-    localStorage.setItem("access-token", token);
-    setShowStreamingModal(false);
+  const handleSongClick = (result: string) => {
+    const song = controlledChaosResultUrls.find(song => song.name == result)
+
+    const service = localStorage.getItem("streaming-service");
+    if (service) {
+      switch (service) {
+        case "spotify":
+          window.open(song?.spotify, '_blank');
+          break;
+        case "youtube":
+          window.open(song?.youtube, '_blank');
+          break;
+        case "tidal":
+          window.open(song?.tidal, '_blank');
+          break;
+        case "apple":
+          window.open(song?.apple, '_blank');
+          break;
+        default:
+          break;
+      }
+    }
   };
 
   const handleAnswer = async (nextId: number) => {
@@ -74,49 +69,6 @@ function SongQuizContent() {
     const nextStep = quizQuestions.find((q) => q.id === nextId);
     if (nextStep?.result) {
       setResult(nextStep.result);
-      // Handle pre-save based on streaming service
-      if (streamingService && accessToken) {
-        try {
-          const searchQuery = nextStep.result;
-          const userId = `user-${Date.now()}`; // Generate a unique user ID
-          
-          console.log('Streaming service:', streamingService);
-          console.log('Access token:', accessToken);
-          
-          // Create a presave with the user's streaming service info
-          const presaveData = {
-            songTitle: searchQuery,
-            artistName: "Dafna",
-            releaseDate: "2025-09-19",
-            userId: userId,
-            spotifyToken: streamingService === 'spotify' ? accessToken : null,
-            appleMusicToken: streamingService === 'apple' ? accessToken : null,
-            streamingService: streamingService,
-            quizResult: searchQuery
-          };
-
-          console.log('Creating presave with data:', JSON.stringify(presaveData, null, 2));
-          
-          // Validate the data before sending
-          if (!presaveData.songTitle || !presaveData.artistName || !presaveData.userId || !presaveData.streamingService) {
-            throw new Error('Invalid presave data: missing required fields');
-          }
-
-          const success = await presaveApi.createPresave(presaveData);
-
-          if (success) {
-            alert('Song pre-saved successfully! You\'ll be notified when it\'s released.');
-          }
-        } catch (error) {
-          console.error('Error pre-saving song:', error);
-          alert('An error occurred while pre-saving the song. Please try again later.');
-        }
-      } else {
-        console.log('Missing streaming service or access token:', {
-          streamingService,
-          hasAccessToken: !!accessToken
-        });
-      }
     } else {
       setCurrentQuestion(nextId);
     }
@@ -128,9 +80,6 @@ function SongQuizContent() {
     setCheckpointIndex(0);
     setComplete(0);
     setKey(prev => prev + 1);
-    setShowStreamingModal(true);
-    setStreamingService(null);
-    setAccessToken(null);
   };
 
   const question = quizQuestions.find((q) => q.id === currentQuestion);
@@ -150,12 +99,6 @@ function SongQuizContent() {
 
   return (
     <div>
-      {showStreamingModal && (
-        <StreamingServiceModal 
-          onSelect={handleStreamingServiceSelect} 
-          isMobile={isMobile} 
-        />
-      )}
       <RemoveScroll className={`absolute w-screen h-screen relative overscroll-none overflow-y-none ${retroFont.className}`}>
         <Canvas 
           key={key}
@@ -179,11 +122,31 @@ function SongQuizContent() {
             saturation={0}
           />
         </Canvas>
-        <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
+        {showModal ? (
+        <Modal
+          closeModal={() => setShowModal(false)}
+          isMobile={isMobile}
+          optional={false}
+        />
+      ) :
+        <div className={`absolute ${isMobile ? 'bottom-4' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
           {result ? 
-            <div className="flex flex-col items-center p-6 text-center text-white">
+            <div className="flex flex-col items-center p-6 text-center text-cyan-400 bg-gray-700/75">
               <h1 className="text-2xl font-bold">Your Song Match: {result} 🎶</h1>
               <p className="mt-4">Listen to your song and let us know if it fits your vibe!</p>
+              {result && (
+                <img
+                  src={`/images/chaos.jpg`}
+                  alt={`controlledchaos`}
+                  className="mt-6 rounded shadow-lg max-w-xs w-1/2 mx-auto"
+                />
+              )}
+                <button 
+                className="mt-6 px-4 py-2 bg-cyan-300 text-cyan-700 hover:bg-cyan-400 transition-colors" 
+                onClick={() => handleSongClick(result)}
+              >
+                Listen Now
+              </button>
               <button 
                 className="mt-6 px-4 py-2 bg-cyan-300 text-cyan-700 hover:bg-cyan-400 transition-colors" 
                 onClick={handleRestart}
@@ -192,7 +155,7 @@ function SongQuizContent() {
               </button>
             </div> 
             :  
-            <div className="flex flex-col items-center p-6 text-center text-white">
+            <div className="flex flex-col items-center p-6 text-center text-cyan-100">
               <h1 className="text-2xl font-bold">
                 <TypewriterText 
                   text={question?.question || ''}
@@ -218,6 +181,7 @@ function SongQuizContent() {
             </div>
           }
         </div>
+}
       </RemoveScroll>
     </div>
   );

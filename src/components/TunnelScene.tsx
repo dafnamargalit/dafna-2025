@@ -384,6 +384,7 @@ function TunnelSceneContent() {
             modalData={modalData}
             closeModal={() => setModalData(null)}
             isMobile={isMobile}
+            optional={true}
           />
         )}
         

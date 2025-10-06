@@ -140,6 +140,7 @@ const Music: React.FC = () => {
           closeModal={() => setShowModal(false)}
           modalData={selectedAlbum}
           isMobile={isMobile}
+          optional={true}
         />
       )}
     </div>
