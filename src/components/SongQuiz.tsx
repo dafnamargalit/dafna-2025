@@ -132,8 +132,7 @@ function SongQuizContent() {
         <div className={`absolute ${isMobile ? 'bottom-4' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
           {result ? 
             <div className="flex flex-col items-center p-6 text-center text-cyan-400 bg-gray-700/75">
-              <h1 className="text-2xl font-bold">Your Song Match: {result} 🎶</h1>
-              <p className="mt-4">Listen to your song and let us know if it fits your vibe!</p>
+              <h1 className="text-2xl font-bold">Your Song Match: {result}</h1>
               {result && (
                 <img
                   src={`/images/chaos.jpg`}
