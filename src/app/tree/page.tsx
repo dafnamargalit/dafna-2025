@@ -29,14 +29,19 @@ function TreeContent() {
 
   const announcements = [
     {
-      title: 'STREAM SH!TTALKING',
-      link: 'https://ffm.to/dafna-shittalking',
-      description: 'out now!'
-    },
-    {
       title: 'NYC SHOW 10/20',
       link: 'https://link.dice.fm/j62b787fbab3',
       description: 'get ur tix'
+    },
+    {
+      title: 'PRESAVE CONTROLLEDCHAOS',
+      link: 'https://ffm.to/dafna-controlledchaos',
+      description: 'out oct 17'
+    },
+    {
+      title: 'STREAM SH!TTALKING',
+      link: 'https://ffm.to/dafna-shittalking',
+      description: 'out now!'
     },
     {
       title: 'Watch the "BADBADNEWS" music video',
