@@ -49,21 +49,6 @@ function TreeContent() {
       description: 'watch me get screwed over by a man'
     },
     {
-      title: 'STREAM "BADBADNEWS"!',
-      link: 'https://apollodistro.lnk.to/Dafna-BADBADNEWS',
-      description: 'Out Now'
-    },
-    {
-      title: 'Watch the "CLINGWRAP" production breakdown',
-      link: 'https://www.youtube.com/watch?v=wvj3XM4gC30',
-      description: 'dive in deep behind the song !!!'
-    },
-    {
-      title: 'WATCH THE "CLINGWRAP" MUSIC VIDEO',
-      link: 'https://youtu.be/YS3W7p2rYLg?si=uKzSbENfhQy4hqzl',
-      description: 'watch my new music video'
-    },
-    {
       title:'visit full site',
       link: 'https://dafna.music',
       description: ''
