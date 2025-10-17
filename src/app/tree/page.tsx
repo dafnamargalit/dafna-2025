@@ -34,19 +34,14 @@ function TreeContent() {
       description: 'get ur tix'
     },
     {
-      title: 'PRESAVE CONTROLLEDCHAOS',
+      title: 'STREAM CONTROLLEDCHAOS',
       link: 'https://ffm.to/dafna-controlledchaos',
-      description: 'out oct 17'
+      description: 'out now'
     },
     {
-      title: 'STREAM SH!TTALKING',
-      link: 'https://ffm.to/dafna-shittalking',
-      description: 'out now!'
-    },
-    {
-      title: 'Watch the "BADBADNEWS" music video',
-      link: 'https://www.youtube.com/watch?v=Vo0xX_MkdCU',
-      description: 'watch me get screwed over by a man'
+      title: 'Watch "THEBIGSTUFF" Live at Coke Studio',
+      link: 'https://www.youtube.com/watch?v=Ugn7tREzj2c',
+      description: 'me if i was oh so heartbroken'
     },
     {
       title:'visit full site',

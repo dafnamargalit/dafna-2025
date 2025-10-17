@@ -9,9 +9,9 @@ export default function Announcement({ isMobile }: AnnouncementProps) {
     <Link 
       href={'https://ffm.to/dafna-controlledchaos'} 
       className={`hover:opacity-70 bg-cyan-300 flex ${isMobile ? 'mt-40' : ''} items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
-      aria-label="PRESAVE CONTROLLEDCHAOS"
+      aria-label="STREAM CONTROLLEDCHAOS"
     >
-      <i>PRESAVE CONTROLLEDCHAOS</i>
+      <i>STREAM CONTROLLEDCHAOS</i>
     </Link>
   );
 }
