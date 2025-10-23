@@ -29,9 +29,14 @@ function TreeContent() {
 
   const announcements = [
     {
-      title: 'NYC SHOW 10/20',
-      link: 'https://link.dice.fm/j62b787fbab3',
-      description: 'get ur tix'
+      title: 'CHOOSE YOUR OWN ADVENTURE',
+      link: 'https://dafna.music/quiz',
+      description: 'which song are you???'
+    },
+    {
+      title: 'NEW MERCH ALERT',
+      link: 'https://shop.dafna.music',
+      description: 'maybe we can twin'
     },
     {
       title: 'STREAM CONTROLLEDCHAOS',
