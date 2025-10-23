@@ -58,10 +58,10 @@ export const controlledChaosResultUrls = [
   },
   {
     name: "HEREIGOAGAIN",
-    spotify: "",
-    youtube: "",
-    tidal: "",
-    apple: ""
+    spotify: "https://open.spotify.com/track/0yQkkgcVT2J3e1bWlYmd2D?si=c64c38b884aa4287",
+    youtube: "https://www.youtube.com/watch?v=7xcZQPPX8l8&list=OLAK5uy_lquWX8Bp7LRZQ75Bm9lomWDKPbRNKTAX8&index=3",
+    tidal: "https://tidal.com/track/459685302/u",
+    apple: "https://music.apple.com/us/song/hereigoagain/1839908230"
   },
   {
     name: "CLINGWRAP",
@@ -86,17 +86,17 @@ export const controlledChaosResultUrls = [
   },
   {
     name: "THEBIGSTUFF",
-    spotify: "",
-    youtube: "",
-    tidal: "",
-    apple: ""
+    spotify: "https://open.spotify.com/track/5cvEKqPZpKx5syqKkYJYjK?si=5281aae784af4b1a",
+    youtube: "https://www.youtube.com/watch?v=prTr492KicI&list=OLAK5uy_lquWX8Bp7LRZQ75Bm9lomWDKPbRNKTAX8&index=7",
+    tidal: "https://tidal.com/track/459685308/u",
+    apple: "https://music.apple.com/us/song/thebigstuff/1839908234"
   },
   {
     name: "SETTLEFORYOU",
-    spotify: "",
-    youtube: "",
-    tidal: "",
-    apple: ""
+    spotify: "https://open.spotify.com/track/2XKx17Vc0T22nRvUmL3X0f?si=d6b910d59aa14b1a",
+    youtube: "https://www.youtube.com/watch?v=-LgT_hgosZs&list=RD-LgT_hgosZs&start_radio=1",
+    tidal: "https://tidal.com/track/459685309/u",
+    apple: "https://music.apple.com/us/song/settleforyou/1839908235"
   },
 ]
 
