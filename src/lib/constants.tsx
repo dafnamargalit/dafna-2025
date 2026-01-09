@@ -3,9 +3,9 @@ export const albums = [
       name: "chaos",
       title: "CONTROLLEDCHAOS",
       spotify: "https://open.spotify.com/prerelease/5VkB7CNu3fyQpPP1gndS9q?si=1bd0983a56164d03",
-      youtube: "",
-      tidal: "",
-      apple: ""
+      youtube: "https://youtube.com/playlist?list=OLAK5uy_lquWX8Bp7LRZQ75Bm9lomWDKPbRNKTAX8&si=2XqjZ3HrYIjybcQA",
+      tidal: "https://tidal.com/@dafna",
+      apple: "https://music.apple.com/us/album/controlledchaos/1839908227"
     },
     {
         name: "paradox",
