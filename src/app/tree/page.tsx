@@ -57,7 +57,7 @@ function TreeContent() {
 
   return (
     <Layout>
-      <div className={`flex justify-center p-4 text-cyan-700 min-h-screen ${retroFont.className}`}>
+      <div className={`relative z-10 overflow-x-auto overflow-y-auto snap-y snap-mandatory h-screen w-screen flex justify-center p-4 text-cyan-700 min-h-screen ${retroFont.className}`}>
         <div className="max-w-2xl w-full space-y-2 py-8 overflow-y-auto h-full">
 
           <Link href="/" className="flex justify-center mb-2">

@@ -72,11 +72,11 @@ const trackStreamingClick = (serviceName: string) => {
 
   return (
     <Layout>
-      <div className={`flex  flex-col items-center p-4 text-cyan-700 min-h-screen ${retroFont.className}`}>
+      <div className={`flex flex-col items-center p-4 text-cyan-700 z-10 overflow-x-auto overflow-y-auto snap-y snap-mandatory h-screen w-screen ${retroFont.className}`}>
           <Link href="/" className="flex justify-center mb-2">
             <DafnaLogo width={200} height={100} />
           </Link>
- <div className="relative w-72 h-72">
+ <div className="relative w-full max-w-md aspect-square">
         <Image
           src="/images/chaos.jpg"
           alt="song cover"
@@ -85,7 +85,7 @@ const trackStreamingClick = (serviceName: string) => {
           className="object-contain"
         />
         </div>
-          <div className="flex pt-4 space-y-4 flex-col">
+          <div className="flex pt-4 space-y-4 flex-col w-full max-w-md ">
           {services.map((service, index) => (
               <Link
                 key={index}
@@ -93,7 +93,7 @@ const trackStreamingClick = (serviceName: string) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackStreamingClick(service.name)}
-                className="inline-flex items-center justify-center gap-4 w-80 h-12 px-4 text-lg font-medium bg-cyan/40 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                className="inline-flex items-center justify-center gap-4 h-12 px-4 text-lg font-medium bg-cyan/40 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
               >
                 {service.icon}
                 <h2 className="text-lg font-semibold text-cyan-500">Stream on {service.name}</h2>
