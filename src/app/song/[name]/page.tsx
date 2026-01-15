@@ -13,6 +13,15 @@ export default function SongPage() {
 
   const { name } = useParams();
 
+const trackStreamingClick = (serviceName: string) => {
+  if (typeof window !== 'undefined' && (window as any).fbq) {
+    (window as any).fbq('trackCustom', 'StreamingServiceClick', {
+      service: serviceName,
+      song: name,
+    });
+  }
+};
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -83,6 +92,7 @@ export default function SongPage() {
                 href={service.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackStreamingClick(service.name)}
                 className="inline-flex items-center justify-center gap-4 w-80 h-12 px-4 text-lg font-medium bg-cyan/40 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
               >
                 {service.icon}
