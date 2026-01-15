@@ -76,7 +76,7 @@ const trackStreamingClick = (serviceName: string) => {
           <Link href="/" className="flex justify-center mb-2">
             <DafnaLogo width={200} height={100} />
           </Link>
- <div className="relative w-full max-w-md aspect-square">
+ <div className="relative w-full max-w-sm aspect-square">
         <Image
           src="/images/chaos.jpg"
           alt="song cover"
@@ -85,7 +85,7 @@ const trackStreamingClick = (serviceName: string) => {
           className="object-contain"
         />
         </div>
-          <div className="flex pt-4 space-y-4 flex-col w-full max-w-md ">
+          <div className="flex pt-4 space-y-4 flex-col w-full max-w-sm ">
           {services.map((service, index) => (
               <Link
                 key={index}
