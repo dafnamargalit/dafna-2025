@@ -15,7 +15,7 @@ const Home: React.FC = () => {
     }, []);
 
   return (
-    <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overscroll-none overflow-hidden items-center justify-center h-screen w-screen z-10`}>
+    <div className={`absolute ${isMobile ? 'bottom-24' : 'bottom-4'} px-4 flex flex-col overflow-hidden items-center justify-center h-screen w-screen z-10`}>
             <Announcement isMobile={isMobile} />
             <DafnaLogo width={isMobile ? 200 : 400} height={isMobile ? 200 : 400}/>
             <div className={`flex flex-row space-x-2 ${isMobile ? 'mb-16' : ''}`}>
