@@ -28,6 +28,11 @@ function TreeContent() {
   }, [searchParams])
 
   const announcements = [
+        {
+      title: 'PRESAVE LUVRGIRL',
+      link: 'https://ffm.to/luvrgirl',
+      description: 'out july 1st'
+    },
     {
       title: 'CHOOSE YOUR OWN ADVENTURE',
       link: 'https://dafna.music/quiz',
@@ -42,11 +47,6 @@ function TreeContent() {
       title: 'STREAM CONTROLLEDCHAOS',
       link: 'https://ffm.to/dafna-controlledchaos',
       description: 'out now'
-    },
-    {
-      title: 'Watch "THEBIGSTUFF" Live at Coke Studio',
-      link: 'https://www.youtube.com/watch?v=Ugn7tREzj2c',
-      description: 'me if i was oh so heartbroken'
     },
     {
       title:'visit full site',
