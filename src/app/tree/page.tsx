@@ -28,6 +28,11 @@ function TreeContent() {
   }, [searchParams])
 
   const announcements = [
+    {
+      title: 'Dafna + Late Bloomer at SOHO LIVE, NYC',
+      link: 'https://tickets.venuepilot.com/e/dafna-late-bloomer-2026-07-17-soho-live-new-york-852aa9',
+      description: 'get your tix!'
+    },
         {
       title: 'PRESAVE LUVRGIRL',
       link: 'https://ffm.to/luvrgirl',
