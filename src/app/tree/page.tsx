@@ -34,9 +34,9 @@ function TreeContent() {
       description: 'get your tix!'
     },
         {
-      title: 'PRESAVE LUVRGIRL',
+      title: 'STREAM LUVRGIRL',
       link: 'https://ffm.to/luvrgirl',
-      description: 'out july 1st'
+      description: 'out now!'
     },
     {
       title: 'CHOOSE YOUR OWN ADVENTURE',
