@@ -7,11 +7,11 @@ interface AnnouncementProps {
 export default function Announcement({ isMobile }: AnnouncementProps) {
   return (
     <Link 
-      href={'https://ffm.to/dafna-controlledchaos'} 
+      href={'https://ffm.to/luvrgirl'} 
       className={`hover:opacity-70 bg-cyan-300 flex ${isMobile ? 'mt-40' : ''} items-center justify-center ${isMobile ? 'p-1 text-sm' : 'p-2'} border-solid border-2 border-cyan-500 text-cyan-700 cursor-pointer`}
-      aria-label="STREAM CONTROLLEDCHAOS"
+      aria-label="STREAM LUVRGIRL"
     >
-      <i>STREAM CONTROLLEDCHAOS</i>
+      <i>STREAM LUVRGIRL</i>
     </Link>
   );
 }
