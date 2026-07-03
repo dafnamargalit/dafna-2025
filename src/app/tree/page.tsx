@@ -32,7 +32,8 @@ function TreeContent() {
       title: 'Dafna + Late Bloomer at SOHO LIVE, NYC',
       link: 'https://tickets.venuepilot.com/e/dafna-late-bloomer-2026-07-17-soho-live-new-york-852aa9',
       description: 'get your tix!'
-    },{
+    },
+    {
       title: "WATCH THE 'LUVRGIRL' MUSIC VIDEO",
       link: 'https://www.youtube.com/watch?v=jLf5-c7PyaI',
       description: 'out now!'
